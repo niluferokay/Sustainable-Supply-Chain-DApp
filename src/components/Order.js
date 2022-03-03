@@ -10,6 +10,7 @@ orders.sort((a,b) => b.id - a.id)
         <td className="p-comp">{order.quantity}</td>
         <td className="p-comp">{order.unit}</td>
         <td className="p-comp">{order.date}</td>
+        <td className="p-comp">{order.account}</td>
         <td className="delete"><FaTimes 
         style={{ color: "red", cursor: "pointer" }}
         onClick={() => onDelete(order.id)} /></td>
@@ -27,6 +28,7 @@ const Order = ({ orders, onDelete }) => {
             <th>Quantity</th>
             <th>Unit</th>
             <th>Date / Time</th>
+            <th>User</th>
           </tr>
           <OrderList orders={orders} />
       </table>

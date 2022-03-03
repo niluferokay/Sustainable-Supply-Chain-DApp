@@ -61,7 +61,7 @@ contract Origin {
         string quantity;
         string unit;
         string date;
-        string user;
+        string account;
     }
 
     event OrderAdded(
@@ -70,23 +70,23 @@ contract Origin {
         string quantity,
         string unit,
         string date,
-        string user
+        string account
     );
    
-    function addOrder(string memory _name, string memory _quantity, string memory _unit, string memory _date, string memory _user) public {
+    function addOrder(string memory _name, string memory _quantity, string memory _unit, string memory _date, string memory _account) public {
         //Require name and company
         require(bytes(_name).length != 0);
         require(bytes(_quantity).length != 0);
         require(bytes(_unit).length != 0);
         require(bytes(_date).length != 0);
-        require(bytes(_user).length != 0);
+        require(bytes(_account).length != 0);
         //Make sure parameters are correct
         //Increment product count
         orderCount++;
         // Add the order
-        orders[orderCount] = Order(orderCount, _name, _quantity, _unit, _date, _user);
+        orders[orderCount] = Order(orderCount, _name, _quantity, _unit, _date, _account);
         //Trigger an event
-        emit OrderAdded(orderCount, _name, _quantity, _unit, _date, _user);
+        emit OrderAdded(orderCount, _name, _quantity, _unit, _date, _account);
         // }
     }   
  
@@ -119,7 +119,7 @@ contract Origin {
         string latitude;
         string longitude;
         string date;
-        string user;
+        string account;
     }
 
     event ShipmentAdded(
@@ -129,19 +129,19 @@ contract Origin {
         string latitude,
         string longitude,
         string date,
-        string user
+        string account
     );
    
-    function addShipment(string memory _shipType, string memory _place,  string memory _latitude, string memory _longitude, string memory _date, string _user) public {
+    function addShipment(string memory _shipType, string memory _place,  string memory _latitude, string memory _longitude, string memory _date, string memory _account) public {
         require(bytes(_shipType).length != 0);
         require(bytes(_place).length != 0);
         require(bytes(_latitude).length != 0);
         require(bytes(_longitude).length != 0);
         require(bytes(_date).length != 0);
-        require(bytes(_user).length != 0);
+        require(bytes(_account).length != 0);
         shipmentCount++;
-        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _user);
-        emit ShipmentAdded(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _user);
+        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _account);
+        emit ShipmentAdded(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _account);
         // }
     }   
     

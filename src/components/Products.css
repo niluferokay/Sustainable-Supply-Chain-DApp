@@ -414,24 +414,97 @@ footer {
 }
 .lca-container{
   margin-left: 20%;
-  padding-top: 30px;
 }
 .lca-form{
   display: flex;
   flex-direction: row;
-  align-content: center;
+  margin: 3%;
+  /* align-content: center;
   align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-}
-.lca-input{
-  width: 50%;
+  justify-content: center; */
+  /* width: 100%; */
+  /* font-family: 'Times New Roman', Times, serif; */
+  background-color: #f2f2f2;
 
 }
-.lca-product {
- display: flex;
- flex-direction: column;
- width: 50%;
- margin-left: 25%;
- margin-bottom: 5%;
+
+.lca-form h3{
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.lca-form label{
+  font-size: 13px;
+  /* font-family: 'Times New Roman', Times, serif; */
+}
+
+.lca-form input, select{
+  margin-left: 10px;
+}
+
+.lca-form div{
+  margin: 10px;
+}
+
+.lca-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.lca-indicators{
+  margin: 3%;
+}
+
+.lca-indicators h3{
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.lca-table tr, th, td {
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  font-size: 12px;
+  padding: 8px;
+
+}
+
+.lca-table th[rowspan] {
+  width: 20%;
+  font-weight: 500;
+}
+.lca-table th[tbody] {
+  width: 30%;
+  font-weight: 700;
+}
+.lca-table tr td:nth-of-type(1){
+  width: 20%;
+  font-weight: 500;
+}
+.lca-table tr td:nth-of-type(2){
+  width: 17%;
+  font-weight: 500;
+}
+
+.lca-table tr:nth-child(even) {
+  background-color: #f0efef;
+}
+
+.lca-table tr:nth-child(even) th[rowspan] {
+  background-color: #FFF;
+}
+
+.assess-container {
+  margin-left:20%;
+  margin-top:30px;
+}
+.lca-dashheader {
+  align-items: flex-start;
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 20px;
+  background-color: #f2f2f2;
+}
+
+.lca-container Button{
+  margin-right:20px;
+
 }

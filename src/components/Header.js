@@ -1,7 +1,7 @@
 import Button from "./FormButton"
 import React, { useState, useEffect } from "react"
 
-const Header = ({ title, formTitle, onAdd, showAdd, addShipment}) => {
+const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
 
     const [date, setDate] = useState("")
     const [latitude, setLatitude] = useState("")
@@ -60,13 +60,13 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment}) => {
         const shipType = "Shipment Sent"
         setShipType(shipType)
         console.log(shipType)
-        await addShipment({shipType, place, latitude, longitude, date})
+        await addShipment({shipType, place, latitude, longitude, date, account})
     }
 
     const getRecLocationDate = async () => {
         const shipType = "Shipment Received"
         setShipType(shipType)
-        await addShipment({shipType, place, latitude, longitude, date})
+        await addShipment({shipType, place, latitude, longitude, date, account})
     }
 
     return (

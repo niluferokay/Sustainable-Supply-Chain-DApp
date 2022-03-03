@@ -18,11 +18,12 @@ shipments.sort((a,b) => b.id - a.id)
         <td className="date"> {shipment.date} <FaTimes 
         style={{ color: "red", cursor: "pointer" }}
         onClick={() => onDelete(shipment.id)} /></td>
+        <td classsName="date" > {shipment.account} </td>
     </tr>
 ))
 
 
-const Shipments = ({shipments}) => {
+const Shipment = ({shipments}) => {
 
     return (
         <>
@@ -33,10 +34,11 @@ const Shipments = ({shipments}) => {
                 <th className="address">Address</th>
                 <th className="status">Map View</th>
                 <th className="date">Date & Time</th>
+                <th className="date">User</th>
               </tr>
               <ShipList shipments={shipments} />
           </table>
         </>)
 }
 
-export default Shipments
+export default Shipment

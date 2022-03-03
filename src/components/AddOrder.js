@@ -1,8 +1,7 @@
-import React from 'react'
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-const AddOrder = ({addOrder, products, onAdd}) => {
+const AddOrder = ({addOrder, products, account, onAdd}) => {
     const {register} = useForm();
 
     const [name, setName] = useState("")
@@ -28,7 +27,7 @@ const AddOrder = ({addOrder, products, onAdd}) => {
         console.log(name)
         console.log(quantity)
         console.log(unit)
-        addOrder({name, quantity, unit, date})
+        addOrder({name, quantity, unit, date, account})
 
         setQuantity("") 
     }

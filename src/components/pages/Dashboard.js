@@ -6,8 +6,8 @@ import "../Products.css"
 import Web3 from "web3"
 import Origin from "../../abis/Origin.json"
 import Header from '../Header';
-import Shipments from '../Shipments';
 import { ProductContext } from '../../contexts/ProductContext';
+import Shipment from '../Shipment';
 
 const Dashboard = () => {
 
@@ -76,18 +76,18 @@ const Dashboard = () => {
     const [orders, setOrder] = useState([])
     const [shipments, setShipment] = useState([])
     const [sort, setSort] = useState([])
-        
+    
     //Add Order
-    const addOrder = ({name, quantity, unit, date}) => {
-        contract.methods.addOrder(name, quantity, unit, date).send( {from: account} )
+    const addOrder = ({name, quantity, unit, date, account}) => {
+        contract.methods.addOrder(name, quantity, unit, date, account).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
     }
 
     //Add Shipment
-    const addShipment = ({shipType, place, latitude, longitude, date}) => {
-        contract.methods.addShipment(shipType, place, latitude, longitude, date).send( {from: account} )
+    const addShipment = ({shipType, place, latitude, longitude, date, account}) => {
+        contract.methods.addShipment(shipType, place, latitude, longitude, date, account).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
@@ -101,11 +101,11 @@ const Dashboard = () => {
             formTitle ="Create Order" 
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} 
             showAdd={showCreateOrder}
-            addShipment={addShipment}
+            addShipment={addShipment} account = {account}
             />
-            {showCreateOrder && <AddOrder products = {products} addOrder={addOrder}
+            {showCreateOrder && <AddOrder products = {products} account = {account} addOrder={addOrder}
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} />}
-        <Shipments shipments = {shipments}  />
+        <Shipment shipments = {shipments} />
         <Order orders={orders} />
         </div>
         </>

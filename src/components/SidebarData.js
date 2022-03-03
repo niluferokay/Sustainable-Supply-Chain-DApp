@@ -2,6 +2,7 @@ import React from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
+import * as MdIcons from 'react-icons/md';
 
 export const SidebarData = [
   {
@@ -11,15 +12,15 @@ export const SidebarData = [
     cName: 'side-text'
   },
   {
-    title: 'Profile',
-    path: '/profile',
-    icon: <FaIcons.FaUserCircle />,
-    cName: 'side-text'
-  },
-  {
     title: 'Products',
     path: '/products',
     icon: <FaIcons.FaCartPlus />,
+    cName: 'side-text'
+  },
+  {
+    title: 'Assessments',
+    path: '/assessments',
+    icon: <MdIcons.MdAssessment />,
     cName: 'side-text'
   },
   {
