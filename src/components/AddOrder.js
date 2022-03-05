@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react/cjs/react.production.min';
 
 const AddOrder = ({addOrder, products, account, onAdd}) => {
     const {register} = useForm();

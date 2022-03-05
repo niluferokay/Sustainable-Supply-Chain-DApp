@@ -5,6 +5,7 @@ import Dashboard from './components/pages/Dashboard';
 import Products from './components/pages/Products';
 import Assessments from './components/pages/Assessments';
 import LCAForm from './components/pages/LCAForm';
+import Example from './components/pages/Example';
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/products" element= {<Products/>}/>
             <Route path="/assessments" element= {<Assessments/>}/>
             <Route path="/assessments/lca" element= {<LCAForm/>}/>
+            <Route path="/ex" element= {<Example/>}/>
             </Routes>
         </Router>
         </>

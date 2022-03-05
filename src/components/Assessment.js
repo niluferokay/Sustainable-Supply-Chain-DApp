@@ -1,6 +1,19 @@
 import React from 'react'
 
-const Assessment = () => {
+
+const AssessList = ({assessments}) =>
+assessments.sort((a,b) => b.id - a.id)
+.map(a => (
+  <tr key={a.id}>
+  <td className="p-name">{a.assessType}</td>
+  <td className="p-comp">{a.document}</td>
+  <td className="p-comp">{a.date}</td>
+  <td className="p-comp">{a.account}</td>
+</tr>
+))
+
+const Assessment = ({assessments}) => {
+
   return (
     <>
     <h3 className="orderTitle">Assessments</h3>
@@ -11,7 +24,7 @@ const Assessment = () => {
             <th>Date / Time</th>
             <th>Added By User</th>
           </tr>
-          {/* <OrderList orders={orders} /> */}
+          <AssessList assessments={assessments} />
       </table>
     </>
 

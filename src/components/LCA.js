@@ -1,9 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import Web3 from "web3"
+import Assessment from "../abis/Assessment.json"
+import Assess from './Assessment'
+import LCAIndicators from './LCAIndicators'
 
 const LCA = () => {
+
+    useEffect(() => { 
+        const loadWeb3 = async () => {
+            if(window.ethereum) {
+              window.web3 = new Web3(window.ethereum)
+              await window.ethereum.enable()
+            } if (window.web3) {
+              window.web3 = new Web3(window.web3.currentProvider)
+            } else {
+              window.alert("Please use Metamask!")
+            }
+        }
+        loadWeb3()}, [])
+    
+    useEffect(() => { 
+        const loadBlockchainData = async () => {
+            const web3 = window.web3
+            const accounts = await web3.eth.getAccounts()
+            setAccount(accounts[0])
+            const networkId = await web3.eth.net.getId()
+            const networkData = Assessment.networks[networkId]
+            if (networkData) {
+                //Fetch contract
+                const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
+                setContract(contract)
+                const assessmentCount = await contract.methods.assessmentCount().call()
+                setAssessmentCount(assessmentCount)
+                //Load assessments
+                for (var i = 1; i <= assessmentCount; i++) {
+                    const newAssessment = await contract.methods.assessments(i).call()
+                    setAssessments(assessments =>([...assessments, newAssessment]))
+                }
+                }
+            else { 
+                window.alert("Origin contract is not deployed to the detected network")
+            }
+        }
+        loadBlockchainData()}, [])
+
     const {register} = useForm();
 
+    const [contract, setContract] = useState([])
+    const [account, setAccount] = useState([])        
+    const [assessmentCount, setAssessmentCount] = useState()        
+    const [assessments, setAssessments] = useState([])
+    const [date, setDate] = useState("")
+    const [document, setDocument] = useState("")
+    const [assessType, setAssessType] = useState("")
     const [energy, setEnergy] = useState("")
     const [batch, setBatch] = useState("")
     const [energyred, setEnergyred] = useState("")
@@ -21,16 +71,41 @@ const LCA = () => {
     const [hazmat, setHazmat] = useState("")
     const [soilwaste, setSoilwaste] = useState("")
     const [waterwaste, setWaterwaste] = useState("")
+    
+    useEffect(() => {
+        getDate()
+    }, [date])
 
-    const onSubmit = (e) =>{
-        e.preventDefault()
+    const getDate = async () => {
+        const today = new Date()
+        const d = await today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+        const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        const date = await d + " " + t
+        setDate(date)
+        console.log(date)
     }
 
-    console.log(water)
+    const onSubmit = async(e) =>{
+        e.preventDefault()
+        const assessType = "Life Cycle Assessment"
+        setAssessType(assessType)
+        const document = "Doc Here"
+        setDocument(document)
+        await addAssessment({assessType, document, date, account})
+    }
+
+    const addAssessment = ({assessType, document, date, account}) => {
+        contract.methods.addAssessment(assessType, document, date, account).send( {from: account} )
+        .once('receipt', (receipt) => {
+            window.location.reload()
+        })
+    }
 
     return (
             <div>
             <div className="lca-container">
+            <LCAIndicators/>
+
             <form className="lca-form" onSubmit={onSubmit}>
                 <div className="lca-input">
                         <h3>Life Cycle Assessment</h3>
@@ -38,7 +113,7 @@ const LCA = () => {
                             1- Total amount of energy used in the supply chain to produce a batch of products 
                             </label>
                             <input 
-                                {...register("energy", {required: true})}
+                                {...register("energy")}
                                 type='number'
                                 value = {energy} onChange={(e) => setEnergy(e.target.value)}
                             /> 
@@ -47,7 +122,7 @@ const LCA = () => {
                             2- Batch size
                             </label>
                             <input 
-                                {...register("batch", {required: true})}
+                                {...register("batch")}
                                 type='number'
                                 value = {batch} onChange={(e) => setBatch(e.target.value)}
                             /> 
@@ -56,7 +131,7 @@ const LCA = () => {
                             3- Total amount of energy reduced in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("energyred", {required: true})}
+                                {...register("energyred")}
                                 type='number'
                                 value = {energyred} onChange={(e) => setEnergyred(e.target.value)}
                             /> 
@@ -66,7 +141,7 @@ const LCA = () => {
                             4- Choose the type(s) of renewable energy used in the product production
                             </label>
                             <select 
-                                {...register("renewenergytype", {required: true})}
+                                {...register("renewenergytype")}
                                 type="text"
                                 value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
                             > 
@@ -83,7 +158,7 @@ const LCA = () => {
                             5- Total amount of renewable energy used in the supply chain to produce a batch of products 
                             </label>
                             <input 
-                                {...register("renewenergy", {required: true})}
+                                {...register("renewenergy")}
                                 type="text"
                                 value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
                             /> 
@@ -92,7 +167,7 @@ const LCA = () => {
                             6- Total amount of water used in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("water", {required: true})}
+                                {...register("water")}
                                 type="text"
                                 value = {water} onChange={(e) => setWater(e.target.value)}
                             /> 
@@ -101,7 +176,7 @@ const LCA = () => {
                             7- Total amount of recycled/reused water used in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("waterrec", {required: true})}
+                                {...register("waterrec")}
                                 type="text"
                                 value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
                             /> 
@@ -110,7 +185,7 @@ const LCA = () => {
                             8- Total amount of materials other than water used in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                 {...register("material", {required: true})}
+                                 {...register("material")}
                                 type="text"
                                 value = {material} onChange={(e) => setMaterial(e.target.value)}
                             /> 
@@ -119,7 +194,7 @@ const LCA = () => {
                             9- Total amount of reduced materials in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("materialred", {required: true})}
+                                {...register("materialred")}
                                 type="text"
                                 value = {materialred} onChange={(e) => setMaterialred(e.target.value)}/> 
                         <div></div> 
@@ -127,7 +202,7 @@ const LCA = () => {
                             10- Total amount of recycled/ reused materials used in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("materialrec", {required: true})}
+                                {...register("materialrec")}
                                 type="text"
                                 value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}/> 
                         <div></div> 
@@ -135,42 +210,42 @@ const LCA = () => {
                             11- Choose the type(s) of recycled/ reused materials used in the product production
                             </label>
                             <input 
-                                {...register("materialrectype", {required: true})}
+                                {...register("materialrectype")}
                                 type="text"
                                 value = {materialrectype} onChange={(e) => setMaterialrectype(e.target.value)}/> 
                         <div></div>  */}
                         <label>
                             12- Total amount of of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6) in the supply chain to produce a batch of products
                             </label>
-                            <input {...register("ghg", {required: true})}
+                            <input {...register("ghg")}
                                 type="text"
                                 value = {ghg} onChange={(e) => setGhg(e.target.value)}/>
                         <div></div> 
                         <label>
                             13- Total amount of water pollution generated in the supply chain to produce a batch of products
                             </label>
-                            <input  {...register("waterpol", {required: true})}
+                            <input  {...register("waterpol")}
                                 type="text"
                                 value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}/> 
                         <div></div> 
                         {/* <label>
                             14- Choose the type(s) of water pollution
                             </label>
-                            <input  {...register("waterpoltype", {required: true})}
+                            <input  {...register("waterpoltype")}
                                 type="text"
                                 value = {waterpoltype} onChange={(e) => setWaterpoltype(e.target.value)}/> 
                         <div></div>  */}
                         <label>
                             15- Total amount of soil pollution generated in the supply chain to produce a batch of products
                             </label>
-                            <input  {...register("soilpol", {required: true})}
+                            <input  {...register("soilpol")}
                                 type="text"
                                 value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}/> 
                         <div></div> 
                         {/* <label>
                             16- Choose the type(s) of soil pollution
                             </label>
-                            <input  {...register("soilpoltype", {required: true})}
+                            <input  {...register("soilpoltype")}
                                 type="text"
                                 value = {soilpoltype} onChange={(e) => setSoilpoltype(e.target.value)}
                             /> L/wash
@@ -178,7 +253,7 @@ const LCA = () => {
                         <label>
                             17- Total amount of air emission (NOx, SOx) in the supply chain to produce a batch of products
                             </label>
-                            <input  {...register("air", {required: true})}
+                            <input  {...register("air")}
                                 type="text"
                                 value = {air} onChange={(e) => setAir(e.target.value)}/> 
                         <div></div> 
@@ -186,7 +261,7 @@ const LCA = () => {
                             18- Total amount of hazardous materials used in the supply chain to produce a batch of products
                             </label>
                             <input
-                                {...register("hazmat", {required: true})}
+                                {...register("hazmat")}
                                 type="text"
                                 value = {hazmat} onChange={(e) => setHazmat(e.target.value)}/> 
                         <div></div> 
@@ -194,7 +269,7 @@ const LCA = () => {
                             19- Total amount of solid waste generated in the supply chain to produce a batch of products
                             </label>
                             <input 
-                                {...register("soilwaste", {required: true})}
+                                {...register("soilwaste")}
                                 type="text"
                                 value = {soilwaste} onChange={(e) => setSoilwaste(e.target.value)}/>
                         <div></div> 
@@ -202,7 +277,7 @@ const LCA = () => {
                             20- Total amount of waste water generated in the supply chain to produce a batch of products
                             </label>
                             <input  
-                                {...register("waterwaste", {required: true})}
+                                {...register("waterwaste")}
                                 type="text"
                                 value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}/> 
                         <div></div> 
@@ -210,7 +285,7 @@ const LCA = () => {
                             21- Choose the type(s) of solid waste generated
                             </label>
                             <input  
-                                {...register("soilwastetype", {required: true})}
+                                {...register("soilwastetype")}
                                 type="text"
                                 value = {soilwastetype} onChange={(e) => setSoilwastetype(e.target.value)}/> kg/wash
                         <div></div> 
@@ -218,7 +293,7 @@ const LCA = () => {
                             22- Choose the type(s) of solid waste destination
                             </label>
                             <input  
-                                {...register("soildwastedes", {required: true})}
+                                {...register("soildwastedes")}
                                 type="text"
                                 value = {soilwastedes} onChange={(e) => setSoilwastedes(e.target.value)}/> kg/wash
                         <div></div> 
@@ -227,7 +302,7 @@ const LCA = () => {
                             23- Choose the type(s) of waste water destination
                             </label>
                             <input 
-                                {...register("waterwastedes", {required: true})}
+                                {...register("waterwastedes")}
                                 type="text"
                                 value = {waterwastedes} onChange={(e) => setWaterwastedes(e.target.value)}/> kg/wash
                         <div></div>  */}
