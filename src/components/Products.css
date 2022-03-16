@@ -313,6 +313,7 @@ body {
   border: 1px solid #fff;
   width: 60%;
 }
+
 .order-form {
   z-index: 1; /* Sit on top */
   overflow: auto; /* Enable scroll if needed */
@@ -326,6 +327,7 @@ body {
   width: 60%;
   height: 75%;
 }
+
 .form-inputs {
   margin: 20px 0;
 }
@@ -452,19 +454,28 @@ footer {
 }
 
 .lca-indicators{
-  margin: 3%;
+    z-index: 1; /* Sit on top */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #f2f2f2;
+    align-self: center;
+    position: absolute;
+    padding: 40px;
+    top: 5%;
+    left: 22.5%;
+    border: 1px solid #fff;
+    width: 75%;
+    height: 100%;
 }
 
 .lca-indicators h3{
   margin-bottom: 20px;
-  font-size: 15px;
+  /* font-size: 15px; */
 }
 .lca-table tr, th, td {
   border-bottom: 1px solid #ddd;
   text-align: left;
   font-size: 12px;
   padding: 8px;
-
 }
 
 .lca-table th[rowspan] {

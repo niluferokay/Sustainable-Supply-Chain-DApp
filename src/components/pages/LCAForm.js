@@ -1,13 +1,12 @@
 import React from 'react'
-import LCA from '../LCA'
-import LCAIndicators from '../LCAIndicators'
 import Sidebar from '../Sidebar'
+import LCA from '../LCA'
 
 const LCAForm = () => {
+
   return (
     <div>
       <Sidebar/>
-      {/* <LCAIndicators/> */}
       <LCA/>
     </div>
   )

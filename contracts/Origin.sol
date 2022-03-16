@@ -18,27 +18,32 @@ contract Origin {
         string name;
         string image;
         string company;
+        string date;
+        address account;
     }
 
     event ProductAdded(
         uint id,
         string name,
         string image,
-        string company
+        string company,
+        string date,
+        address account
     );
    
-    function addProduct(string memory _name, string memory _image, string memory _company) public {
+    function addProduct(string memory _name, string memory _image, string memory _company, string memory _date) public {
         //Require name and company
         require(bytes(_name).length != 0);
         require(bytes(_image).length != 0);
         require(bytes(_company).length != 0);
+        require(bytes(_date).length != 0);
         //Make sure parameters are correct
         //Increment product count
         productCount++;
         // Add the product
-        products[productCount] = Product(productCount, _name,_image, _company);
+        products[productCount] = Product(productCount, _name,_image, _company, _date, msg.sender);
         //Trigger an event
-        emit ProductAdded(productCount, _name, _image, _company);
+        emit ProductAdded(productCount, _name, _image, _company, _date, msg.sender);
         // }
     }
 
@@ -61,7 +66,7 @@ contract Origin {
         string quantity;
         string unit;
         string date;
-        string account;
+        address account;
     }
 
     event OrderAdded(
@@ -70,23 +75,23 @@ contract Origin {
         string quantity,
         string unit,
         string date,
-        string account
+        address account
     );
    
-    function addOrder(string memory _name, string memory _quantity, string memory _unit, string memory _date, string memory _account) public {
+    function addOrder(string memory _name, string memory _quantity, string memory _unit, string memory _date) public {
         //Require name and company
         require(bytes(_name).length != 0);
         require(bytes(_quantity).length != 0);
         require(bytes(_unit).length != 0);
         require(bytes(_date).length != 0);
-        require(bytes(_account).length != 0);
+        // require(bytes(msg.sender).length != 0);
         //Make sure parameters are correct
         //Increment product count
         orderCount++;
         // Add the order
-        orders[orderCount] = Order(orderCount, _name, _quantity, _unit, _date, _account);
+        orders[orderCount] = Order(orderCount, _name, _quantity, _unit, _date, msg.sender);
         //Trigger an event
-        emit OrderAdded(orderCount, _name, _quantity, _unit, _date, _account);
+        emit OrderAdded(orderCount, _name, _quantity, _unit, _date, msg.sender);
         // }
     }   
  
@@ -94,21 +99,25 @@ contract Origin {
         uint id;
         string name;
         string file;
+        string date;
+        address account;
     }
 
     event CertificateAdded(
         uint id,
         string name,
-        string file
-
+        string file,
+        string date,
+        address account
     );
    
-    function addCertificate(string memory _name, string memory _file) public {
+    function addCertificate(string memory _name, string memory _file, string memory _date) public {
         require(bytes(_name).length != 0);
         require(bytes(_file).length != 0);
+        require(bytes(_date).length != 0);
         certificateCount++;
-        certificates[certificateCount] = Certificate(certificateCount, _name, _file);
-        emit CertificateAdded(certificateCount, _name, _file);
+        certificates[certificateCount] = Certificate(certificateCount, _name, _file, _date, msg.sender);
+        emit CertificateAdded(certificateCount, _name, _file, _date, msg.sender);
         // }
     }   
 
@@ -119,7 +128,7 @@ contract Origin {
         string latitude;
         string longitude;
         string date;
-        string account;
+        address account;
     }
 
     event ShipmentAdded(
@@ -129,19 +138,18 @@ contract Origin {
         string latitude,
         string longitude,
         string date,
-        string account
+        address account
     );
    
-    function addShipment(string memory _shipType, string memory _place,  string memory _latitude, string memory _longitude, string memory _date, string memory _account) public {
+    function addShipment(string memory _shipType, string memory _place,  string memory _latitude, string memory _longitude, string memory _date) public {
         require(bytes(_shipType).length != 0);
         require(bytes(_place).length != 0);
         require(bytes(_latitude).length != 0);
         require(bytes(_longitude).length != 0);
         require(bytes(_date).length != 0);
-        require(bytes(_account).length != 0);
         shipmentCount++;
-        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _account);
-        emit ShipmentAdded(shipmentCount, _shipType, _place, _latitude, _longitude, _date, _account);
+        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _place, _latitude, _longitude, _date, msg.sender);
+        emit ShipmentAdded(shipmentCount, _shipType, _place, _latitude, _longitude, _date, msg.sender);
         // }
     }   
     

@@ -5,7 +5,8 @@ import Dashboard from './components/pages/Dashboard';
 import Products from './components/pages/Products';
 import Assessments from './components/pages/Assessments';
 import LCAForm from './components/pages/LCAForm';
-import Example from './components/pages/Example';
+import SocialForm from './components/pages/SocialForm';
+import EnviroForm from './components/pages/EnviroForm';
 
 function App() {
     return (
@@ -16,7 +17,8 @@ function App() {
             <Route path="/products" element= {<Products/>}/>
             <Route path="/assessments" element= {<Assessments/>}/>
             <Route path="/assessments/lca" element= {<LCAForm/>}/>
-            <Route path="/ex" element= {<Example/>}/>
+            <Route path="/assessments/social" element= {<SocialForm/>}/>
+            <Route path="/assessments/enviro" element= {<EnviroForm/>}/>
             </Routes>
         </Router>
         </>

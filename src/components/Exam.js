@@ -4,21 +4,20 @@ import { useForm } from 'react-hook-form'
 const Exam = () => {
     const {register} = useForm();
     
-    const[form, setForm] = useState([])
+    // const[form, setForm] = useState([])
     const [energy, setEnergy] = useState("")
     const [batch, setBatch] = useState("")
     const [energyred, setEnergyred] = useState("")
 
-    const onSubmit = (e) =>{
-        e.preventDefault()
-        const inputState = {energy, energyred, batch}
-        if (energy&& energyred&& batch) {
-            setForm((prev => [...prev, inputState]))
-            setEnergy("")
-            setEnergyred("")
-            setBatch("")
+    const onSubmit = async(e) =>{
+
+        // const inputState = {energy, energyred, batch}
+        // if (energy&& energyred&& batch) {
+        //     setForm((prev => [...prev, inputState]))
+        //     setEnergy("")
+        //     setEnergyred("")
+        //     setBatch("")
     
-        }
     }
 
     return (

@@ -8,6 +8,7 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
     const [longitude, setLongitude] = useState("")
     const [place, setAddress] = useState("")
     const [shipType, setShipType] = useState("")
+    const [d, setD] = useState("")
 
     const getLocation = () => {      
         if (navigator.geolocation) {
@@ -44,7 +45,7 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
 
     const getDate = async () => {
         const today = new Date()
-        const d = await today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+        const d = await today.getDate() +'-'+ (today.getMonth()+1) +'-'+ today.getFullYear()
         const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
         const date = await d + " " + t
         setDate(date)
@@ -54,18 +55,20 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
     useEffect(() => { 
             getDate()
             getLocation()
-        }, [])
+        }, [d])
 
     const getSentLocationDate = async() => {
         const shipType = "Shipment Sent"
         setShipType(shipType)
         console.log(shipType)
+        setD("now")
         await addShipment({shipType, place, latitude, longitude, date, account})
     }
 
     const getRecLocationDate = async () => {
         const shipType = "Shipment Received"
         setShipType(shipType)
+        setD("now")
         await addShipment({shipType, place, latitude, longitude, date, account})
     }
 
@@ -83,11 +86,11 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
                 text="Receive Shipment"
                 />
             </div>    
-        {showAdd ? <h2>{formTitle}</h2> : <h2>{title}</h2> }
+        {showAdd ? "" : <h2>{title}</h2> }
         <Button className="btn" 
         onClick= {onAdd}
-        color={showAdd ? "red": "green"}
-        text={showAdd ? "X": <>{formTitle}</>}
+        color={showAdd ? "#f2f2f2" : "green"}
+        text={showAdd ? "": <>{formTitle}</>}
         />
     </header>
     )

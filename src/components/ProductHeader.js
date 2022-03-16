@@ -1,7 +1,7 @@
 import React from "react"
 import Button from "./FormButton"
 
-const Header = ({ title, formTitle, onAdd, showAdd, onShip, showShip }) => {
+const Header = ({ title, formTitle, onAdd, showAdd }) => {
     return (
         <header className="header">
             {showAdd ? <h2>{formTitle}</h2> : <h2>{title}</h2> }

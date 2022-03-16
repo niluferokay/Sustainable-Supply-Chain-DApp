@@ -78,16 +78,16 @@ const Dashboard = () => {
     const [sort, setSort] = useState([])
     
     //Add Order
-    const addOrder = ({name, quantity, unit, date, account}) => {
-        contract.methods.addOrder(name, quantity, unit, date, account).send( {from: account} )
+    const addOrder = ({name, quantity, unit, date}) => {
+        contract.methods.addOrder(name, quantity, unit, date).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
     }
 
     //Add Shipment
-    const addShipment = ({shipType, place, latitude, longitude, date, account}) => {
-        contract.methods.addShipment(shipType, place, latitude, longitude, date, account).send( {from: account} )
+    const addShipment = ({shipType, place, latitude, longitude, date}) => {
+        contract.methods.addShipment(shipType, place, latitude, longitude, date).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
@@ -100,10 +100,10 @@ const Dashboard = () => {
         <Header 
             formTitle ="Create Order" 
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} 
-            showAdd={showCreateOrder}
+            showAdd={showCreateOrder} 
             addShipment={addShipment} account = {account}
             />
-            {showCreateOrder && <AddOrder products = {products} account = {account} addOrder={addOrder}
+            {showCreateOrder && <AddOrder products = {products} addOrder={addOrder}
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} />}
         <Shipment shipments = {shipments} />
         <Order orders={orders} />

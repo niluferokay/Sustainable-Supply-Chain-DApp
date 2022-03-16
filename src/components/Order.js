@@ -1,4 +1,3 @@
-import { FaTimes } from "react-icons/fa";
 import React from 'react';
 
 //Choose from Products
@@ -10,10 +9,12 @@ orders.sort((a,b) => b.id - a.id)
         <td className="p-comp">{order.quantity}</td>
         <td className="p-comp">{order.unit}</td>
         <td className="p-comp">{order.date}</td>
-        <td className="p-comp">{order.account}</td>
-        <td className="delete"><FaTimes 
-        style={{ color: "red", cursor: "pointer" }}
-        onClick={() => onDelete(order.id)} /></td>
+        <td className="p-comp">
+        {order.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier":
+        order.account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? "Company":
+        order.account === "0xf5D0a9A8cCC008Bc72c6e708F5A7871d094B7E11" ? "Customer": order.account}
+          </td>
+        <td></td>
     </tr>
 ))
 
@@ -28,7 +29,7 @@ const Order = ({ orders, onDelete }) => {
             <th>Quantity</th>
             <th>Unit</th>
             <th>Date / Time</th>
-            <th>User</th>
+            <th>User Account</th>
           </tr>
           <OrderList orders={orders} />
       </table>

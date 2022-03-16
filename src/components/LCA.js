@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Web3 from "web3"
-import Assessment from "../abis/Assessment.json"
-import Assess from './Assessment'
-import LCAIndicators from './LCAIndicators'
+import Assessment from "../abis/Assessments.json"
 
 const LCA = () => {
 
@@ -38,22 +36,30 @@ const LCA = () => {
                     const newAssessment = await contract.methods.assessments(i).call()
                     setAssessments(assessments =>([...assessments, newAssessment]))
                 }
+                for (var i = 1; i <= assessmentCount; i++) {
+                    const newAssessment = await contract.methods.assessments(i).call()
+                    setForm(assessments =>([...assessments, JSON.parse(newAssessment.document)]))
+                }
                 }
             else { 
-                window.alert("Origin contract is not deployed to the detected network")
+                window.alert("Assessment contract is not deployed to the detected network")
             }
         }
         loadBlockchainData()}, [])
 
     const {register} = useForm();
-
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
     const [assessmentCount, setAssessmentCount] = useState()        
     const [assessments, setAssessments] = useState([])
     const [date, setDate] = useState("")
-    const [document, setDocument] = useState("")
+    const [document, setDocument] = useState([])
     const [assessType, setAssessType] = useState("")
+    const [form, setForm] = useState([])
+    // const [merge, setMerge] = useState([])
+    const [showForm, setShowForm] = useState([])
+    const [d, setD] = useState("")
+
     const [energy, setEnergy] = useState("")
     const [batch, setBatch] = useState("")
     const [energyred, setEnergyred] = useState("")
@@ -74,38 +80,63 @@ const LCA = () => {
     
     useEffect(() => {
         getDate()
-    }, [date])
+    }, [d])
 
     const getDate = async () => {
         const today = new Date()
-        const d = await today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+        const d = await today.getDate() +'-'+ (today.getMonth()+1) +'-'+ today.getFullYear()
         const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
-        const date = await d + " " + t
+        const date = await d + " / " + t
         setDate(date)
         console.log(date)
     }
-
     const onSubmit = async(e) =>{
         e.preventDefault()
+        const lcaForm = {
+            id: (parseInt(assessmentCount)+1).toString(),
+            energy: energy, 
+            batch: batch,
+            energyred: energyred,
+            renewenergytype: renewenergytype,
+            renewenergy: renewenergy,
+            water: water,
+            waterrec: waterrec,
+            material: material,
+            materialred: materialred,
+            materialrec: materialrec,
+            ghg: ghg,
+            waterpol: waterpol,
+            soilpol: soilpol,
+            air: air,
+            hazmat: hazmat,
+            soilwaste: soilwaste,
+            waterwaste: waterwaste
+        }
+        const document = await JSON.stringify(lcaForm)
         const assessType = "Life Cycle Assessment"
         setAssessType(assessType)
-        const document = "Doc Here"
-        setDocument(document)
-        await addAssessment({assessType, document, date, account})
+        setD("now")
+        await addAssessment({assessType, date, document})
+
     }
 
-    const addAssessment = ({assessType, document, date, account}) => {
-        contract.methods.addAssessment(assessType, document, date, account).send( {from: account} )
+    const addAssessment = ({assessType, date, document}) => {
+        contract.methods.addAssessment(assessType, date, document).send( {from: account} )
         .once('receipt', (receipt) => {
-            window.location.reload()
+            window.location.assign('http://localhost:3000/assessments')
         })
     }
+
+    const handleClick = (index) => {
+        setShowForm(state => ({
+          ...state, // <-- copy previous state
+          [index]: !state[index] // <-- update value by index key
+        }));
+      };
 
     return (
             <div>
             <div className="lca-container">
-            <LCAIndicators/>
-
             <form className="lca-form" onSubmit={onSubmit}>
                 <div className="lca-input">
                         <h3>Life Cycle Assessment</h3>
@@ -114,7 +145,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("energy")}
-                                type='number'
+                                type='number' min='0' 
                                 value = {energy} onChange={(e) => setEnergy(e.target.value)}
                             /> 
                         <div></div>
@@ -123,7 +154,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("batch")}
-                                type='number'
+                                type='number' min='0'
                                 value = {batch} onChange={(e) => setBatch(e.target.value)}
                             /> 
                         <div></div>
@@ -132,34 +163,35 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("energyred")}
-                                type='number'
+                                type='number' min='0'
                                 value = {energyred} onChange={(e) => setEnergyred(e.target.value)}
                             /> 
                         <div></div> 
-                            <label 
-                          >
+                            <label>
                             4- Choose the type(s) of renewable energy used in the product production
                             </label>
-                            <select 
-                                {...register("renewenergytype")}
-                                type="text"
-                                value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                            > 
-                            <option value=""disabled selected hidden></option>
-                            <option value="Solar">Solar energy</option>
-                            <option value="Hydro">Hydro</option>
-                            <option value="Wind">Wind</option>
-                            <option value="Biomass">Biomass</option>
-                            <option value="Geothermal">Geothermal</option>
-                            <option value="None">None</option>
-                            </select>
+                                <input 
+                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
+                                    type="checkbox"/>Solar energy
+                                <input 
+                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
+                                    type="checkbox"/>Hydro
+                                <input 
+                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
+                                    type="checkbox"/>Wind
+                                <input 
+                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
+                                    type="checkbox"/>Biomass
+                                <input 
+                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
+                                    type="checkbox"/>Geothermal
                         <div></div> 
                         <label>
                             5- Total amount of renewable energy used in the supply chain to produce a batch of products 
                             </label>
                             <input 
                                 {...register("renewenergy")}
-                                type="text"
+                                type='number' min='0'
                                 value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
                             /> 
                         <div></div> 
@@ -168,7 +200,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("water")}
-                                type="text"
+                                type='number' min='0'
                                 value = {water} onChange={(e) => setWater(e.target.value)}
                             /> 
                         <div></div> 
@@ -177,7 +209,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("waterrec")}
-                                type="text"
+                                type='number' min='0'
                                 value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
                             /> 
                         <div></div> 
@@ -186,7 +218,7 @@ const LCA = () => {
                             </label>
                             <input 
                                  {...register("material")}
-                                type="text"
+                                type='number' min='0'
                                 value = {material} onChange={(e) => setMaterial(e.target.value)}
                             /> 
                         <div></div> 
@@ -195,7 +227,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("materialred")}
-                                type="text"
+                                type='number' min='0'
                                 value = {materialred} onChange={(e) => setMaterialred(e.target.value)}/> 
                         <div></div> 
                         <label>
@@ -203,7 +235,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("materialrec")}
-                                type="text"
+                                type='number' min='0'
                                 value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}/> 
                         <div></div> 
                         {/* <label>
@@ -218,14 +250,14 @@ const LCA = () => {
                             12- Total amount of of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6) in the supply chain to produce a batch of products
                             </label>
                             <input {...register("ghg")}
-                                type="text"
+                                type='number' min='0'
                                 value = {ghg} onChange={(e) => setGhg(e.target.value)}/>
                         <div></div> 
                         <label>
                             13- Total amount of water pollution generated in the supply chain to produce a batch of products
                             </label>
                             <input  {...register("waterpol")}
-                                type="text"
+                                type='number' min='0'
                                 value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}/> 
                         <div></div> 
                         {/* <label>
@@ -239,14 +271,14 @@ const LCA = () => {
                             15- Total amount of soil pollution generated in the supply chain to produce a batch of products
                             </label>
                             <input  {...register("soilpol")}
-                                type="text"
+                                type='number' min='0'
                                 value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}/> 
                         <div></div> 
                         {/* <label>
                             16- Choose the type(s) of soil pollution
                             </label>
                             <input  {...register("soilpoltype")}
-                                type="text"
+                                type='number' min='0'
                                 value = {soilpoltype} onChange={(e) => setSoilpoltype(e.target.value)}
                             /> L/wash
                         <div></div>  */}
@@ -254,7 +286,7 @@ const LCA = () => {
                             17- Total amount of air emission (NOx, SOx) in the supply chain to produce a batch of products
                             </label>
                             <input  {...register("air")}
-                                type="text"
+                                type='number' min='0'
                                 value = {air} onChange={(e) => setAir(e.target.value)}/> 
                         <div></div> 
                         <label>
@@ -262,7 +294,7 @@ const LCA = () => {
                             </label>
                             <input
                                 {...register("hazmat")}
-                                type="text"
+                                type='number' min='0'
                                 value = {hazmat} onChange={(e) => setHazmat(e.target.value)}/> 
                         <div></div> 
                         <label>
@@ -270,7 +302,7 @@ const LCA = () => {
                             </label>
                             <input 
                                 {...register("soilwaste")}
-                                type="text"
+                                type='number' min='0'
                                 value = {soilwaste} onChange={(e) => setSoilwaste(e.target.value)}/>
                         <div></div> 
                         <label>
@@ -278,7 +310,7 @@ const LCA = () => {
                             </label>
                             <input  
                                 {...register("waterwaste")}
-                                type="text"
+                                type='number' min='0'
                                 value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}/> 
                         <div></div> 
                         {/* <label>

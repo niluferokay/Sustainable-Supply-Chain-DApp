@@ -1,9 +1,8 @@
-import React from 'react'
-import { useState} from "react"
+import React, { useState } from 'react'
 const { create } = require("ipfs-http-client")
 const ipfs = create({host:"ipfs.infura.io", port:"5001", protocol: "https"})
 
-const AddProduct = ({ addProduct, showAdd }) => {
+const AddProduct = ({ addProduct}) => {
     
     const [name, setName] = useState("")
     const [company, setCompany] = useState("")
