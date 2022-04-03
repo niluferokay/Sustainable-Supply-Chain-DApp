@@ -4,6 +4,7 @@ import Web3 from "web3"
 import Origin from "../abis/Origin.json"
 
 const AddOrder = ({addOrder, onAdd}) => {
+
     useEffect(() => { 
         const loadWeb3 = async () => {
             if(window.ethereum) {
@@ -17,40 +18,40 @@ const AddOrder = ({addOrder, onAdd}) => {
         }
         loadWeb3()}, [])
 
-        useEffect(() => { 
-            const loadBlockchainData = async () => {
-                const web3 = window.web3
-                //Load account
-                const accounts = await web3.eth.getAccounts()
-                // console.log(accounts)
-                setAccount(accounts[0])
-                // console.log(account)
-                console.log(Origin.abi)
-                const networkId = await web3.eth.net.getId()
-                console.log(networkId)
-                const networkData = Origin.networks[networkId]
-                console.log(networkData)
-                if (networkData) {
-                    // const abi = 
-                    // const address = networkData.address
-                    //Fetch contract
-                    const contract = new web3.eth.Contract(Origin.abi, networkData.address)
-                    setContract(contract)
-                    console.log(contract)
-                    const productCount = await contract.methods.productCount().call()
-                    setProductCount(productCount)
-                    console.log(productCount)
-                    //Load products
-                    for (var i = 1; i <= productCount; i++) {
-                        const newProduct = await contract.methods.products(i).call()
-                        setProducts(products =>([...products, newProduct]))
-                    }
-                    }
-                else { 
-                    window.alert("Origin contract is not deployed to the detected network")
+    useEffect(() => { 
+        const loadBlockchainData = async () => {
+            const web3 = window.web3
+            //Load account
+            const accounts = await web3.eth.getAccounts()
+            // console.log(accounts)
+            setAccount(accounts[0])
+            // console.log(account)
+            console.log(Origin.abi)
+            const networkId = await web3.eth.net.getId()
+            console.log(networkId)
+            const networkData = Origin.networks[networkId]
+            console.log(networkData)
+            if (networkData) {
+                // const abi = 
+                // const address = networkData.address
+                //Fetch contract
+                const contract = new web3.eth.Contract(Origin.abi, networkData.address)
+                setContract(contract)
+                console.log(contract)
+                const productCount = await contract.methods.productCount().call()
+                setProductCount(productCount)
+                console.log(productCount)
+                //Load products
+                for (var i = 1; i <= productCount; i++) {
+                    const newProduct = await contract.methods.products(i).call()
+                    setProducts(products =>([...products, newProduct]))
                 }
+                }
+            else { 
+                window.alert("Origin contract is not deployed to the detected network")
             }
-            loadBlockchainData()}, [])
+        }
+        loadBlockchainData()}, [])
 
     const [products, setProducts] = useState([])
     const [contract, setContract] = useState([])
@@ -88,37 +89,29 @@ const AddOrder = ({addOrder, onAdd}) => {
     }
 
     return (
-        <div className="form-content">
+        <div className='center'>
             <form className="order-form" onSubmit={onSubmit}>
             <div className="form-header">
                 <h2>Add Order</h2>
-                <button className="btn form-close" style= {{background:"red"}} onClick={onAdd}>X</button>
-            </div>                
+                <button className="btn form-close" style= {{background:"red", fontSize:"14px"}} onClick={onAdd}>X</button>
+            </div>
+            <div className="product-center-form">                
                 <div className="form-inputs">
-                    <label htmlFor="name"
-                    className="form-label">
-                    Select a product</label>
+                    <label>Select Product</label>
                     <select 
-                        className="form-input"
-                        {...register("name", {required: true })}
+                        className="name"
                         value = {name} onChange={(e) => setName(e.target.value)}
                     >
-                    <option value=""disabled selected hidden></option>
-                    {/* <option value="T-shirt">T-shirt</option> */}
-                    {products.map(product => { 
-                    return <option value={product.name}>{product.name} </option>
-                    })}
+                        <option value=""disabled selected hidden></option>
+                        {products.map(product => { 
+                        return <option value={product.name}>{product.name} </option>
+                        })}
                     </select>
                 </div>
                 <div className="form-inputs">
-                    <label htmlFor="quantity"
-                    className="form-label">
-                    Quantity / Unit
-                    </label>
+                    <label>Quantity / Unit</label>
                         <input 
-                            id="quantity"
                             type="text"
-                            name="quantity"
                             className="quantity"
                             placeholder="Enter quantity"
                             {...register("quantity", {required: true })}
@@ -133,10 +126,12 @@ const AddOrder = ({addOrder, onAdd}) => {
                             <option value="kg">kg</option>
                             <option value="items">items</option>
                         </select>
-                    </div>
+                </div>
+            
                 <button className="btn form-input-btn" type="submit">
                     Submit
                 </button>
+            </div>
             </form>
         </div>
     )

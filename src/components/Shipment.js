@@ -15,12 +15,12 @@ shipments.sort((a,b) => b.id - a.id)
         </iframe>
         </td>
         <td className="date"> {shipment.date}</td>
-        <td classsName="date" > 
-        {shipment.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier":
+        <td className="p-comp">
+        {shipment.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier#1":
+        shipment.account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? "Supplier#2":
         shipment.account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? "Company":
         shipment.account === "0xf5D0a9A8cCC008Bc72c6e708F5A7871d094B7E11" ? "Customer": shipment.account}
-        </td>
-        <td></td>
+      </td>          
     </tr>
 ))
 
@@ -29,14 +29,14 @@ const Shipment = ({shipments}) => {
 
     return (
         <>
-        <h3 className="orderTitle">Shipments</h3>
+        <h3 className="table-title">Shipments</h3>
             <table className="table">
               <tr>
                 <th className="status">Status</th>                
                 <th className="address">Address</th>
                 <th className="status">Map View</th>
-                <th className="date">Date & Time</th>
-                <th className="status">User Account</th>
+                <th className="date">Date / Time</th>
+                <th className="status">User</th>
               </tr>
               <ShipList shipments={shipments} />
           </table>

@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 const { create } = require("ipfs-http-client")
 const ipfs = create({host:"ipfs.infura.io", port:"5001", protocol: "https"})
 
-const AddProduct = ({ addProduct}) => {
+const AddProduct = ({ addProduct, onAdd}) => {
     
     const [name, setName] = useState("")
     const [company, setCompany] = useState("")
     const [buffer, setBuffer] = useState("")
+    const [date, setDate] = useState("")
+    const [d, setD] = useState("")
 
     const captureFile = async (e) => {
         e.preventDefault()
@@ -27,6 +29,19 @@ const AddProduct = ({ addProduct}) => {
           console.log(buffer)
         }
 
+    useEffect(() => {
+        getDate()
+    }, [d])
+    
+    const getDate = async () => {
+        const today = new Date()
+        const d = await today.getDate() +'-'+ (today.getMonth()+1) +'-'+ today.getFullYear()
+        const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        const date = await d + " " + t
+        setDate(date)
+        console.log(date)
+    }
+
     const onSubmit= async (e) => {
         e.preventDefault()
         console.log("submitting...")
@@ -34,65 +49,52 @@ const AddProduct = ({ addProduct}) => {
         console.log("Ipfs result", result)
         const image = result.path
         console.log(image)
-
-        addProduct({name, image, company})
+        setD("now")
+        addProduct({name, image, company, date})
 
         setName("")
         setCompany("") 
     }
 
     return (
-
-        <div className="form-content">
-            <form className="form" onSubmit={onSubmit}>
+        <div className="center">
+            <form className="product-form" onSubmit={onSubmit}>
+            <div className="product-form-header">
+                <h2>Add Product</h2>
+                <button className="btn form-close" style= {{background:"red", fontSize:"14px"}} onClick={onAdd}>X</button>
+            </div>
+            <div className="product-center-form">                
                 <div className="form-inputs">
-                    <label htmlFor="productName"
-                    className="form-label">
-                    Product Name
-                    </label>
+                    <label>Product Name</label>
                     <input 
-                        id="productName"
                         type="text"
-                        name="productName"
-                        className="form-input"
+                        className="product"
                         placeholder="Enter product name"
-                        // {...register("productName", {required: true })}
                         value = {name} onChange={(e) => setName(e.target.value)}
                         />
                 </div>
                 <div className="form-inputs">
-                    <label htmlFor="image"
-                    className="form-label">
-                    Image
-                    </label>
+                    <label>Image</label>
                     <input 
-                        id="image"
                         type="file"
-                        name="image"
-                        className="form-input"
+                        className="product"
                         placeholder="Enter image"
-                        // {...register("image", {required: false })}
                         onChange={captureFile}
                         />
                 </div>
                 <div className="form-inputs">
-                    <label htmlFor="companyName"
-                    className="form-label">
-                    Company Name
-                    </label>
+                    <label>Company Name</label>
                     <input 
-                        id="companyName"
                         type="companyName"
-                        name="companyName"
-                        className="form-input"
+                        className="product"
                         placeholder="Select company name"
-                        // {...register("companyName", {required: true })}
                         value= {company} onChange={(e) => setCompany(e.target.value)}
                         />
                 </div>
                 <button className="btn form-input-btn" type="submit">
                     Add
                 </button>
+            </div>
             </form>
         </div>
     )

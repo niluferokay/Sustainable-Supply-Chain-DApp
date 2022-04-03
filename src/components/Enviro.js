@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Web3 from "web3"
 import Assessment from "../abis/Assessments.json"
-const { create } = require("ipfs-http-client")
-const ipfs = create({host:"ipfs.infura.io", port:"5001", protocol: "https"})
+import * as AiIcons from 'react-icons/ai';
+
 
 const Enviro = () => {
 
@@ -31,12 +31,12 @@ const Enviro = () => {
                 //Fetch contract
                 const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
                 setContract(contract)
-                const assessmentCount = await contract.methods.assessmentCount().call()
-                setAssessmentCount(assessmentCount)
-                //Load assessments
-                for (var i = 1; i <= assessmentCount; i++) {
-                    const newAssessment = await contract.methods.assessments(i).call()
-                    setAssessments(assessments =>([...assessments, newAssessment]))
+                const enviroCount = await contract.methods.enviroCount().call()
+                setEnviroCount(enviroCount)
+                //Load Enviros
+                for (var i = 1; i <= enviroCount; i++) {
+                    const newEnviro = await contract.methods.enviros(i).call()
+                    setEnviros(enviros =>([...enviros, newEnviro]))
                 }
                 }
             else { 
@@ -48,13 +48,14 @@ const Enviro = () => {
     const {register} = useForm();
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
-    const [assessmentCount, setAssessmentCount] = useState()        
-    const [assessments, setAssessments] = useState([])
+    const [enviroCount, setEnviroCount] = useState()
+    const [enviros, setEnviros] = useState([])
     const [date, setDate] = useState("")
-    const [document, setDocument] = useState([])
-    const [assessType, setAssessType] = useState("")
     const [d, setD] = useState("")
 
+    const [monthYear, setMonthYear] = useState("")
+    const [month, setMonth] = useState("")
+    const [year, setYear] = useState("")
     const [energy, setEnergy] = useState("")
     const [energyred, setEnergyred] = useState("")
     const [renewenergytype, setRenewenergytype] = useState("")
@@ -81,11 +82,13 @@ const Enviro = () => {
     const [clean, setClean] = useState("")
     const [envirosus, setEnvirosus] = useState("")
     const [suppliers, setSuppliers] = useState("")
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    const monthNumber = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 
     const onSubmit = async(e) =>{
         e.preventDefault()
         const enviroForm = {
-            id: assessmentCount,
+            id: (parseInt(enviroCount)+1).toString(),
             energy: energy, 
             energyred: energyred,
             renewenergytype: renewenergytype,
@@ -109,372 +112,374 @@ const Enviro = () => {
             envirostand: envirostand,
             reverse: reverse,
             reversetype: reversetype,
+            clean: clean,
             envirosus: envirosus,
             suppliers: suppliers
         }
         const document = JSON.stringify(enviroForm)
-        // console.log(json)
-        // const result = await ipfs.add(json)
-        // console.log("Ipfs result", result)
-        // const document = result.path
-        // console.log(document)
-        const assessType = "Environmental Sustainability Assessment"
-        setAssessType(assessType)
         setD("now")
-        await addAssessment({assessType, document})
+        await addEnviro({date, document, month, year})
     }
 
+    console.log(month + year)
     useEffect(() => {
         getDate()
-    }, [d])
+        getMonth()
+    }, [d, monthYear])
 
     const getDate = async () => {
-        const today = new Date()
-        const d = await today.getDate() +'-'+ (today.getMonth()+1) +'-'+ today.getFullYear()
-        const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+        const tomonth = new Date()
+        const d = await tomonth.getDate() +'-'+ (tomonth.getMonth()+1) +'-'+ tomonth.getFullYear()
+        const t = await tomonth.getHours() + ":" + tomonth.getMinutes() + ":" + tomonth.getSeconds()
         const date = await d + " " + t
         setDate(date)
         console.log(date)
     }
 
-    const addAssessment = ({assessType, document}) => {
-        contract.methods.addAssessment(assessType, document).send( {from: account} )
+    const getMonth = () => {
+        const month = monthYear.toString().substr(-2)
+        const year = monthYear.toString().substr(0,4)
+        setYear(year)
+        for (var i = 0; i <= 11; i++) {
+        if (month === monthNumber[i]) {
+            setMonth(months[i])
+        }
+    }}
+
+    const addEnviro = ({date, document, month, year}) => {
+        contract.methods.addEnviro(date, document, month, year).send( {from: account} )
         .once('receipt', (receipt) => {
-            window.location.reload()
+            window.location.assign('http://localhost:3000/assessments')
         })
     }
 
+    const handleChange = (name, checked, set) => {
+        checked === true ? set((prev) => [...prev, name]) 
+        : console.log("")
+    }
+    console.log(energy)
     return (
-            <div>
             <div className="lca-container">
             <form className="lca-form" onSubmit={onSubmit}>
                 <div className="lca-input">
-                        <h3>Enviromental Sustainability Assessment</h3>
-                            <label 
-                            className="form-label">
-                            1- Total amount of energy used per day (kWh/ day)   
+                    <h3>Enviromental Sustainability Assessment</h3>
+                        <div className="center">
+                            <div>
+                        <label>
+                            Select Month/ Year  
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='month' required
+                                value = {monthYear} onChange={(e) => setMonthYear(e.target.value)}
+                            />
+                            </div>
+                        </div>
+                <fieldset className="monthly-kpi"><legend>Monthly KPI Update</legend> 
+                        <label 
+                            className="form-label">
+                            1- Total amount of energy used   
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
                                 value = {energy} onChange={(e) => setEnergy(e.target.value)}
                             /> 
-                        <div></div>
+                            <label class="wrap_text"> kWh/ month</label> 
+                            <div></div>
                             <label 
                             className="form-label">
-                            2- Total amount of energy reduced per day (kWh/ day) 
+                            4- Total amount of renewable energy used  
                             </label>
                             <input 
-                                type='number' min='0'
-                                value = {energyred} onChange={(e) => setEnergyred(e.target.value)}
-                            /> 
-                        <div></div>
-                            <label 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
+                            /><label class="wrap_text"> kWh/ month</label> 
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            5- Total amount of water used  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {water} onChange={(e) => setWater(e.target.value)}
+                            /> <label class="wrap_text"> ㎥/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            6- Total amount of recycled or reused water used  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
+                            /> <label class="wrap_text"> ㎥/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            7- Total amount of materials other than water used  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {material} onChange={(e) => setMaterial(e.target.value)}
+                            /> <label class="wrap_text">kg/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            9- Total amount of recycled or reused materials used 
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}
+                                /> <label class="wrap_text">kg/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            14- Total amount of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6)  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {ghg} onChange={(e) => setGhg(e.target.value)}
+                            /><label class="wrap_text"> t CO2eq/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            15- Total amount of water pollution generated  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}
+                                /> <label class="wrap_text"> ㎥/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            17- Total amount of soil pollution generated 
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}
+                                />  
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            19- Total amount of air emission (NOx, SOx) generated  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {air} onChange={(e) => setAir(e.target.value)}
+                                /> <label class="wrap_text"> ppm/month</label> 
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            20- Total amount of hazardous materials used  
+                            <AiIcons.AiOutlineQuestionCircle style={{fontSize: "15px", color:"#2F4050"}} /></label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {hazmat} onChange={(e) => setHazmat(e.target.value)}
+                                /> <label class="wrap_text">kg/ month</label> 
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            21- Total amount of solid waste generated  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {solidwaste} onChange={(e) => setSoilwaste(e.target.value)}
+                                /> <label class="wrap_text">kg/ month</label>
+                        <div></div> 
+                        <label 
+                            className="form-label">
+                            22- Total amount of waste water generated  
+                            </label>
+                            <input 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001"
+                                value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}
+                                /> <label class="wrap_text"> ㎥/ month</label> 
+                </fieldset>
+                <fieldset className='annual-kpi'><legend>Annual KPI Update</legend>
+                        <label 
                             className="form-label">
                             3- Choose the type(s) of renewable energy used
                             </label>
-                            <input 
-                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                                    type="checkbox"/>Solar energy
+                            <div></div> 
                                 <input 
-                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                                    type="checkbox"/>Hydro
+                                    name = "Solar energy" onChange={(e) => handleChange(e.target.name, e.target.checked, setRenewenergytype)}
+                                    type="checkbox" /><label class="wrap_text"> Solar energy</label> 
                                 <input 
-                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                                    type="checkbox"/>Wind
+                                    name = "Hydropower" onChange={(e) => handleChange(e.target.name, e.target.checked, setRenewenergytype)}
+                                    type="checkbox"/><label class="wrap_text"> Hydropower</label> 
                                 <input 
-                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                                    type="checkbox"/>Biomass
+                                    name = "Wind energy" onChange={(e) => handleChange(e.target.name, e.target.checked, setRenewenergytype)}
+                                    type="checkbox"/><label class="wrap_text"> Wind energy</label>
                                 <input 
-                                    value = {renewenergytype} onChange={(e) => setRenewenergytype(e.target.value)}
-                                    type="checkbox"/>Geothermal
-                        <div></div> 
-                            <label 
-                            className="form-label">
-                            4- Total amount of renewable energy used per day (kWh/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
-                            /> 
+                                    name = "Biomass" onChange={(e) => handleChange(e.target.name, e.target.checked, setRenewenergytype)}
+                                    type="checkbox"/><label class="wrap_text"> Biomass</label> 
+                                <input 
+                                    name = "Geothermal energy" onChange={(e) => handleChange(e.target.name, e.target.checked, setRenewenergytype)}
+                                    type="checkbox"/><label class="wrap_text"> Geothermal energy</label> 
                         <div></div> 
                         <label 
                             className="form-label">
-                            5- Total amount of water used per day (m3/ day)
+                            11- Total amount of land owned, leased, or managed for production activities or extractive use
                             </label>
+                            <div></div>
                             <input 
-                                type='number' min='0'
-                                value = {water} onChange={(e) => setWater(e.target.value)}
-                            /> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            6- Total amount of recycled/reused water used per day (m3/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
-                            /> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            7- Total amount of materials other than water used per day (kg/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {material} onChange={(e) => setMaterial(e.target.value)}
-                            /> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            8- Total amount of reduced materials per day (kg/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {materialred} onChange={(e) => setMaterialred(e.target.value)}
-                            /> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            9- Total amount of recycled/reused materials used per day (kg/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}/> 
-                        <div></div> 
-                        {/* <label 
-                            className="form-label">
-                            10- Choose the type(s) of recycled/ reused materials used
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> MJ/kg textile
-                        <div></div>  */}
-                        <label 
-                            className="form-label">
-                            11- Total amount of land owned, leased, or managed for production activities or extractive use (ha)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {land} onChange={(e) => setLand(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()}  
+                                value = {land} onChange={(e) => setLand(e.target.value)}
+                                /><label class="wrap_text"> m²</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             12- Is there a biodiversity policy?
                             </label>
+                            <div></div>
                             <input 
                                 type="radio"
-                                value = {bio} onChange={(e) => setBio(e.target.value)}/> Yes
+                                value = "Yes" name = "bio" checked={bio === "Yes"} onChange={(e) => setBio(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {bio} onChange={(e) => setBio(e.target.value)}/> No
+                                value = "No" name = "bio" checked={bio === "No"} onChange={(e) => setBio(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             13- Are there activities and operations on protected and sensitive areas? (e.g., IUCN protected area categories 1–4, world heritage sites, and biosphere reserves)
-                            </label>
+                            <AiIcons.AiOutlineQuestionCircle style={{fontSize: "15px", color:"#2F4050"}} /></label>
+                            <div></div>
                             <input 
                                 type="radio"
-                                value = {sensitive} onChange={(e) => setSensitive(e.target.value)}/> Yes
+                                value = "Yes" name = "sensitive" checked={sensitive === "Yes"} onChange={(e) => setSensitive(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {sensitive} onChange={(e) => setSensitive(e.target.value)}/> No
+                                value = "No" name = "sensitive" checked={sensitive === "No"} onChange={(e) => setSensitive(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
-                            14- Total amount of of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6) per day (t of CO2e/ day)
+                            25- Is the product produced recyclable or reusable? 
                             </label>
-                            <input 
-                                type='number' min='0'
-                                value = {ghg} onChange={(e) => setGhg(e.target.value)}
-                            /> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            15- Total amount of water pollution generated per day (m3/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}/> 
-                        <div></div> 
-                        {/* <label 
-                            className="form-label">
-                            16- Choose the type(s) of water pollution
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> 
-                        <div></div>  */}
-                        <label 
-                            className="form-label">
-                            17- Total amount of soil pollution generated per day
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}/> 
-                        <div></div> 
-                        {/* <label 
-                            className="form-label">
-                            18- Choose the type(s) of soil pollution
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> 
-                        <div></div>  */}
-                        <label 
-                            className="form-label">
-                            19- Total amount of air emission (NOx, SOx) generated per day (t/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {air} onChange={(e) => setAir(e.target.value)}/> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            20- Total amount of hazardous materials used per day (kg/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {hazmat} onChange={(e) => setHazmat(e.target.value)}/> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            21- Total amount of solid waste generated per day (kg/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {solidwaste} onChange={(e) => setSoilwaste(e.target.value)}/> 
-                        <div></div> 
-                        <label 
-                            className="form-label">
-                            22- Total amount of waste water generated per day (m3/ day)
-                            </label>
-                            <input 
-                                type='number' min='0'
-                                value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}/> 
-                        <div></div> 
-                        {/* <label 
-                            className="form-label">
-                            23- Choose the type(s) of solid waste generated
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> 
-                        <div></div>  */}
-                        {/* <label 
-                            className="form-label">
-                            24- Choose the type(s) of solid waste destination
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> 
-                        <div></div>  */}
-                        {/* <label 
-                            className="form-label">
-                            25- Choose the type(s) of waste water destination
-                            </label>
-                            <input 
-                                type="text"
-                                value = {water} onChange={(e) => setWater(e.target.value)}/> 
-                        <div></div>  */}
-                        <label 
-                            className="form-label">
-                            25- Is the product produced recyclable/reusable? 
-                            </label>
+                            <div></div>
                             <input 
                                 type="radio"
-                                value = {productrec} onChange={(e) => setProductrec(e.target.value)}/> Yes
+                                value = "Yes" checked={productrec === "Yes"} onChange={(e) => setProductrec(e.target.value)}/> 
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {productrec} onChange={(e) => setProductrec(e.target.value)}/> No
+                                value = "No" f onChange={(e) => setProductrec(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
-                            26- Choose the external certification(s) regarding environmental standards
+                            26- Is there  ISO 14000 certification regarding environmental standards?
                             </label>
+                            <div></div> 
                             <input 
-                                type="checkbox"
-                                value = {envirostand} onChange={(e) => setEnvirostand(e.target.value)}/> ISO14000
+                                type="radio"
+                                value = "Yes" name = "envirostand"  checked={envirostand === "Yes"} onChange={(e) => setEnvirostand(e.target.value)}/> 
+                                <label class="wrap_text"> Yes</label>
+                            <input 
+                                type="radio"
+                                value = "No" name = "envirostand" checked={envirostand === "No"} onChange={(e) => setEnvirostand(e.target.value)}/> 
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             27- Is there reverse logistics system?
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {reverse} onChange={(e) => setReverse(e.target.value)}/> Yes
+                                value = "Yes" name = "reverse"  checked={reverse === "Yes"} onChange={(e) => setReverse(e.target.value)}/> 
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {reverse} onChange={(e) => setReverse(e.target.value)}/> No
+                                value = "No" name = "reverse" checked={reverse === "No"} onChange={(e) => setReverse(e.target.value)}/> 
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             28- Choose the type(s) of reverse logistics
                             </label>
+                            <div></div> 
                             <input 
                                 type="checkbox"
-                                value = {reversetype} onChange={(e) => setReversetype(e.target.value)}/> Returns
+                                name = "Returns" onChange={(e) => handleChange(e.target.name, e.target.checked, setReversetype)}/> 
+                                <label class="wrap_text"> Returns</label>
                             <input 
                                 type="checkbox"
-                                value = {reversetype} onChange={(e) => setReversetype(e.target.value)}/> Reselling
+                                name = "Reselling" onChange={(e) => handleChange(e.target.name, e.target.checked, setReversetype)}/> 
+                                <label class="wrap_text"> Reselling</label> 
                             <input 
                                 type="checkbox"
-                                value = {reversetype} onChange={(e) => setReversetype(e.target.value)}/> Repairs
+                                name = "Repairs" onChange={(e) => handleChange(e.target.name, e.target.checked, setReversetype)}/> 
+                                <label class="wrap_text"> Repairs</label> 
                             <input 
                                 type="checkbox"
-                                value = {reversetype} onChange={(e) => setReversetype(e.target.value)}/> Repackaging
+                                name = "Repackaging" onChange={(e) => handleChange(e.target.name, e.target.checked, setReversetype)}/> 
+                                <label class="wrap_text"> Repackaging</label> 
                             <input 
                                 type="checkbox"
-                                value = {reversetype} onChange={(e) => setReversetype(e.target.value)}/> Recycling
+                                name = "Recycling" onChange={(e) => handleChange(e.target.name, e.target.checked, setReversetype)}/> 
+                                <label class="wrap_text"> Recycling</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             29- Choose the type(s) of clean technology used?
                             </label>
+                            <div></div> 
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Recycling
+                                name = "Recycling" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Recycling</label> 
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Renewable energy
+                                name = "Renewable energy" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Renewable energy</label> 
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Green transportation
+                                name = "Green transportation" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Green transportation</label>
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Electric motors
+                                name = "Electric motors" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Electric motors</label>
+                            <div></div>   
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Green chemistry
+                                name = "Green chemistry" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Green chemistry</label> 
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Green lighting
+                                name = "Green lighting" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Green lighting</label>
                             <input 
                                 type="checkbox"
-                                value = {clean} onChange={(e) => setClean(e.target.value)}/> Grey water
+                                name = "Grey water" onChange={(e) => handleChange(e.target.name, e.target.checked, setClean)}/> 
+                                <label class="wrap_text"> Grey water</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             30- Total number of suppliers monitored on environmental sustainability
                             </label>
+                            <div></div>
                             <input 
-                                type='number' min='0'
+                                type='number' min='0' onWheel={(e) => e.target.blur()}  
                                 value = {envirosus} onChange={(e) => setEnvirosus(e.target.value)}/>
                         <div></div> 
                         <label 
                             className="form-label">
                             31- Total number of suppliers
                             </label>
+                            <div></div>
                             <input 
-                                type='number' min='0'
+                                type='number' min='0' onWheel={(e) => e.target.blur()}  
                                 value = {suppliers} onChange={(e) => setSuppliers(e.target.value)}/>
-                        <div></div> 
+                </fieldset>
                 <button className="btn form-input-btn lca" type="submit">
                     Calculate LCA
                 </button>
                 </div>
             </form>
             </div>
-        </div>
     )
 }
 

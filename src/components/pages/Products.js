@@ -1,14 +1,13 @@
-import React from 'react'
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react'
+import Web3 from "web3"
+import Origin from "../../abis/Origin.json"
 import AddProduct from '../AddProduct'
 import Sidebar from '../Sidebar'
 import Product from '../Product'
-import ProductHeader from '../ProductHeader'
 import "../Products.css"
-import Web3 from "web3"
-import Origin from "../../abis/Origin.json"
+import Button from "../FormButton"
 
-export const Products = () => {
+const Products = () => {
 
     useEffect(() => { 
         const loadWeb3 = async () => {
@@ -61,13 +60,12 @@ export const Products = () => {
     const [products, setProducts] = useState([])
     const [contract, setContract] = useState([])
     const [showAddProduct, setShowAddProduct] = useState(false)
-    const [showAddOrder, setShowAddOrder] = useState(false)
     const [account, setAccount] = useState([])        
     const [productCount, setProductCount] = useState()        
 
     //Add Product
-    const addProduct = ({name, image, company}) => {
-        contract.methods.addProduct(name, image, company).send( {from: account} )
+    const addProduct = ({name, image, company, date}) => {
+        contract.methods.addProduct(name, image, company, date).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
@@ -82,13 +80,18 @@ export const Products = () => {
         <>
         <div>
             <Sidebar />
-            <div className="form-container">
-            <ProductHeader formTitle ="Add Product" title="Products"
-            onAdd= {() => setShowAddProduct(!showAddProduct)} 
-            showAdd={showAddProduct}/>
-            {showAddProduct && <AddProduct addProduct={addProduct}/>}
-            <Product onView={onView} products={products} 
-             /> 
+            <div className="main-container">
+            <header className="product-header"> 
+                <h2>Products</h2> 
+                <Button className="btn" 
+                onClick={() => setShowAddProduct(!showAddProduct)}
+                color={showAddProduct ? "#f2f2f2": "#3eb049"}
+                text={showAddProduct ? "X": <>{"Add Product"}</>}
+                />
+            </header>
+            {showAddProduct && <AddProduct onAdd={() => setShowAddProduct(!showAddProduct)} 
+            addProduct={addProduct}/>}
+            <Product onView={onView} products={products} /> 
             </div>
         </div>
         </>

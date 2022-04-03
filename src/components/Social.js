@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Web3 from "web3"
 import Assessment from "../abis/Assessments.json"
-const { create } = require("ipfs-http-client")
-const ipfs = create({host:"ipfs.infura.io", port:"5001", protocol: "https"})
 
 const Social = () => {
 
@@ -31,14 +29,14 @@ const Social = () => {
                 //Fetch contract
                 const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
                 setContract(contract)
-                const assessmentCount = await contract.methods.assessmentCount().call()
-                setAssessmentCount(assessmentCount)
-                //Load assessments
-                for (var i = 1; i <= assessmentCount; i++) {
-                    const newAssessment = await contract.methods.assessments(i).call()
-                    setAssessments(assessments =>([...assessments, newAssessment]))
-                }
-                }
+                const socialCount = await contract.methods.socialCount().call()
+                setSocialCount(socialCount)
+            //Load Socials
+            for (var i = 1; i <= socialCount; i++) {
+                const newSocial = await contract.methods.socials(i).call()
+                setSocials(socials =>([...socials, newSocial]))
+            }
+            }
             else { 
                 window.alert("Assessment contract is not deployed to the detected network")
             }
@@ -48,13 +46,14 @@ const Social = () => {
     const {register} = useForm();
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
-    const [assessmentCount, setAssessmentCount] = useState()        
-    const [assessments, setAssessments] = useState([])
+    const [socialCount, setSocialCount] = useState()
+    const [socials, setSocials] = useState([])
     const [date, setDate] = useState("")
-    const [document, setDocument] = useState([])
-    const [assessType, setAssessType] = useState("")
     const [d, setD] = useState("")
 
+    const [monthYear, setMonthYear] = useState("")
+    const [month, setMonth] = useState("")
+    const [year, setYear] = useState("")
     const [trainh, setTrainh] = useState("")
     const [trainemp, setTrainemp] = useState("")
     const [emp, setEmp] = useState("")
@@ -103,11 +102,13 @@ const Social = () => {
     const [privacy, setPrivacy] = useState("")
     const [leaks, setLeaks] = useState("")
     const [cuscomp, setCuscomp] = useState("")
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    const monthNumber = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
     
     const onSubmit = async(e) =>{
         e.preventDefault()
         const socialForm = {  
-        id: assessmentCount,
+        id: (parseInt(socialCount)+1).toString(),
         trainh: trainh,
         trainemp: trainemp,
         emp: emp, 
@@ -158,20 +159,14 @@ const Social = () => {
         cuscomp: cuscomp
     } 
     const document = JSON.stringify(socialForm)
-    // console.log(json)
-    // const result = await ipfs.add(json)
-    // console.log("Ipfs result", result)
-    // const document = result.path
-    // console.log(document)
-    const assessType = "Social Sustainability Assessment"
-    setAssessType(assessType)
     setD("now")
-    await addAssessment({assessType, document})
+    await addSocial({date, document, month, year})
     }
 
     useEffect(() => {
         getDate()
-    }, [d])
+        getMonth()
+    }, [d, monthYear])
 
     const getDate = async () => {
         const today = new Date()
@@ -182,24 +177,51 @@ const Social = () => {
         console.log(date)
     }
 
-    const addAssessment = ({assessType, document}) => {
-        contract.methods.addAssessment(assessType, document).send( {from: account} )
+    const getMonth = () => {
+        const month = monthYear.toString().substr(-2)
+        const year = monthYear.toString().substr(0,4)
+        setYear(year)
+        for (var i = 0; i <= 11; i++) {
+        if (month === monthNumber[i]) {
+            setMonth(months[i])
+        }
+    }}
+    
+    const addSocial = ({date, document, month, year}) => {
+        contract.methods.addSocial(date, document, month, year).send( {from: account} )
         .once('receipt', (receipt) => {
-            window.location.reload()
+            window.location.assign('http://localhost:3000/assessments')
         })
     }
+
+    const handleChange = (name, checked) => {
+        checked === true ? setSocialstand((prev) => [...prev, name]) 
+        : console.log("")}
+
     return (
-            <div>
+        <div>
             <div className="lca-container">
             <form className="lca-form" onSubmit={onSubmit}>
                 <div className="lca-input">
                         <h3>Social Sustainability Assessment</h3>
+                        <div className="center">
+                            <div>
+                        <label>
+                            Select Month/ Year  
+                            </label>
+                            <input 
+                                type='month' required
+                                value = {monthYear} onChange={(e) => setMonthYear(e.target.value)}
+                            />
+                        </div>
+                        </div>    
+                        <fieldset className="monthly-kpi"><legend>Monthly KPI Update</legend>
                             <label 
                             className="form-label">
                             1- Total number of training hours provided to employees per year   
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
                                 value = {trainh} onChange={(e) => setTrainh(e.target.value)}
                             /> 
                         <div></div>
@@ -208,7 +230,7 @@ const Social = () => {
                             2- Total number of trained employees per year
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {trainemp} onChange={(e) => setTrainemp(e.target.value)}
                             /> 
                         <div></div>
@@ -217,7 +239,7 @@ const Social = () => {
                             3- Total number of employees
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {emp} onChange={(e) => setEmp(e.target.value)}
                             /> 
                         <div></div> 
@@ -226,7 +248,7 @@ const Social = () => {
                             4- Total number of employees who resigned or have been made redundant per year
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()}
                                 value = {resemp} onChange={(e) => setResemp(e.target.value)}
                             /> 
                         <div></div> 
@@ -235,7 +257,7 @@ const Social = () => {
                             5- Total number of hired employees per year 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()}  
                                 value = {hiredemp} onChange={(e) => setHiredemp(e.target.value)}
                             /> 
                         <div></div> 
@@ -244,7 +266,7 @@ const Social = () => {
                             6- Total number of full-time employees 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {fullemp} onChange={(e) => setFullemp(e.target.value)}
                             /> 
                         <div></div> 
@@ -253,7 +275,7 @@ const Social = () => {
                             7- Average contractual working hours per full-time employee per week
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
                                 value = {workh} onChange={(e) => setWorkh(e.target.value)}
                             /> 
                         <div></div> 
@@ -262,7 +284,7 @@ const Social = () => {
                             8- Average overtime hours per employee per week
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
                                 value = {overtimeh} onChange={(e) => setOvertimeh(e.target.value)}
                             /> 
                         <div></div> 
@@ -271,15 +293,16 @@ const Social = () => {
                             9- Average employee wage 
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {empwage} onChange={(e) => setEmpwage(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                                value = {empwage} onChange={(e) => setEmpwage(e.target.value)}
+                                /> <label class="wrap_text"> TL</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             10- Total number of full-time employees earning below minimum wage
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {minwage} onChange={(e) => setMinwage(e.target.value)}/>
                         <div></div> 
                         <label 
@@ -287,7 +310,7 @@ const Social = () => {
                             11- Total number of employees entitled for health insurance, parental leave, unemployment, disability and invalidity coverage, retirement provision 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {insurance} onChange={(e) => setInsurance(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -295,23 +318,25 @@ const Social = () => {
                             12- Average female employee wage
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {femwage} onChange={(e) => setFemwage(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                                value = {femwage} onChange={(e) => setFemwage(e.target.value)}
+                                /> <label class="wrap_text"> TL</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             13- Average male employee wage
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {malwage} onChange={(e) => setMalwage(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                                value = {malwage} onChange={(e) => setMalwage(e.target.value)}
+                                /> <label class="wrap_text"> TL</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             14- Total number of female employees
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {fem} onChange={(e) => setFem(e.target.value)}
                             />
                         <div></div> 
@@ -320,7 +345,7 @@ const Social = () => {
                             15- Total number of male employees 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {male} onChange={(e) => setMale(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -328,23 +353,25 @@ const Social = () => {
                             16- Total number of female employees in board of director and management positions
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {femboard} onChange={(e) => setFemboard(e.target.value)}/> MJ/wash
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
+                                value = {femboard} onChange={(e) => setFemboard(e.target.value)}/>
                         <div></div> 
                         <label 
                             className="form-label">
                             17- Total number of employees in board of director and management positions
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {empboard} onChange={(e) => setEmpboard(e.target.value)}/> 
-                        <div></div> 
+                        <div></div>
+                        </fieldset>
+                        <fieldset className='annual-kpi'><legend>Annual KPI Update</legend> 
                         <label 
                             className="form-label">
                             18- Total number of disabled employees 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {disabled} onChange={(e) => setDisabled(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -352,7 +379,7 @@ const Social = () => {
                             19- Total number of minority employees 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {minority} onChange={(e) => setMinority(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -360,100 +387,119 @@ const Social = () => {
                             20- Total number of older employees
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {older} onChange={(e) => setOlder(e.target.value)}/> 
                         <div></div> 
                         <label 
                             className="form-label">
                             21- Choose the external certification(s) regarding social standards and supplier's code of conduct 
                             </label>
+                            <div></div>  
                             <input 
-                                type="checkbox"
-                                value = {socialstand} onChange={(e) => setSocialstand(e.target.value)}/> ISO26000
+                                name = "ISO26000" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> ISO26000</label> 
                             <input 
-                                type="checkbox"
-                                value = {socialstand} onChange={(e) => setSocialstand(e.target.value)}/> SA8000
+                                name = "SA8000" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> SA8000</label>  
                         <div></div> 
                         <label 
                             className="form-label">
                             22- Is there compliance with ILO Guidelines for Occupational Health Management Systems? 
                             </label>
+                            <div></div> 
+                            <input
+                                type="radio"
+                                value = "Yes" name = "ilo" checked={ilo === "Yes"} onChange={(e) => setIlo(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {ilo} onChange={(e) => setIlo(e.target.value)}/> Yes 
-                            <input 
-                                type="radio"
-                                value = {ilo} onChange={(e) => setIlo(e.target.value)}/> No
+                                value = "No" name = "ilo" checked={ilo === "No"} onChange={(e) => setIlo(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             23- Is there fire-fighting equipment and emergency exits?
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {fire} onChange={(e) => setFire(e.target.value)}/> Yes
+                                value = "Yes" name = "fire" checked={fire === "Yes"} onChange={(e) => setFire(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {fire} onChange={(e) => setFire(e.target.value)}/> No
+                                value = "No" name = "fire" checked={fire === "No"} onChange={(e) => setFire(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             24- Is there provision of medical assistance and first aid?
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {medical} onChange={(e) => setMedical(e.target.value)}/> Yes
+                                value = "Yes" name = "medical" checked={medical === "Yes"} onChange={(e) => setMedical(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {medical} onChange={(e) => setMedical(e.target.value)}/> No
+                                value = "No" name = "medical" checked={medical === "No"} onChange={(e) => setMedical(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
-                            25- Is there access to  and sanitation?
+                            25- Is there access to water and sanitation?
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {sanitation} onChange={(e) => setSanitation(e.target.value)}/> Yes
+                                value = "Yes" name = "sanitation" checked={sanitation === "Yes"} onChange={(e) => setSanitation(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {sanitation} onChange={(e) => setSanitation(e.target.value)}/> No
+                                value = "No" name = "sanitation" checked={sanitation === "No"} onChange={(e) => setSanitation(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             26- Is there provision of protective gear? 
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {gear} onChange={(e) => setGear(e.target.value)}/> Yes
+                                value = "Yes" name = "gear" checked={gear === "Yes"} onChange={(e) => setGear(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {gear} onChange={(e) => setGear(e.target.value)}/> No 
+                                value = "No" name = "gear" checked={gear === "No"} onChange={(e) => setGear(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             27- Total number of work accidents per year
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {workacc} onChange={(e) => setWorkacc(e.target.value)}/> 
                         <div></div> 
                         <label 
                             className="form-label">
                             28- Are there union(s) within the organization?
                             </label>
+                            <div></div> 
                             <input 
                                 type="radio"
-                                value = {union} onChange={(e) => setUnion(e.target.value)}/> Yes
+                                value = "Yes" name = "union" checked={union === "Yes"} onChange={(e) => setUnion(e.target.value)}/>
+                                <label class="wrap_text"> Yes</label>
                             <input 
                                 type="radio"
-                                value = {union} onChange={(e) => setUnion(e.target.value)}/> No
+                                value = "No" name = "union" checked={union === "No"} onChange={(e) => setUnion(e.target.value)}/>
+                                <label class="wrap_text"> No</label>
                         <div></div> 
                         <label 
                             className="form-label">
                             29- Total number of employees joined to labor unions
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {empunion} onChange={(e) => setEmpunion(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -461,7 +507,7 @@ const Social = () => {
                             30- Total number of employees covered by collective bargaining agreements
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {bargain} onChange={(e) => setBargain(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -469,7 +515,7 @@ const Social = () => {
                             31- Total number of discrimination incidents in terms of race, gender, sexual orientation, religion, disability, and age
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {discri} onChange={(e) => setDiscri(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -477,7 +523,7 @@ const Social = () => {
                             32- Total number of child labor
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {child} onChange={(e) => setChild(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -485,7 +531,7 @@ const Social = () => {
                             33- Total number of forced labor
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {forced} onChange={(e) => setForced(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -493,7 +539,7 @@ const Social = () => {
                             34- Total number of incidents of violating the rights of indigenous people 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {indig} onChange={(e) => setIndig(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -501,7 +547,7 @@ const Social = () => {
                             35- Total number of local employees
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {localemp} onChange={(e) => setLocalemp(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -509,7 +555,7 @@ const Social = () => {
                             36- Total number of local suppliers
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {localsup} onChange={(e) => setLocalsup(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -517,23 +563,25 @@ const Social = () => {
                             37- Total amount of money donated
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {donation} onChange={(e) => setDonation(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                                value = {donation} onChange={(e) => setDonation(e.target.value)}
+                                /> <label class="wrap_text"> TL</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             38- Total amount of pre-tax earnings 
                             </label>
                             <input 
-                                type='number' min='0' 
-                                value = {earning} onChange={(e) => setEarning(e.target.value)}/> 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                                value = {earning} onChange={(e) => setEarning(e.target.value)}
+                                /> <label class="wrap_text"> TL</label> 
                         <div></div> 
                         <label 
                             className="form-label">
                             39- Total number of incidents of corruption 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {corrup} onChange={(e) => setCorrup(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -541,7 +589,7 @@ const Social = () => {
                             40- Total number of legal actions pending or completed regarding anti-competitive behavior 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {anticomp} onChange={(e) => setAnticomp(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -549,7 +597,7 @@ const Social = () => {
                             41- Total number of suppliers monitored on labor practices, health and safety, human rights, society and product responsibility issues
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {socialsus} onChange={(e) => setSocialsus(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -557,7 +605,7 @@ const Social = () => {
                             42- Total number of suppliers
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {suppliers} onChange={(e) => setSuppliers(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -565,7 +613,7 @@ const Social = () => {
                             43- Total number of products and services for which health and safety impacts are assessed
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {productassess} onChange={(e) => setProductassess(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -573,7 +621,7 @@ const Social = () => {
                             44- Total number of products and services 
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {product} onChange={(e) => setProduct(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -581,7 +629,7 @@ const Social = () => {
                             45- Total number of health and safety incidents concerning products and services
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {productincident} onChange={(e) => setProductincident(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -589,7 +637,7 @@ const Social = () => {
                             46- Total number of customer privacy complaints
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {privacy} onChange={(e) => setPrivacy(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -597,7 +645,7 @@ const Social = () => {
                             47- Total number of leaks, thefts, or losses of customer data
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {leaks} onChange={(e) => setLeaks(e.target.value)}/> 
                         <div></div> 
                         <label 
@@ -605,9 +653,10 @@ const Social = () => {
                             48- Total number of customer complaints
                             </label>
                             <input 
-                                type='number' min='0' 
+                                type='number' min='0' onWheel={(e) => e.target.blur()} 
                                 value = {cuscomp} onChange={(e) => setCuscomp(e.target.value)}/> 
-                        <div></div> 
+                        <div></div>
+                        </fieldset> 
                 <button className="btn form-input-btn lca" type="submit">
                     Calculate LCA
                 </button>

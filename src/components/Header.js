@@ -74,13 +74,13 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
 
     return (
         <header className="dashheader">
-            <div className="shipment-btn">
-                <Button className="btn" 
+            <div className="shipment-btns">
+                <Button 
                 onClick={getSentLocationDate}
                 color="orange"
                 text="Send Shipment"
                 />
-                <Button className="btn" 
+                <Button 
                 onClick={getRecLocationDate}
                 color="gold"
                 text="Receive Shipment"
@@ -89,8 +89,8 @@ const Header = ({ title, formTitle, onAdd, showAdd, addShipment, account}) => {
         {showAdd ? "" : <h2>{title}</h2> }
         <Button className="btn" 
         onClick= {onAdd}
-        color={showAdd ? "#f2f2f2" : "green"}
-        text={showAdd ? "": <>{formTitle}</>}
+        color= {showAdd ? "#f2f2f2" : "#3eb049"}
+        text= {showAdd ? "": <>{formTitle}</>}
         />
     </header>
     )

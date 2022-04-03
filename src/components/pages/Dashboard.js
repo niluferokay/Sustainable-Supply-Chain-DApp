@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react'
-import AddOrder from '../AddOrder'
-import Order from '../Order'
-import Sidebar from '../Sidebar';
-import "../Products.css"
+import React, { useState, useEffect} from 'react'
 import Web3 from "web3"
 import Origin from "../../abis/Origin.json"
-import Header from '../Header';
-import { ProductContext } from '../../contexts/ProductContext';
-import Shipment from '../Shipment';
+import AddOrder from '../AddOrder'
+import Order from '../Order'
+import Sidebar from '../Sidebar'
+import Header from '../Header'
+import Shipment from '../Shipment'
 
 const Dashboard = () => {
 
@@ -59,23 +57,27 @@ const Dashboard = () => {
                         const newShipment = await contract.methods.shipments(i).call()
                         setShipment(shipments =>([...shipments, newShipment]))
                     }
+                    for (var i = 1; i <= shipmentCount; i++) {
+                        const newShipment = await contract.methods.shipments(i).call()
+                        const newLat = newShipment.latitude
+                        setLat(shipments =>([...shipments, newLat]))
+                    }
                     }
                 else { 
                     window.alert("Origin contract is not deployed to the detected network")
                 }
             }
-            loadBlockchainData()}, [])
+        loadBlockchainData()}, [])
     
-    const {products} = useContext(ProductContext)
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
     const [ordersCount, setOrderCount] = useState()        
     const [shipmentCount, setShipmentCount] = useState()        
     const [showCreateOrder, setShowCreateOrder] = useState(false)
-    const [showShipment, setShowShipment] = useState(true)
     const [orders, setOrder] = useState([])
     const [shipments, setShipment] = useState([])
-    const [sort, setSort] = useState([])
+    const [lat, setLat] = useState([])
+    const [long, setLong] = useState()
     
     //Add Order
     const addOrder = ({name, quantity, unit, date}) => {
@@ -95,18 +97,18 @@ const Dashboard = () => {
 
     return (
         <>
-        <div className="form-container">
-        <Sidebar />
+        <div className="main-container">
+        <Sidebar/>
         <Header 
             formTitle ="Create Order" 
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} 
             showAdd={showCreateOrder} 
             addShipment={addShipment} account = {account}
             />
-            {showCreateOrder && <AddOrder products = {products} addOrder={addOrder}
+            {showCreateOrder && <AddOrder addOrder={addOrder}
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} />}
-        <Shipment shipments = {shipments} />
         <Order orders={orders} />
+        <Shipment shipments = {shipments} />
         </div>
         </>
     )
