@@ -65,7 +65,7 @@ body {
   table-layout: fixed;
   width: 85%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 400;
 }
 .assess-table {
@@ -75,7 +75,7 @@ body {
   table-layout: fixed;
   width: 70%;
   border-collapse: collapse;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 400;
 }
 
@@ -103,62 +103,134 @@ body {
   background-color: #f2f2f2;
   align-self: center;
   position: absolute;
-  padding: 30px;
+  padding: 30px 0px 0px 6px;
   top: 12%;
-  border: 2px solid darkgray;
-  width: 60%;
+  border: 1px solid darkgray;
+  width: 45%;
+  height: 59%;
+  border-radius: 10px;
+}
+
+.ship-form {
+  z-index: 1; /* Sit on top */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: #f2f2f2;
+  align-self: center;
+  position: absolute;
+  padding: 30px 0px 0px 0px;
+  top: 12%;
+  border: 1px solid darkgray;
+  width: 48%;
   height: 60%;
   border-radius: 10px;
 }
+
 .product-form {
   z-index: 1; /* Sit on top */
   overflow: auto; /* Enable scroll if needed */
   background-color: #f2f2f2;
   align-self: center;
   position: absolute;
-  padding: 30px;
+  padding: 30px 20px 0px 10px;
   top: 12%;
-  border: 2px solid darkgray;
-  width: 60%;
+  border: 1px solid darkgray;
+  width: 45%;
   height: 70%;
   border-radius: 10px;
-
 }
 
 .form-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   font-size: 15px;
-  margin-left: 32px;
+  margin-left: 50px;
+}
+.form-header h2{
+  margin-right: 330px;
 }
 
 .product-form-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   font-size: 15px;
-  margin-left: 32px;
+  margin-left: 50px;
 }
 
-.form-inputs label {
+.product-form-header h2 {
+  margin-right: 300px;
+}
+
+.form-inputs label:not(.order-label) {
   font-size: 15px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+  text-align: start;
+  margin-left: 80px;
 }
 
-.name {
-  width: 90%;
-  height: 40px;
-  margin: 5px;
+.order-label {
+  font-size: 15px;
+  display: block;
+  margin-bottom: 15px;
+  text-align: start;
+  margin-left: 90px;
+}
+
+.product-center-form h3 {
+  font-size: 15px;
+  float: left;
+  margin-left: 85px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 9px;
+}
+
+.quantity {
+  width: 42%;
+  height: 28px;
+  margin: 0px 5px 9px 0px;
   padding: 3px 7px;
-  font-size: 17px;
+  font-size: 14px;
+}
+
+.unit {
+  width: 18%;
+  height: 28px;
+  margin: 0px 0px 9px 5px;
+  padding: 3px 7px;
+  font-size: 14px;
+}
+
+.order-product {
+  width: 61%;
+  height: 28px;
+  padding: 3px 7px;
+  font-size: 14px;
+  margin-bottom: 13px;
 }
 
 .product {
-  width: 90%;
+  width: 65%;
   height: 28px;
-  margin-bottom: 3px;
   padding: 3px 7px;
   font-size: 14px;
+  margin-bottom: 13px;
+}
+
+.process-add {
+  width: 53%;
+  height: 28px;
+  float: left;
+  margin-bottom: 18px;
+  margin-left: 103px;
+  padding: 3px 7px;
+  font-size: 14px;
+}
+
+.add {
+  font-size: 20px;
+  float: left;
+  margin-left: 20px;
 }
 
 .form-inputs {
@@ -167,32 +239,26 @@ body {
 
 .form-input-btn {
   display: block;
-  width: 90%;
+  width: 85%;
 }
 
-.quantity {
-  width: 64%;
-  height: 40px;
-  margin: 5px;
-  padding: 3px 7px;
-  font-size: 17px;
+.center-btn {
+  text-align: center;
+  padding-top: 15px;
 }
 
-.unit {
-  width: 24%;
-  height: 40px;
-  margin: 5px;
-  padding: 3px 7px;
-  font-size: 17px;
+.form-input-lca{
+  width: 85%;
+  margin-top: 190px;
+}
+
+.order-input-btn {
+  display: block;
+  width: 61%;
 }
 
 .product-center-form {
   text-align: center;
-}
-
-.form-inputs label {
-  text-align: start;
-  margin-left: 40px;
 }
 
 .p-img {
@@ -210,11 +276,9 @@ body {
 .shipments td {
   padding: 10px;
 }
-.address td, .address th{
-  text-align: left;
-  width: 50%;
+.address {
+  width: 20%;
 }
-
 .assess {
   width: 150px;
 }
@@ -233,27 +297,55 @@ body {
 .period {
   width: 190px;
 }
-.status td {
+.process {
+  width: 32%;
+}
+.product-name {
+  width: 20%;
+}
+.product-img {
+  width: 15%;
+}
+.status {
+  width:14%
+}
+.ship-product {
+  width:12%
+}
+.ship-process {
   width:15%
 }
-.date td {
+.mapview {
+  width:18%
+}
+.date {
   width:20%
 }
 .delete {
   width: 2px;
 }
 
+.ordernum {
+  width: 11%;
+}
+
 .table tr:nth-child(even) {background-color:#f2f2f2}
 .table tr:hover {background-color:#ddd}
 
 .table th {
-  padding-left: 25px;
   padding-bottom: 12px;
   color: black;
   background-color: white;
-  text-transform: uppercase;
-  text-align: left;
+  font-size: 13px;
 }
+
+.assess-table th {
+  padding-bottom: 12px;
+  color: black;
+  background-color: white;
+  font-size: 13px;
+}
+
 .shipments-table{
   border: 1px solid #c3c3c3;
 }
@@ -351,7 +443,9 @@ body {
 .lca-form{
   display: flex;
   flex-direction: row;
-  margin: 3%;
+  justify-content: center;
+  padding: 3%;
+  padding-bottom: 50px;
   background-color: #f2f2f2;
 }
 
@@ -456,7 +550,7 @@ body {
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
-  margin-left: 20px;
+  margin-left: 50px;
 }
 
 .wrap_text {
@@ -468,11 +562,27 @@ font-size: 14px;
   border-radius: 20px;
   padding: 15px;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.monthly-kpi-env {
+  border:2px solid;
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .monthly-kpi label:not(.wrap_text) {
   display:inline-block;
-  width: 460px;
+  width: 560px;
+}
+
+.monthly-kpi-env label:not(.wrap_text) {
+  display:inline-block;
+  width: 400px;
 }
 
 .annual-kpi {
@@ -480,10 +590,14 @@ font-size: 14px;
   border-radius: 20px;
   padding: 15px;
   margin-bottom: 20px;
+  width: 900px;
+  display: flex;
+  justify-content: center;
 }
 
-.annual-kpi input {
-  margin-left: 24px;
+.annual-kpi label:not(.wrap_text) {
+  display:inline-block;
+  width: 560px;
 }
 
 .lca-kpi {
@@ -491,11 +605,15 @@ font-size: 14px;
   border-radius: 20px;
   padding: 15px;
   margin-bottom: 20px;
+  width: 1050px;
+  display: flex;
+  justify-content: center;
+
 }
 
 .lca-kpi label:not(.wrap_text) {
   display:inline-block;
-  width: 400px;
+  width: 560px;
 }
 
 .center {
@@ -506,7 +624,6 @@ font-size: 14px;
 
 .center-form {
 margin-left: 250px;
-
 }
 
 .charts {

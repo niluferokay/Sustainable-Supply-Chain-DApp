@@ -4,8 +4,9 @@ import Origin from "../../abis/Origin.json"
 import AddOrder from '../AddOrder'
 import Order from '../Order'
 import Sidebar from '../Sidebar'
-import Header from '../Header'
 import Shipment from '../Shipment'
+import AddShipment from '../AddShipment'
+import Button from "../FormButton"
 
 const Dashboard = () => {
 
@@ -57,11 +58,6 @@ const Dashboard = () => {
                         const newShipment = await contract.methods.shipments(i).call()
                         setShipment(shipments =>([...shipments, newShipment]))
                     }
-                    for (var i = 1; i <= shipmentCount; i++) {
-                        const newShipment = await contract.methods.shipments(i).call()
-                        const newLat = newShipment.latitude
-                        setLat(shipments =>([...shipments, newLat]))
-                    }
                     }
                 else { 
                     window.alert("Origin contract is not deployed to the detected network")
@@ -74,10 +70,10 @@ const Dashboard = () => {
     const [ordersCount, setOrderCount] = useState()        
     const [shipmentCount, setShipmentCount] = useState()        
     const [showCreateOrder, setShowCreateOrder] = useState(false)
+    const [showCreateShip, setShowCreateShip] = useState(false)
     const [orders, setOrder] = useState([])
     const [shipments, setShipment] = useState([])
-    const [lat, setLat] = useState([])
-    const [long, setLong] = useState()
+    const [shipType, setShipType] = useState("")
     
     //Add Order
     const addOrder = ({name, quantity, unit, date}) => {
@@ -88,8 +84,8 @@ const Dashboard = () => {
     }
 
     //Add Shipment
-    const addShipment = ({shipType, place, latitude, longitude, date}) => {
-        contract.methods.addShipment(shipType, place, latitude, longitude, date).send( {from: account} )
+    const addShipment = ({shipType, latitude, longitude, date, product, process}) => {
+        contract.methods.addShipment(shipType, latitude, longitude, date, product, process).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
@@ -99,14 +95,29 @@ const Dashboard = () => {
         <>
         <div className="main-container">
         <Sidebar/>
-        <Header 
-            formTitle ="Create Order" 
-            onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} 
-            showAdd={showCreateOrder} 
-            addShipment={addShipment} account = {account}
-            />
+        <header className="dashheader">
+            <div className="shipment-btns">
+                <Button 
+                onClick={() => {setShowCreateShip(!showCreateShip); setShipType("Shipment Sent")}}
+                color="orange"
+                text="Send Shipment"
+                />
+                <Button 
+                onClick={() => {setShowCreateShip(!showCreateShip); setShipType("Shipment Received")}}
+                color="gold"
+                text="Receive Shipment"
+                />
+            </div>    
+                <Button className="btn" 
+                onClick= {() => {setShowCreateOrder(!showCreateOrder)}}
+                color= {showCreateOrder ? "#f2f2f2" : "#3eb049"}
+                text= {showCreateOrder ? "": <>Create Order</>}
+                />
+        </header>
             {showCreateOrder && <AddOrder addOrder={addOrder}
             onAdd= {() => {setShowCreateOrder(!showCreateOrder)}} />}
+            {showCreateShip && <AddShipment addShipment={addShipment}
+            shipType={shipType} onShipAdd= {() => {setShowCreateShip(!showCreateShip)}} />}
         <Order orders={orders} />
         <Shipment shipments = {shipments} />
         </div>

@@ -106,7 +106,7 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
                 />
                 <Button className="btn" 
                 onClick={routeLCA}
-                text="Life Cycle Assessment Report"
+                text="Life Cycle Inventory Report"
                 />
             </div>    
         </header>

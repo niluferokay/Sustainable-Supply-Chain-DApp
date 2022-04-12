@@ -169,11 +169,10 @@ const LCA = () => {
         : console.log("")}
     
     return (
-            <div>
             <div className="lca-container">
             <form className="lca-form" onSubmit={onSubmit}>
-                <div className="lca-input">
-                        <h3>Life Cycle Assessment</h3>
+                <div>
+                    <h3>Life Cycle Inventory</h3>
                         <div className="center">
                             <div>
                             <label>
@@ -201,168 +200,164 @@ const LCA = () => {
                                 value = {process} onChange={(e) => setProcess(e.target.value)}
                             >
                             <option value=""disabled selected hidden></option>
-                            <option value="Harvest"> Harvest </option>
-                            <option value="Yarn Manufacturing"> Yarn Manufacturing </option>
-                            <option value="Fabric Formation"> Fabric Formation </option>
-                            <option value="Dyeing"> Dyeing </option>
-                            <option value="Cut and Sew"> Cut and Sew </option>
-                            <option value="Storage"> Storage </option>
-                            <option value="Use"> Use </option>
+                            {product !== "" ? products.filter(obj => obj.name.includes(product)).map(product => product.process).map(a => JSON.parse(a).map(process=> 
+                            <option value={process}>{process} </option>
+                            )) : null}
                             </select>
-                            </div> 
-                        <div></div> 
+                        </div>  
                         </div>
-                        <fieldset className="lca-kpi"><legend>Product LCA Update</legend>
-                        <div className='center-form' >
-                            <label>
-                            1- Total amount of energy used  
-                            </label> 
-                            <input 
-                                {...register("energy")} 
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {energy} onChange={(e) => setEnergy(e.target.value)}
-                            /><label class="wrap_text"> kWh</label>
-                        <div></div>
-                            <label>
-                            2- Batch size
-                            </label>
-                            <input 
-                                {...register("batch")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {batch} onChange={(e) => setBatch(e.target.value)}
-                            /> 
-                        <div></div>
-                            {/* <label>
-                            4- Choose the type(s) of renewable energy used in the product production
-                            </label>
-                            <div></div> 
-                                <input 
-                                    name = "Solar energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
-                                    type="checkbox" /><label class="wrap_text"> Solar energy</label> 
-                                <input 
-                                    name = "Hydropower" onChange={(e) => handleChange(e.target.name, e.target.checked)}
-                                    type="checkbox"/><label class="wrap_text"> Hydropower</label> 
-                                <input 
-                                    name = "Wind energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
-                                    type="checkbox"/><label class="wrap_text"> Wind energy</label>
-                                <input 
-                                    name = "Biomass" onChange={(e) => handleChange(e.target.name, e.target.checked)}
-                                    type="checkbox"/><label class="wrap_text"> Biomass</label> 
-                                <input 
-                                    name = "Geothermal energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
-                                    type="checkbox"/><label class="wrap_text"> Geothermal energy</label> 
-                        <div></div>  */}
+                <fieldset className="monthly-kpi"><legend>Product LCI Update</legend>
+                    <div className='center-form-input' >
                         <label>
-                            5- Total amount of renewable energy used  
-                            </label>
-                            <input 
-                                {...register("renewenergy")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
-                            /> <label class="wrap_text"> kWh</label>
+                        1- Total amount of energy used  
+                        </label> 
+                        <input 
+                            {...register("energy")} 
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {energy} onChange={(e) => setEnergy(e.target.value)}
+                        /><label class="wrap_text"> kWh</label>
+                    <div></div>
+                        <label>
+                        2- Batch amount
+                        </label>
+                        <input 
+                            {...register("batch")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {batch} onChange={(e) => setBatch(e.target.value)}
+                        /> 
+                    <div></div>
+                        {/* <label>
+                        4- Choose the type(s) of renewable energy used in the product production
+                        </label>
                         <div></div> 
-                        <label>
-                            6- Total amount of water used 
-                            </label>
                             <input 
-                                {...register("water")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {water} onChange={(e) => setWater(e.target.value)}
+                                name = "Solar energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox" /><label class="wrap_text"> Solar energy</label> 
+                            <input 
+                                name = "Hydropower" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> Hydropower</label> 
+                            <input 
+                                name = "Wind energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> Wind energy</label>
+                            <input 
+                                name = "Biomass" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> Biomass</label> 
+                            <input 
+                                name = "Geothermal energy" onChange={(e) => handleChange(e.target.name, e.target.checked)}
+                                type="checkbox"/><label class="wrap_text"> Geothermal energy</label> 
+                    <div></div>  */}
+                    <label>
+                        5- Total amount of renewable energy used  
+                        </label>
+                        <input 
+                            {...register("renewenergy")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {renewenergy} onChange={(e) => setRenewenergy(e.target.value)}
+                        /> <label class="wrap_text"> kWh</label>
+                    <div></div> 
+                    <label>
+                        6- Total amount of water used 
+                        </label>
+                        <input 
+                            {...register("water")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {water} onChange={(e) => setWater(e.target.value)}
+                        /> <label class="wrap_text"> ㎥</label> 
+                    <div></div> 
+                    <label>
+                        7- Total amount of recycled or reused water used 
+                        </label>
+                        <input 
+                            {...register("waterrec")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
+                        /> <label class="wrap_text"> ㎥</label> 
+                    <div></div> 
+                    <label>
+                        8- Total amount of materials other than water used 
+                        </label>
+                        <input 
+                                {...register("material")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {material} onChange={(e) => setMaterial(e.target.value)}
+                        /> <label class="wrap_text"> kg</label> 
+                    <div></div> 
+                    <label>
+                        10- Total amount of recycled or reused materials used 
+                        </label>
+                        <input 
+                            {...register("materialrec")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}
+                            /> <label class="wrap_text"> kg</label>  
+                    <div></div> 
+                    <label>
+                        12- Total amount of of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6) 
+                        </label>
+                        <input {...register("ghg")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {ghg} onChange={(e) => setGhg(e.target.value)}
+                            /> <label class="wrap_text"> t CO2eq</label> 
+                    <div></div> 
+                    <label>
+                        13- Total amount of water pollution generated 
+                        </label>
+                        <input  {...register("waterpol")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}
                             /> <label class="wrap_text"> ㎥</label> 
-                        <div></div> 
-                        <label>
-                            7- Total amount of recycled or reused water used 
-                            </label>
-                            <input 
-                                {...register("waterrec")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {waterrec} onChange={(e) => setWaterrec(e.target.value)}
-                            /> <label class="wrap_text"> ㎥</label> 
-                        <div></div> 
-                        <label>
-                            8- Total amount of materials other than water used 
-                            </label>
-                            <input 
-                                 {...register("material")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {material} onChange={(e) => setMaterial(e.target.value)}
+                    <div></div> 
+                    <label>
+                        15- Total amount of soil pollution generated 
+                        </label>
+                        <input  {...register("soilpol")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}/> 
+                    <div></div> 
+                    <label>
+                        17- Total amount of air emission (NOx, SOx) 
+                        </label>
+                        <input  {...register("air")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {air} onChange={(e) => setAir(e.target.value)}
+                            /> <label class="wrap_text"> ppm</label> 
+                    <div></div> 
+                    <label>
+                        18- Total amount of hazardous materials used 
+                        </label>
+                        <input
+                            {...register("hazmat")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {hazmat} onChange={(e) => setHazmat(e.target.value)}
+                            /> <label class="wrap_text"> kg</label>  
+                    <div></div> 
+                    <label>
+                        19- Total amount of solid waste generated 
+                        </label>
+                        <input 
+                            {...register("soilwaste")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {soilwaste} onChange={(e) => setSoilwaste(e.target.value)}
                             /> <label class="wrap_text"> kg</label> 
-                        <div></div> 
-                        <label>
-                            10- Total amount of recycled or reused materials used 
-                            </label>
-                            <input 
-                                {...register("materialrec")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {materialrec} onChange={(e) => setMaterialrec(e.target.value)}
-                                /> <label class="wrap_text"> kg</label>  
-                        <div></div> 
-                        <label>
-                            12- Total amount of of greenhouse gas emission (CO2, CH4, N2O, HFCs, PFCs, SF6) 
-                            </label>
-                            <input {...register("ghg")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {ghg} onChange={(e) => setGhg(e.target.value)}
-                                /> <label class="wrap_text"> t CO2eq</label> 
-                        <div></div> 
-                        <label>
-                            13- Total amount of water pollution generated 
-                            </label>
-                            <input  {...register("waterpol")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {waterpol} onChange={(e) => setWaterpol(e.target.value)}
-                                /> <label class="wrap_text"> ㎥</label> 
-                        <div></div> 
-                        <label>
-                            15- Total amount of soil pollution generated 
-                            </label>
-                            <input  {...register("soilpol")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {soilpol} onChange={(e) => setSoilpol(e.target.value)}/> 
-                        <div></div> 
-                        <label>
-                            17- Total amount of air emission (NOx, SOx) 
-                            </label>
-                            <input  {...register("air")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {air} onChange={(e) => setAir(e.target.value)}
-                                /> <label class="wrap_text"> ppm</label> 
-                        <div></div> 
-                        <label>
-                            18- Total amount of hazardous materials used 
-                            </label>
-                            <input
-                                {...register("hazmat")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {hazmat} onChange={(e) => setHazmat(e.target.value)}
-                                /> <label class="wrap_text"> kg</label>  
-                        <div></div> 
-                        <label>
-                            19- Total amount of solid waste generated 
-                            </label>
-                            <input 
-                                {...register("soilwaste")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {soilwaste} onChange={(e) => setSoilwaste(e.target.value)}
-                                /> <label class="wrap_text"> kg</label> 
-                        <div></div> 
-                        <label>
-                            20- Total amount of waste water generated 
-                            </label>
-                            <input  
-                                {...register("waterwaste")}
-                                type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                                value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}
-                                /> <label class="wrap_text"> ㎥</label>  
-                        </div>
-                        </fieldset> 
-                <button className="btn form-input-btn lca" type="submit">
-                    Calculate LCA
-                </button>
+                    <div></div> 
+                    <label>
+                        20- Total amount of waste water generated 
+                        </label>
+                        <input  
+                            {...register("waterwaste")}
+                            type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                            value = {waterwaste} onChange={(e) => setWaterwaste(e.target.value)}
+                            /> <label class="wrap_text"> ㎥</label>  
+                    </div>
+                </fieldset>
+                    <div className='center-btn'>
+                        <button className="btn form-input-lca" type="submit">
+                            Calculate LCI 
+                        </button>
+                    </div> 
                 </div>
             </form>
             </div>
-        </div>
     )
 }
 

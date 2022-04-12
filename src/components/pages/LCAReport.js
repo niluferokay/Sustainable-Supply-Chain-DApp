@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect} from 'react'
 import Web3 from "web3"
 import Assessment from "../../abis/Assessments.json"
 import {Bar} from "react-chartjs-2"
@@ -90,10 +90,13 @@ const LCAReport = () => {
               for (var i = 1; i <= LCACount; i++) {
                   const newLCA = await contract.methods.LCAs(i).call()
                   setLCAs(LCAs =>([...LCAs, newLCA]))
+                  setMonth(LCAs =>([...LCAs, newLCA.month]))
+                  setYear(LCAs =>([...LCAs, newLCA.year]))
               }
               for (var i = 1; i <= LCACount; i++) {
                   const newLCA = await contract.methods.LCAs(i).call()
                   setForm(LCAs =>([...LCAs, JSON.parse(newLCA.document)]))
+                  setProduct(LCAs =>([...LCAs, JSON.parse(newLCA.document).product]))
               }
               }
           else { 
@@ -109,12 +112,16 @@ const LCAReport = () => {
     const [date, setDate] = useState("")
     const [document, setDocument] = useState([])
     const [form, setForm] = useState([])
-  
-    const data = (LCAs.map(t1 => ({...t1, ...form.find(t2 => t2.id === t1.id)})))
+    const [product, setProduct] = useState([])
+    const [month, setMonth] = useState([])
+    const [year, setYear] = useState([])
+    const [formProduct, setFormProduct] = useState("")
+    const [formMonth, setFormMonth] = useState("")
+    const [formYear, setFormYear] = useState("")
 
     const [energyChartData, setEnergyChartData] = useState({
-        datasets: [],
-    });
+      datasets: [],
+  });
 
     const [waterChartData, setWaterChartData] = useState({
         datasets: [],
@@ -149,8 +156,9 @@ const LCAReport = () => {
     const [hazmat, setHazmat] = useState([])
     const [solidwaste, setSolidwaste] = useState([])
     const [waterwaste, setWaterwaste] = useState([])
-    const [suppliers, setSuppliers] = useState([])
     const [id, setId] = useState([])
+    // const [data, setData] = useState([])
+
 
     const [optionsE, setOptionsE] = useState({})
     const [optionsW, setOptionsW] = useState({})
@@ -158,20 +166,27 @@ const LCAReport = () => {
     const [optionsM, setOptionsM] = useState({})
     const [optionsP, setOptionsP] = useState({})
 
-  const charts = async () => {
-    setEnergy(data.map(a => parseInt(a.energy)))
+    const dataE = form.map((item, i) => Object.assign({}, item, LCAs[i]));
+    const data = dataE.filter(obj => obj.month.includes(formMonth))
+    
+    useEffect(() => {
+    charts()
+  }, [formMonth])
+
+  const charts = async() => {
+    setEnergy(data.map(a => parseInt(a.energy)/parseInt(a.batch)))
     setId(data.map(a => (a.process)))
-    setWater(data.map(a => parseInt(a.water)))
-    setWaterrec(data.map(a => parseInt(a.waterrec)))
-    setMaterial(data.map(a => parseInt(a.material)))
-    setMaterialrec(data.map(a => parseInt(a.materialrec)))
-    setGhg(data.map(a => parseInt(a.ghg)))
-    setWaterpol(data.map(a => parseInt(a.waterpol)))
-    setSoilpol(data.map(a => parseInt(a.soilpol)))
-    setAir(data.map(a => parseInt(a.air)))
-    setHazmat(data.map(a => parseInt(a.hazmat)))
-    setSolidwaste(data.map(a => parseInt(a.solidwaste)))
-    setWaterwaste(data.map(a => parseInt(a.waterwaste)))
+    setWater(data.map(a => parseInt(a.water)/parseInt(a.batch)))
+    setWaterrec(data.map(a => parseInt(a.waterrec)/parseInt(a.batch)))
+    setMaterial(data.map(a => parseInt(a.material)/parseInt(a.batch)))
+    setMaterialrec(data.map(a => parseInt(a.materialrec)/parseInt(a.batch)))
+    setGhg(data.map(a => parseInt(a.ghg)/parseInt(a.batch)))
+    setWaterpol(data.map(a => parseInt(a.waterpol)/parseInt(a.batch)))
+    setSoilpol(data.map(a => parseInt(a.soilpol)/parseInt(a.batch)))
+    setAir(data.map(a => parseInt(a.air)/parseInt(a.batch)))
+    setHazmat(data.map(a => parseInt(a.hazmat)/parseInt(a.batch)))
+    setSolidwaste(data.map(a => parseInt(a.solidwaste)/parseInt(a.batch)))
+    setWaterwaste(data.map(a => parseInt(a.waterwaste)/parseInt(a.batch)))
 
     setEnergyChartData({
       labels: id,
@@ -352,15 +367,48 @@ const LCAReport = () => {
     });
   }
 
-  useEffect(() => { 
-  charts()
-  }, [data]);
+  const unique = [...new Set(product.map(item => item))]
+  const uniqueMonth = ["Apr","May"]
+  // const uniqueMonth = [...new Set(month.map(item => item))]
+  const uniqueYear = [...new Set(year.map(item => item))]
   
   return (
     <>
       <Sidebar/>
       <div className='charts-header'>
-        <h2>Life Cycle Assessment Report</h2>
+        <h2>Life Cycle Inventory Report</h2>
+      </div>
+      <div className="center">
+            <div>
+              <label>Select Product</label>
+                <select 
+                    value = {formProduct} onChange={(e) => setFormProduct(e.target.value)}
+                >
+                <option value=""disabled selected hidden></option>
+                {unique.map(a => {  
+                return <option value={a}>{a} </option>
+                })}
+                </select>
+          </div>
+            <div>
+              <label>Filter by Date</label>
+                <select 
+                    value = {formMonth} onChange={(e) => setFormMonth(e.target.value)}
+                >
+                <option value=""disabled selected hidden></option>
+                {uniqueMonth.map(a => {  
+                return <option value={a}>{a} </option>
+                })}
+                </select>
+                <select 
+                    value = {formYear} onChange={(e) => setFormYear(e.target.value)}
+                >
+                <option value=""disabled selected hidden></option>
+                {uniqueYear.map(a => {  
+                return <option value={a}>{a} </option>
+                })}
+                </select>
+          </div>
       </div>
       <div className='charts'>
         <div>

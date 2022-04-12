@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import Web3 from "web3"
 import Origin from "../abis/Origin.json"
 
-const AddOrder = ({addOrder, onAdd}) => {
+const AddShipment = ({addShipment, shipType, onShipAdd}) => {
 
     useEffect(() => { 
         const loadWeb3 = async () => {
@@ -63,11 +63,45 @@ const AddOrder = ({addOrder, onAdd}) => {
     const [quantity, setQuantity] = useState("")
     const [unit, setUnit] = useState("")
     const [date, setDate] = useState("")
-    const [d, setD] = useState("")
-    
-    useEffect(() => {
+    const [d, setD] = useState("")   
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+    const [place, setAddress] = useState("")
+    const [product, setProduct] = useState("")
+    const [process, setProcess] = useState("")
+
+    useEffect(() => { 
         getDate()
+        getLocation()
     }, [d])
+
+    const getLocation = () => {      
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getCoordinates,  handleError, {enableHighAccuracy: true})
+        }    
+    }
+
+    const handleError = () => {
+        alert("Geolocation API is not supported in your browser. Please enable Geolocation")
+    }
+  
+    const getCoordinates = async(position) => {
+        const accuracy = await position.coords.accuracy
+        console.log(accuracy)
+        const lat  = await position.coords.latitude.toString()
+        console.log("lat", lat)
+        const long = await position.coords.longitude.toString()
+        console.log("long", long)
+        setLatitude(lat)
+        setLongitude(long)
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyA1NTVyRpS9yu9w8Otq1K3r-SwMJMvrhNY`;
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const place = data.results[0].formatted_address
+        setAddress(place)
+        console.log(place)})        
+    }
 
     const getDate = async () => {
         const today = new Date()
@@ -75,32 +109,28 @@ const AddOrder = ({addOrder, onAdd}) => {
         const t = await today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
         const date = await d + " " + t
         setDate(date)
-        console.log(date)
     }
-    
+  
     const onSubmit = async(e) => {
         e.preventDefault()
-        console.log(name)
-        console.log(quantity)
-        console.log(unit)
         setD("now")
-        addOrder({name, quantity, unit, date})
-        setQuantity("") 
+        await addShipment({shipType, latitude, longitude, date, account, product, process})
     }
-
+    console.log(shipType)
+    
     return (
         <div className='center'>
-            <form className="order-form" onSubmit={onSubmit}>
+            <form className="ship-form" onSubmit={onSubmit}>
             <div className="form-header">
-                <h2>Add Order</h2>
-                <button className="btn form-close" style= {{background:"red", fontSize:"14px"}} onClick={onAdd}>X</button>
+                <h2>{shipType==="Shipment Sent" ? "Sent Shipment" : "Receive Shipment"}</h2>
+                <button className="btn form-close" style= {{background:"red", fontSize:"14px"}} onClick={onShipAdd}>X</button>
             </div>
             <div className="product-center-form">                
                 <div className="form-inputs">
                     <label className='order-label'>Select Product</label>
                     <select 
                         className="order-product"
-                        value = {name} onChange={(e) => setName(e.target.value)}
+                        value = {product} onChange={(e) => setProduct(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>
                         {products.map(product => { 
@@ -109,26 +139,19 @@ const AddOrder = ({addOrder, onAdd}) => {
                     </select>
                 </div>
                 <div className="form-inputs">
-                    <label className='order-label'>Product Quantity and Unit</label>
-                        <input 
-                            type="number"
-                            className="quantity"
-                            placeholder="Enter Product Quantity"
-                            {...register("quantity", {required: true })}
-                            value = {quantity} onChange={(e) => setQuantity(e.target.value)}
-                        />
-                        <select 
-                            className="unit"
-                            {...register("unit", {required: true })}
-                            value = {unit} onChange={(e) => setUnit(e.target.value)}                        
-                        >
-                            <option value=""disabled selected hidden>Select Unit</option>
-                            <option value="kg">kg</option>
-                            <option value="items">items</option>
-                        </select>
-                </div>
+                    <label className='order-label'>Select Production Process</label>
+                    <select 
+                        className="order-product"
+                        value = {process} onChange={(e) => setProcess(e.target.value)}
+                    >
+                        <option value=""disabled selected hidden></option>
+                        {product !== "" ? products.filter(obj => obj.name.includes(product)).map(product => product.process).map(a => JSON.parse(a).map(process=> 
+                        <option value={process}>{process} </option>
+                        )) : null}
+                    </select>
+                </div>            
                 <button className="btn order-input-btn" type="submit">
-                    Add
+                    Sent
                 </button>
             </div>
             </form>
@@ -136,4 +159,4 @@ const AddOrder = ({addOrder, onAdd}) => {
     )
 }
 
-export default AddOrder
+export default AddShipment

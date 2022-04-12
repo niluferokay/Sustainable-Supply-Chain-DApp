@@ -159,7 +159,7 @@ const Assessments = () => {
                   <Button className="btn" 
                   onClick={routeLCA}
                   color="#03a0dd"
-                  text="Life Cycle Assessment"
+                  text="Life Cycle Inventory"
                   />
       </header>
       <Enviro Emerge={Emerge} energy={energyE} material={materialE} EClick={EhandleClick} showEForm={showEForm}/>

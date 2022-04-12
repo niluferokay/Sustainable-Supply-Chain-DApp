@@ -27,7 +27,7 @@ assessments.sort((a,b) => b.id - a.id)
       <AiIcons.AiOutlineClose className='lca-x'
       onClick={() => handleClick(a.id)}/>
       <table className='lca-table'>
-      <caption>Life Cycle Assessment Indicators</caption>
+      <caption>Life Cycle Inventory of {a.product}</caption>
       <thead>
           <th>Indicators</th>
           <th>Measurements</th>
@@ -167,7 +167,7 @@ const LCAIndicators = ({assessments, energy, material, handleClick, showForm}) =
     
   return (
     <>
-    <h3 className="table-title">Life Cycle Assessments</h3>
+    <h3 className="table-title">Life Cycle Inventories</h3>
         <table className="assess-table">
           <tr>
             <th  className='lca-assess'>Assessment</th>

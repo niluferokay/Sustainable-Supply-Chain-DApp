@@ -90,10 +90,12 @@ const EnviroReport = () => {
           for (var i = 1; i <= enviroCount; i++) {
               const newEnviro = await contract.methods.enviros(i).call()
               setEnviros(enviros =>([...enviros, newEnviro]))
+              setFormAccount(enviros =>([...enviros, (newEnviro.account)]))
           }
           for (var i = 1; i <= enviroCount; i++) {
               const newEnviro = await contract.methods.enviros(i).call()
-              setEnviroForm(enviros =>([...enviros, JSON.parse(newEnviro.document)]))
+              const parse = JSON.parse(newEnviro.document)
+              setEnviroForm(enviros =>([...enviros, parse]))
           }
           }
       else { 
@@ -101,6 +103,7 @@ const EnviroReport = () => {
       }
   }
     loadBlockchainData()}, [])
+  
 
   const [contract, setContract] = useState([])
   const [account, setAccount] = useState([])        
@@ -110,8 +113,11 @@ const EnviroReport = () => {
   const [date, setDate] = useState("")
   const [document, setDocument] = useState([])
   const [form, setForm] = useState([])
+  const [formAccount, setFormAccount] = useState([])
+  const [company, setCompany] = useState()
 
-  const data = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
+  const dataE = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
+  const data = dataE.filter(obj => obj.account.includes(company)).map(obj => (obj));
 
   const [energyChartData, setEnergyChartData] = useState({
     datasets: [],
@@ -148,7 +154,6 @@ const EnviroReport = () => {
   const [hazmat, setHazmat] = useState([])
   const [solidwaste, setSolidwaste] = useState([])
   const [waterwaste, setWaterwaste] = useState([])
-  const [suppliers, setSuppliers] = useState([])
   const [id, setId] = useState([])
   const [optionsE, setOptionsE] = useState({})
   const [optionsW, setOptionsW] = useState({})
@@ -350,10 +355,13 @@ const EnviroReport = () => {
       }
     });
   }
-
+  
   useEffect(() => { 
   charts()
   }, [data]);
+
+  const unique = [...new Set(formAccount.map(item => item))]
+  // console.log(formAccount)
   
   return (
     <>
@@ -361,6 +369,24 @@ const EnviroReport = () => {
       <div className='charts-header'>
         <h2>Environmental Sustainability Report</h2>
       </div>
+        <div className="center">
+            <div>
+              <label>Select Company</label>
+                <select 
+                    value = {company} onChange={(e) => setCompany(e.target.value)}
+                >
+                <option value=""disabled selected hidden></option>
+                {unique.map(a => {  
+                return <option value={a}>{a === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier#1":
+                a === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? "Supplier#2":
+                a === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? "Supplier#3":
+                a === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? "Supplier#4":
+                a === "0x3421668462324bFB48EA07D0B12243091CD09759" ? "Company": null} </option>
+                })}
+                </select>
+          </div>
+      </div>
+      <div></div>
       <div className='charts'>
         <div>
         <Line className='line' data={energyChartData} options={optionsE}/>

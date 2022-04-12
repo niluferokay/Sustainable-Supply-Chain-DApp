@@ -64,8 +64,8 @@ const Products = () => {
     const [productCount, setProductCount] = useState()        
 
     //Add Product
-    const addProduct = ({name, image, company, date}) => {
-        contract.methods.addProduct(name, image, company, date).send( {from: account} )
+    const addProduct = ({name, image, process, date}) => {
+        contract.methods.addProduct(name, image, process, date).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
