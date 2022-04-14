@@ -51,6 +51,7 @@ useEffect(() => {
                 for (var i = 1; i <= shipmentCount; i++) {
                     const newShipment = await contract.methods.shipments(i).call()
                     setShipment(shipments =>([...shipments, newShipment]))
+                    setProduct(shipments =>([...shipments, newShipment.product]))
                 }
                 }
             else { 
@@ -63,6 +64,11 @@ useEffect(() => {
   const [account, setAccount] = useState([])        
   const [shipmentCount, setShipmentCount] = useState()        
   const [shipments, setShipment] = useState([])
+  const [product, setProduct] = useState([])
+  const [formProduct, setFormProduct] = useState("")
+
+  const unique = [...new Set(product.map(item => item))]
+
 
   const { isLoaded} = useLoadScript({
     googleMapsApiKey: "AIzaSyAAtD8arMVlDgNnv9xQQHKhI6OaVgl7rkk"
@@ -93,7 +99,17 @@ useEffect(() => {
     <div>
         <Sidebar/>
         <div className="journey-map">
-          <h2>Product Journey</h2>
+        <div className='timeline-header'>
+                <label>Select Product</label>
+                  <select 
+                      value = {formProduct} onChange={(e) => setFormProduct(e.target.value)}
+                  >
+                  <option value=""disabled selected hidden></option>
+                  {unique.map(a => {  
+                  return <option value={a}>{a} </option>
+                  })}
+                  </select>
+        </div>
             <GoogleMap
               id="map"
               mapContainerStyle={mapContainerStyle}
@@ -110,7 +126,7 @@ useEffect(() => {
             ))}
             </GoogleMap>
         </div>
-        <Timeline shipments={shipments} />
+        <Timeline shipments={shipments} product= {formProduct}/>
     </div>
   )
 }

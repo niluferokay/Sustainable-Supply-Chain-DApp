@@ -6,12 +6,13 @@ import * as BiIcons from 'react-icons/bi';
 import * as MdIcons from 'react-icons/md';
 import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../Sidebar';
+import {useLocation} from 'react-router-dom';
 
-const AssessList = ({assessments, energy, material}) =>
+const AssessList = ({assessments, energy, material, process}) =>
 assessments.map(a => (
     <tr key={a.id}>
       <table className='lca-table'>
-      <caption>Life Cycle Assessment Indicators</caption>
+      <caption>Life Cycle Inventory for {process}</caption>
       <thead>
           <th>Indicators</th>
           <th>Measurements</th>
@@ -145,8 +146,7 @@ assessments.map(a => (
 </tr>
 ))
 
-
-const Yarn = () => {
+const AssessLCI = () => {
     useEffect(() => { 
         const loadWeb3 = async () => {
             if(window.ethereum) {
@@ -173,10 +173,6 @@ const Yarn = () => {
               setContract(contract)
               const LCACount = await contract.methods.LCACount().call()
               setLCACount(LCACount)
-              const enviroCount = await contract.methods.enviroCount().call()
-              setEnviroCount(enviroCount)
-              const socialCount = await contract.methods.socialCount().call()
-              setSocialCount(socialCount)
               //Load LCAs
               for (var i = 1; i <= LCACount; i++) {
                   const newLCA = await contract.methods.LCAs(i).call()
@@ -192,26 +188,6 @@ const Yarn = () => {
                   setEnergy(LCAs =>([...LCAs, (parse.energy)]))
                   setMaterial(LCAs =>([...LCAs, (parse.material)]))
               }
-              //Load Enviros
-              for (var i = 1; i <= enviroCount; i++) {
-                  const newEnviro = await contract.methods.enviros(i).call()
-                  setEnviros(enviros =>([...enviros, newEnviro]))
-              }
-              for (var i = 1; i <= enviroCount; i++) {
-                  const newEnviro = await contract.methods.enviros(i).call()
-                  setEnviroForm(enviros =>([...enviros, JSON.parse(newEnviro.document)]))
-              }
-              for (var i = 1; i <= enviroCount; i++) {
-                const newenviro = await contract.methods.enviros(i).call()
-                const parse = JSON.parse(newenviro.document)
-                setEnergyE(enviros =>([...enviros, (parse.energy)]))
-                setMaterialE(enviros =>([...enviros, (parse.material)]))
-            }
-              //Load Socials
-              for (var i = 1; i <= socialCount; i++) {
-                  const newSocial = await contract.methods.socials(i).call()
-                  setSocials(socials =>([...socials, newSocial]))
-              }
               }
           else { 
               window.alert("Assessment contract is not deployed to the detected network")
@@ -223,37 +199,36 @@ const Yarn = () => {
     const [account, setAccount] = useState([])        
     const [LCACount, setLCACount] = useState()
     const [LCAs, setLCAs] = useState([])        
-    const [enviroCount, setEnviroCount] = useState()
-    const [enviros, setEnviros] = useState([])
-    const [enviroform, setEnviroForm] = useState([])
-    const [socialCount, setSocialCount] = useState()
-    const [socials, setSocials] = useState([])  
-    const [date, setDate] = useState("")
-    const [document, setDocument] = useState([])
     const [form, setForm] = useState([])
     const [energy, setEnergy] = useState([])
-    const [energyE, setEnergyE] = useState([])
     const [material, setMaterial] = useState([])
-    const [materialE, setMaterialE] = useState([])
+    const [process, setProcess] = useState()
+
 
     const merge = (LCAs.map(t1 => ({...t1, ...form.find(t2 => t2.id === t1.id)})))
+    const assess = merge.filter(obj => obj.process.includes(process)).map(obj => (obj));
+    const lastAssess = assess.slice(-1)
 
-    const yarn = merge.filter(obj => obj.process.includes("Yarn Manufacturing")).map(obj => (obj));
-    const lastYarn = yarn.slice(-1)
-    const fabric = merge.filter(obj => obj.process.includes("Fabric Formation")).map(obj => (obj));
-    const sew = merge.filter(obj => obj.process.includes("Cut & Sew")).map(obj => (obj));
+    const location = useLocation();
+    const processData = location.state;
+
+    useEffect(() => {
+        setProcess(processData)
+        console.log(processData)
+    }, [processData])
+
 
   return (
     <>
     <Sidebar/>
         <div className='margin'>
         <table className="assess-table">
-          <AssessList assessments={lastYarn} energy={energy} material={material} />
-          {lastYarn.length === 0 ? <h2> No Assessment Found</h2> : null}
+          {lastAssess !== "" ? <AssessList assessments={lastAssess} process={process} 
+          energy={energy} material={material}/>: <h2> No Assessment Found</h2>}
         </table>
       </div>
     </>
   )
 }
 
-export default Yarn
+export default AssessLCI

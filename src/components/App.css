@@ -139,6 +139,11 @@ body {
   border-radius: 10px;
 }
 
+.product-input-btn {
+  display: block;
+  width: 65%;
+}
+
 .form-header {
   display: flex;
   justify-content: flex-start;
@@ -430,11 +435,6 @@ body {
 
 }
 
-.journey-map h2{
-  margin-top: 50px;
-  margin-bottom: 25px;
-}
-
 .lca-container{
   margin-left: 20%;
   background-color: #f2f2f2;
@@ -622,6 +622,17 @@ font-size: 14px;
   align-items: center; 
 }
 
+.center-chart {
+  display: flex; /* displays children (divs) inline by default thats why you need to change its direction */
+  justify-content: flex-start;
+  margin-left: 30%; 
+}
+
+.label-sel{
+  margin-right: 80px;
+  margin-bottom: 20px;
+}
+
 .center-form {
 margin-left: 250px;
 }
@@ -732,7 +743,6 @@ margin-left: 250px;
 
 }
 
-
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -757,7 +767,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 }
 
-.time-title button {
+.time-title-btn {
   text-decoration: none;
   padding: 0.2em 0.7em;
   border-radius: 5px;
@@ -791,5 +801,58 @@ input[type=number]::-webkit-outer-spin-button {
 .time-margin {
   margin-left: 20%;
   background-color: #f2f2f2;
+}
 
+.timeline-header {
+  display: inline-flex;
+
+  margin-top: 50px;
+  margin-bottom: 25px;
+
+}
+
+
+.side-menu {
+  background-color: #2F4050;
+  width: 20%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 80px;
+  display:grid;
+  grid-template-columns: minmax(150px, 25%) 1 fr;
+}
+
+.side-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+}
+
+.side-text a {
+  text-decoration: none;
+  color: #f5f5f5;
+  font-size: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.side-text:hover {
+  background-color: #293846;
+}
+
+.side-menu-items {
+  width: 100%;
+}
+
+span {
+  margin-left: 16px;
 }

@@ -43,16 +43,12 @@ const Dashboard = () => {
                     setContract(contract)
                     // console.log(contract)
                     const orderCount = await contract.methods.orderCount().call()
-                    setOrderCount(orderCount)
-                    // console.log(orderCount, "orders")
                     //Load orders
                     for (var i = 1; i <= orderCount; i++) {
                         const newOrder = await contract.methods.orders(i).call()
                         setOrder(orders =>([...orders, newOrder]))
                     }
                     const shipmentCount = await contract.methods.shipmentCount().call()
-                    setShipmentCount(shipmentCount)
-                    // console.log(sentShipCount)
                     //Load shipments
                     for (var i = 1; i <= shipmentCount; i++) {
                         const newShipment = await contract.methods.shipments(i).call()
@@ -67,8 +63,6 @@ const Dashboard = () => {
     
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
-    const [ordersCount, setOrderCount] = useState()        
-    const [shipmentCount, setShipmentCount] = useState()        
     const [showCreateOrder, setShowCreateOrder] = useState(false)
     const [showCreateShip, setShowCreateShip] = useState(false)
     const [orders, setOrder] = useState([])

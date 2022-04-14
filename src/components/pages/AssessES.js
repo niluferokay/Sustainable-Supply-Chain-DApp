@@ -13,12 +13,19 @@ import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
 
 import Sidebar from '../Sidebar';
+import { useLocation } from 'react-router-dom';
 
-const AssessList = ({assessments, energy, material}) =>
+const AssessList = ({assessments, energy, material, account}) =>
 assessments.map(a => (
     <tr key={a.id}>
         <table className='lca-table'>
-        <caption>Enviromental Indicators</caption>
+        <caption>Enviromental Indicators for 
+        {account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
+        account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
+        account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
+        account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
+        account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": account}
+        </caption>
         <thead>
             {/* <th>Categories</th> */}
             <th>Indicators</th>
@@ -208,11 +215,17 @@ assessments.map(a => (
 </tr>
 ))
 
-const SocialList = ({assessments}) =>
+const SocialList = ({assessments, account}) =>
 assessments.map(a => (
     <tr key={a.id}>
         <table className='lca-table'>
-      <caption>Social Indicators</caption>
+      <caption>Social Indicators for 
+      {account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
+        account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
+        account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
+        account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
+        account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": account}
+      </caption>
       <thead>
           <th>Categories</th>
           <th>Indicators</th>
@@ -461,7 +474,7 @@ assessments.map(a => (
         </tr>
 ))
 
-const Supplier1 = () => {
+const AssessES = () => {
     useEffect(() => { 
         const loadWeb3 = async () => {
             if(window.ethereum) {
@@ -486,27 +499,10 @@ const Supplier1 = () => {
               //Fetch contract
               const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
               setContract(contract)
-              const LCACount = await contract.methods.LCACount().call()
-              setLCACount(LCACount)
               const enviroCount = await contract.methods.enviroCount().call()
               setEnviroCount(enviroCount)
               const socialCount = await contract.methods.socialCount().call()
               setSocialCount(socialCount)
-              //Load LCAs
-              for (var i = 1; i <= LCACount; i++) {
-                  const newLCA = await contract.methods.LCAs(i).call()
-                  setLCAs(LCAs =>([...LCAs, newLCA]))
-              }
-              for (var i = 1; i <= LCACount; i++) {
-                  const newLCA = await contract.methods.LCAs(i).call()
-                  setForm(LCAs =>([...LCAs, JSON.parse(newLCA.document)]))
-              }
-              for (var i = 1; i <= LCACount; i++) {
-                  const newLCA = await contract.methods.LCAs(i).call()
-                  const parse = JSON.parse(newLCA.document)
-                  setEnergy(LCAs =>([...LCAs, (parse.energy)]))
-                  setMaterial(LCAs =>([...LCAs, (parse.material)]))
-              }
               //Load Enviros
               for (var i = 1; i <= enviroCount; i++) {
                   const newEnviro = await contract.methods.enviros(i).call()
@@ -519,8 +515,8 @@ const Supplier1 = () => {
               for (var i = 1; i <= enviroCount; i++) {
                 const newenviro = await contract.methods.enviros(i).call()
                 const parse = JSON.parse(newenviro.document)
-                setEnergyE(enviros =>([...enviros, (parse.energy)]))
-                setMaterialE(enviros =>([...enviros, (parse.material)]))
+                setEnergy(enviros =>([...enviros, (parse.energy)]))
+                setMaterial(enviros =>([...enviros, (parse.material)]))
             }
               //Load Socials
               for (var i = 1; i <= socialCount; i++) {
@@ -540,27 +536,32 @@ const Supplier1 = () => {
 
     const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
-    const [LCACount, setLCACount] = useState()
-    const [LCAs, setLCAs] = useState([])        
+    const [accountData, setAccountData] = useState()        
     const [enviroCount, setEnviroCount] = useState()
     const [enviros, setEnviros] = useState([])
     const [enviroform, setEnviroForm] = useState([])
     const [socialCount, setSocialCount] = useState()
     const [socials, setSocials] = useState([])  
-    const [form, setForm] = useState([])
     const [energy, setEnergy] = useState([])
-    const [energyE, setEnergyE] = useState([])
     const [material, setMaterial] = useState([])
-    const [materialE, setMaterialE] = useState([])
     const [socialform, setSocialForm] = useState([])
+
+    const location = useLocation();
+    const accountD = location.state;
+
+    useEffect(() => {
+        setAccountData(accountD)
+        console.log(accountD)
+    }, [accountD])
 
     const Emerge = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
     const Smerge = (socials.map(t1 => ({...t1, ...socialform.find(t2 => t2.id === t1.id)})))
 
-    const supp = Emerge.filter(obj => obj.account.includes("0xf00EbF44706A84d73698D51390a6801215fF338c")).map(obj => (obj));
-    const suppS = Smerge.filter(obj => obj.account.includes("0xf00EbF44706A84d73698D51390a6801215fF338c")).map(obj => (obj));
+    const supp = Emerge.filter(obj => obj.account.includes(accountData)).map(obj => (obj));
+    const suppS = Smerge.filter(obj => obj.account.includes(accountData)).map(obj => (obj));
     const lastSupp = supp.slice(-1)
     const lastSuppS = suppS.slice(-1)
+
 
     
   return (
@@ -568,13 +569,13 @@ const Supplier1 = () => {
     <Sidebar/>
     <div className='margin'>
     <table className="assess-table">
-         <AssessList assessments={lastSupp} energy={energy} material={material}/>
-         <SocialList assessments={lastSuppS} />
-         {lastSupp.length === 0 && lastSuppS.length === 0 ? <h2> No Assessment Found</h2> : null}
+         <AssessList assessments={lastSupp} energy={energy} material={material} account={accountData} />
+         <SocialList assessments={lastSuppS} Data={accountData} />
+         {lastSupp === "" && lastSuppS === "" ? <h2> No Assessment Found</h2> : null}
     </table>
     </div>
     </>
   )
 }
 
-export default Supplier1
+export default AssessES

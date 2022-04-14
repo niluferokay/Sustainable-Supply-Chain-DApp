@@ -4,7 +4,7 @@ import Origin from "../../abis/Origin.json"
 import AddProduct from '../AddProduct'
 import Sidebar from '../Sidebar'
 import Product from '../Product'
-import "../Products.css"
+import "../App.css"
 import Button from "../FormButton"
 
 const Products = () => {
@@ -27,24 +27,18 @@ const Products = () => {
                 const web3 = window.web3
                 //Load account
                 const accounts = await web3.eth.getAccounts()
-                // console.log(accounts)
                 setAccount(accounts[0])
-                // console.log(account)
                 console.log(Origin.abi)
                 const networkId = await web3.eth.net.getId()
                 console.log(networkId)
                 const networkData = Origin.networks[networkId]
                 console.log(networkData)
                 if (networkData) {
-                    // const abi = 
-                    // const address = networkData.address
                     //Fetch contract
                     const contract = new web3.eth.Contract(Origin.abi, networkData.address)
                     setContract(contract)
                     console.log(contract)
                     const productCount = await contract.methods.productCount().call()
-                    setProductCount(productCount)
-                    console.log(productCount)
                     //Load products
                     for (var i = 1; i <= productCount; i++) {
                         const newProduct = await contract.methods.products(i).call()
@@ -61,7 +55,6 @@ const Products = () => {
     const [contract, setContract] = useState([])
     const [showAddProduct, setShowAddProduct] = useState(false)
     const [account, setAccount] = useState([])        
-    const [productCount, setProductCount] = useState()        
 
     //Add Product
     const addProduct = ({name, image, process, date}) => {

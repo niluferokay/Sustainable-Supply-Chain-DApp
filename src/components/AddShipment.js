@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form'
 import Web3 from "web3"
 import Origin from "../abis/Origin.json"
 
@@ -23,24 +22,16 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
             const web3 = window.web3
             //Load account
             const accounts = await web3.eth.getAccounts()
-            // console.log(accounts)
             setAccount(accounts[0])
-            // console.log(account)
             console.log(Origin.abi)
             const networkId = await web3.eth.net.getId()
             console.log(networkId)
             const networkData = Origin.networks[networkId]
             console.log(networkData)
             if (networkData) {
-                // const abi = 
-                // const address = networkData.address
                 //Fetch contract
                 const contract = new web3.eth.Contract(Origin.abi, networkData.address)
-                setContract(contract)
-                console.log(contract)
                 const productCount = await contract.methods.productCount().call()
-                setProductCount(productCount)
-                console.log(productCount)
                 //Load products
                 for (var i = 1; i <= productCount; i++) {
                     const newProduct = await contract.methods.products(i).call()
@@ -54,14 +45,8 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
         loadBlockchainData()}, [])
 
     const [products, setProducts] = useState([])
-    const [contract, setContract] = useState([])
     const [account, setAccount] = useState([])        
-    const [productCount, setProductCount] = useState()        
         
-    const {register} = useForm();
-    const [name, setName] = useState("")
-    const [quantity, setQuantity] = useState("")
-    const [unit, setUnit] = useState("")
     const [date, setDate] = useState("")
     const [d, setD] = useState("")   
     const [latitude, setLatitude] = useState("")
@@ -116,7 +101,7 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
         setD("now")
         await addShipment({shipType, latitude, longitude, date, account, product, process})
     }
-    console.log(shipType)
+    console.log(place)
     
     return (
         <div className='center'>
@@ -129,7 +114,7 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
                 <div className="form-inputs">
                     <label className='order-label'>Select Product</label>
                     <select 
-                        className="order-product"
+                        className="order-product" required
                         value = {product} onChange={(e) => setProduct(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>
@@ -141,7 +126,7 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
                 <div className="form-inputs">
                     <label className='order-label'>Select Production Process</label>
                     <select 
-                        className="order-product"
+                        className="order-product" required
                         value = {process} onChange={(e) => setProcess(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>

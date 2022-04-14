@@ -30,7 +30,6 @@ import {
   SubTitle
 } from 'chart.js';
 import Sidebar from '../Sidebar';
-
 Chart.register(
   ArcElement,
   LineElement,
@@ -76,21 +75,19 @@ const EnviroReport = () => {
   useEffect(() => { 
   const loadBlockchainData = async () => {
       const web3 = window.web3
-      const accounts = await web3.eth.getAccounts()
-      setAccount(accounts[0])
       const networkId = await web3.eth.net.getId()
       const networkData = Assessment.networks[networkId]
       if (networkData) {
           //Fetch contract
           const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
-          setContract(contract)
           const enviroCount = await contract.methods.enviroCount().call()
-          setEnviroCount(enviroCount)
           //Load Enviros
           for (var i = 1; i <= enviroCount; i++) {
               const newEnviro = await contract.methods.enviros(i).call()
               setEnviros(enviros =>([...enviros, newEnviro]))
               setFormAccount(enviros =>([...enviros, (newEnviro.account)]))
+              setMonth(enviros =>([...enviros, newEnviro.month]))
+              setYear(enviros =>([...enviros, newEnviro.year]))
           }
           for (var i = 1; i <= enviroCount; i++) {
               const newEnviro = await contract.methods.enviros(i).call()
@@ -104,20 +101,19 @@ const EnviroReport = () => {
   }
     loadBlockchainData()}, [])
   
-
-  const [contract, setContract] = useState([])
-  const [account, setAccount] = useState([])        
-  const [enviroCount, setEnviroCount] = useState()
   const [enviros, setEnviros] = useState([])
   const [enviroform, setEnviroForm] = useState([])
-  const [date, setDate] = useState("")
-  const [document, setDocument] = useState([])
-  const [form, setForm] = useState([])
+  const [month, setMonth] = useState([])
+  const [year, setYear] = useState([])
   const [formAccount, setFormAccount] = useState([])
-  const [company, setCompany] = useState()
+  const [formMonth, setFormMonth] = useState("")
+  const [formYear, setFormYear] = useState("")
+  const [company, setCompany] = useState("")
+  const [data, setData] = useState([])
 
   const dataE = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
-  const data = dataE.filter(obj => obj.account.includes(company)).map(obj => (obj));
+
+  const unique = [...new Set(formAccount.map(item => item))]
 
   const [energyChartData, setEnergyChartData] = useState({
     datasets: [],
@@ -141,41 +137,54 @@ const EnviroReport = () => {
     datasets: [],
   });
 
-  const [energy, setEnergy] = useState([])
-  const [renewenergy, setRenewenergy] = useState([])
-  const [water, setWater] = useState([])
-  const [waterrec, setWaterrec] = useState([])
-  const [material, setMaterial] = useState([])
-  const [materialrec, setMaterialrec] = useState([])
-  const [ghg, setGhg] = useState([])
-  const [waterpol, setWaterpol] = useState([])
-  const [soilpol, setSoilpol] = useState([])
-  const [air, setAir] = useState([])
-  const [hazmat, setHazmat] = useState([])
-  const [solidwaste, setSolidwaste] = useState([])
-  const [waterwaste, setWaterwaste] = useState([])
-  const [id, setId] = useState([])
   const [optionsE, setOptionsE] = useState({})
   const [optionsW, setOptionsW] = useState({})
   const [optionsG, setOptionsG] = useState({})
   const [optionsM, setOptionsM] = useState({})
   const [optionsP, setOptionsP] = useState({})
 
+  const uniqueMonth = [...new Set(month.map(item => item))]
+  const uniqueYear = [...new Set(year.map(item => item))]
+
+  const filter = () => {
+    if (formMonth === "All") {
+      const data = (dataE.filter(obj => obj.account.includes(company)))
+      .filter(obj => obj.year.includes(formYear)).map(p => (p))
+      setData(data)
+      }
+    if (formYear === "All") {
+      const data = (dataE.filter(obj => obj.account.includes(company)))
+      .filter(obj => obj.month.includes(formMonth)).map(p => (p))
+      setData(data)
+      }
+    if (formMonth !== "All" && formYear !== "All") {
+      const data = (dataE.filter(obj => obj.account.includes(company)))
+      .filter(obj => obj.month.includes(formMonth))
+      .filter(obj => obj.year.includes(formYear)).map(p => (p))
+      setData(data)
+    }
+    else {
+      const data = (dataE.filter(obj => obj.account.includes(company)))
+      .map(p => (p))
+      setData(data)  
+    }
+  }
+
   const charts = async () => {
-    setEnergy(data.map(a => parseInt(a.energy)))
-    setRenewenergy(data.map(a => parseInt(a.renewenergy)))
-    setId(enviros.map(a => (a.month + " " + a.year)))
-    setWater(data.map(a => parseInt(a.water)))
-    setWaterrec(data.map(a => parseInt(a.waterrec)))
-    setMaterial(data.map(a => parseInt(a.material)))
-    setMaterialrec(data.map(a => parseInt(a.materialrec)))
-    setGhg(data.map(a => parseInt(a.ghg)))
-    setWaterpol(data.map(a => parseInt(a.waterpol)))
-    setSoilpol(data.map(a => parseInt(a.soilpol)))
-    setAir(data.map(a => parseInt(a.air)))
-    setHazmat(data.map(a => parseInt(a.hazmat)))
-    setSolidwaste(data.map(a => parseInt(a.solidwaste)))
-    setWaterwaste(data.map(a => parseInt(a.waterwaste)))
+    const energy = data.map(a => parseInt(a.energy))    
+    const renewenergy = data.map(a => parseInt(a.renewenergy))
+    const id = data.map(a => (a.month + " " + a.year))
+    const water = data.map(a => parseInt(a.water))
+    const waterrec = data.map(a => parseInt(a.waterrec))
+    const material = data.map(a => parseInt(a.material))
+    const materialrec = data.map(a => parseInt(a.materialrec))
+    const ghg = data.map(a => parseInt(a.ghg))
+    const waterpol = data.map(a => parseInt(a.waterpol))
+    const soilpol = data.map(a => parseInt(a.soilpol))
+    const air = data.map(a => parseInt(a.air))
+    const hazmat = data.map(a => parseInt(a.hazmat))
+    const solidwaste = data.map(a => parseInt(a.solidwaste))
+    const waterwaste = data.map(a => parseInt(a.waterwaste))
 
     setEnergyChartData({
       labels: id,
@@ -357,11 +366,12 @@ const EnviroReport = () => {
   }
   
   useEffect(() => { 
-  charts()
-  }, [data]);
+      filter()
+  }, [company, formMonth, formYear]);
 
-  const unique = [...new Set(formAccount.map(item => item))]
-  // console.log(formAccount)
+  useEffect(() => { 
+      charts()
+  }, [data]);
   
   return (
     <>
@@ -369,22 +379,44 @@ const EnviroReport = () => {
       <div className='charts-header'>
         <h2>Environmental Sustainability Report</h2>
       </div>
-        <div className="center">
-            <div>
+        <div className="center-chart">
+            <div  className='label-sel'>
               <label>Select Company</label>
                 <select 
                     value = {company} onChange={(e) => setCompany(e.target.value)}
                 >
                 <option value=""disabled selected hidden></option>
                 {unique.map(a => {  
-                return <option value={a}>{a === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier#1":
+                return <option value={a}>{
+                a === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier#1":
                 a === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? "Supplier#2":
                 a === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? "Supplier#3":
                 a === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? "Supplier#4":
                 a === "0x3421668462324bFB48EA07D0B12243091CD09759" ? "Company": null} </option>
                 })}
                 </select>
-          </div>
+            </div>
+            <div>
+                <label>Filter by Date</label>
+                  <select 
+                      value = {formMonth} onChange={(e) => setFormMonth(e.target.value)}
+                  >
+                  <option value=""disabled selected hidden></option>
+                  <option value = "All" >All</option>
+                  {uniqueMonth.map(a => {  
+                  return <option value={a}>{a} </option>
+                  })}
+                  </select>
+                  <select 
+                      value = {formYear} onChange={(e) => setFormYear(e.target.value)}
+                  >
+                  <option value=""disabled selected hidden></option>
+                  <option value = "All" >All</option>
+                  {uniqueYear.map(a => {  
+                  return <option value={a}>{a} </option>
+                  })}
+                  </select>
+            </div>
       </div>
       <div></div>
       <div className='charts'>

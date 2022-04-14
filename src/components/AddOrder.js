@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form'
 import Web3 from "web3"
 import Origin from "../abis/Origin.json"
 
@@ -21,25 +20,14 @@ const AddOrder = ({addOrder, onAdd}) => {
     useEffect(() => { 
         const loadBlockchainData = async () => {
             const web3 = window.web3
-            //Load account
-            const accounts = await web3.eth.getAccounts()
-            // console.log(accounts)
-            setAccount(accounts[0])
-            // console.log(account)
-            console.log(Origin.abi)
             const networkId = await web3.eth.net.getId()
             console.log(networkId)
             const networkData = Origin.networks[networkId]
             console.log(networkData)
             if (networkData) {
-                // const abi = 
-                // const address = networkData.address
                 //Fetch contract
                 const contract = new web3.eth.Contract(Origin.abi, networkData.address)
-                setContract(contract)
-                console.log(contract)
                 const productCount = await contract.methods.productCount().call()
-                setProductCount(productCount)
                 console.log(productCount)
                 //Load products
                 for (var i = 1; i <= productCount; i++) {
@@ -53,12 +41,7 @@ const AddOrder = ({addOrder, onAdd}) => {
         }
         loadBlockchainData()}, [])
 
-    const [products, setProducts] = useState([])
-    const [contract, setContract] = useState([])
-    const [account, setAccount] = useState([])        
-    const [productCount, setProductCount] = useState()        
-        
-    const {register} = useForm();
+    const [products, setProducts] = useState([])        
     const [name, setName] = useState("")
     const [quantity, setQuantity] = useState("")
     const [unit, setUnit] = useState("")
@@ -85,7 +68,6 @@ const AddOrder = ({addOrder, onAdd}) => {
         console.log(unit)
         setD("now")
         addOrder({name, quantity, unit, date})
-        setQuantity("") 
     }
 
     return (
@@ -99,7 +81,7 @@ const AddOrder = ({addOrder, onAdd}) => {
                 <div className="form-inputs">
                     <label className='order-label'>Select Product</label>
                     <select 
-                        className="order-product"
+                        className="order-product" required
                         value = {name} onChange={(e) => setName(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>
@@ -112,14 +94,12 @@ const AddOrder = ({addOrder, onAdd}) => {
                     <label className='order-label'>Product Quantity and Unit</label>
                         <input 
                             type="number"
-                            className="quantity"
+                            className="quantity" required
                             placeholder="Enter Product Quantity"
-                            {...register("quantity", {required: true })}
                             value = {quantity} onChange={(e) => setQuantity(e.target.value)}
                         />
                         <select 
-                            className="unit"
-                            {...register("unit", {required: true })}
+                            className="unit" required
                             value = {unit} onChange={(e) => setUnit(e.target.value)}                        
                         >
                             <option value=""disabled selected hidden>Select Unit</option>

@@ -93,7 +93,7 @@ const AddProduct = ({ addProduct, onAdd}) => {
                     <label>Product Name</label>
                     <input 
                         type="text"
-                        className="product"
+                        className="product" required
                         placeholder="Enter Product Name"
                         value = {name} onChange={(e) => setName(e.target.value)}
                         />
@@ -104,16 +104,16 @@ const AddProduct = ({ addProduct, onAdd}) => {
                 <div className="form-inputs" key={id}>
                     <input
                         name='process'
-                        className="process-add"
+                        className="process-add" required
                         placeholder="Enter Product Production Process"
                         value= {c} onChange={(e) => handleChangeInput(id, e)}
                         /><AiIcons.AiOutlinePlusCircle className="add" onClick= {handleAddField}/>
-                        {process.length !== 1 ? <AiIcons.AiOutlineMinusCircle className="add" onClick= {() => handleRemoveField(id)}/> : null}
+                        {processes.length !== 1 ? <AiIcons.AiOutlineMinusCircle className="add" onClick= {() => handleRemoveField(id)}/> : null}
 
                 </div>
                 )})}
                 <div></div>
-                <button className="btn form-input-btn" type="submit">
+                <button className="btn product-input-btn" type="submit">
                     Add
                 </button>
             </div>

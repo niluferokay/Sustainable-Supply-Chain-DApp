@@ -6,12 +6,13 @@ import * as BiIcons from 'react-icons/bi';
 import * as MdIcons from 'react-icons/md';
 import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../Sidebar';
+import { useLocation } from 'react-router-dom';
 
 const AssessList = ({assessments, energy, material}) =>
 assessments.map(a => (
     <tr key={a.id}>
       <table className='lca-table'>
-      <caption>Life Cycle Assessment Indicators</caption>
+      <caption>Life Cycle Inventory of {a.process} of a {a.product}</caption>
       <thead>
           <th>Indicators</th>
           <th>Measurements</th>
@@ -145,8 +146,7 @@ assessments.map(a => (
 </tr>
 ))
 
-
-const Harvest = () => {
+const LCIAssess = () => {
     useEffect(() => { 
         const loadWeb3 = async () => {
             if(window.ethereum) {
@@ -163,20 +163,12 @@ const Harvest = () => {
     useEffect(() => { 
       const loadBlockchainData = async () => {
           const web3 = window.web3
-          const accounts = await web3.eth.getAccounts()
-          setAccount(accounts[0])
           const networkId = await web3.eth.net.getId()
           const networkData = Assessment.networks[networkId]
           if (networkData) {
               //Fetch contract
               const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
-              setContract(contract)
               const LCACount = await contract.methods.LCACount().call()
-              setLCACount(LCACount)
-              const enviroCount = await contract.methods.enviroCount().call()
-              setEnviroCount(enviroCount)
-              const socialCount = await contract.methods.socialCount().call()
-              setSocialCount(socialCount)
               //Load LCAs
               for (var i = 1; i <= LCACount; i++) {
                   const newLCA = await contract.methods.LCAs(i).call()
@@ -192,30 +184,6 @@ const Harvest = () => {
                   setEnergy(LCAs =>([...LCAs, (parse.energy)]))
                   setMaterial(LCAs =>([...LCAs, (parse.material)]))
               }
-              //Load Enviros
-              for (var i = 1; i <= enviroCount; i++) {
-                  const newEnviro = await contract.methods.enviros(i).call()
-                  setEnviros(enviros =>([...enviros, newEnviro]))
-              }
-              for (var i = 1; i <= enviroCount; i++) {
-                  const newEnviro = await contract.methods.enviros(i).call()
-                  setEnviroForm(enviros =>([...enviros, JSON.parse(newEnviro.document)]))
-              }
-              for (var i = 1; i <= enviroCount; i++) {
-                const newenviro = await contract.methods.enviros(i).call()
-                const parse = JSON.parse(newenviro.document)
-                setEnergyE(enviros =>([...enviros, (parse.energy)]))
-                setMaterialE(enviros =>([...enviros, (parse.material)]))
-            }
-              //Load Socials
-              for (var i = 1; i <= socialCount; i++) {
-                  const newSocial = await contract.methods.socials(i).call()
-                  setSocials(socials =>([...socials, newSocial]))
-              }
-              for (var i = 1; i <= socialCount; i++) {
-                  const newSocial = await contract.methods.socials(i).call()
-                  setSocialForm(socials =>([...socials, JSON.parse(newSocial.document)]))
-              }
               }
           else { 
               window.alert("Assessment contract is not deployed to the detected network")
@@ -223,46 +191,34 @@ const Harvest = () => {
       }
       loadBlockchainData()}, [])
 
-    const [contract, setContract] = useState([])
-    const [account, setAccount] = useState([])        
-    const [LCACount, setLCACount] = useState()
-    const [LCAs, setLCAs] = useState([])        
-    const [enviroCount, setEnviroCount] = useState()
-    const [enviros, setEnviros] = useState([])
-    const [enviroform, setEnviroForm] = useState([])
-    const [socialCount, setSocialCount] = useState()
-    const [socials, setSocials] = useState([])  
-    const [date, setDate] = useState("")
-    const [document, setDocument] = useState([])
-    const [form, setForm] = useState([])
+    const [date, setDate] = useState()        
     const [energy, setEnergy] = useState([])
-    const [energyE, setEnergyE] = useState([])
     const [material, setMaterial] = useState([])
-    const [materialE, setMaterialE] = useState([])
-    const [socialform, setSocialForm] = useState([])
+    const [LCAs, setLCAs] = useState([])        
+    const [form, setForm] = useState([])
 
+    const location = useLocation();
+    const dateState = location.state;
+
+    useEffect(() => {
+        setDate(dateState)
+        console.log(dateState)
+    }, [dateState])
 
     const merge = (LCAs.map(t1 => ({...t1, ...form.find(t2 => t2.id === t1.id)})))
-    const Emerge = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
-    const Smerge = (socials.map(t1 => ({...t1, ...socialform.find(t2 => t2.id === t1.id)})))
-    const harvest = merge.filter(obj => obj.process.includes("Harvest")).map(obj => (obj));
-    const lastHarvest = harvest.slice(-1)
-    const yarn = merge.filter(obj => obj.process.includes("Yarn Manufacturing")).map(obj => (obj));
-    const lastYarn = yarn.slice(-1)
-    const fabric = merge.filter(obj => obj.process.includes("Fabric Formation")).map(obj => (obj));
-    const sew = merge.filter(obj => obj.process.includes("Cut & Sew")).map(obj => (obj));
+    const lci = merge.filter(obj => obj.date.includes(date)).map(obj => (obj));
 
   return (
     <>
     <Sidebar/>
-        <div className='margin'>
-        <table className="assess-table">
-          <AssessList assessments={lastHarvest} energy={energy} material={material} />
-          {lastHarvest.length === 0 ? <h2> No Assessment Found</h2> : null}
-        </table>
-      </div>
+    <div className='margin'>
+    <table className="assess-table">
+         <AssessList assessments={lci} energy={energy} material={material}/>
+         {lci === "" ? <h2> No Assessment Found</h2> : null}
+    </table>
+    </div>
     </>
   )
 }
 
-export default Harvest
+export default LCIAssess

@@ -1,7 +1,6 @@
 import React, { useState } from  'react'
 import { IoLocationSharp } from 'react-icons/io5'
 
-
 const ShipList = ({shipments, getPlace, place}) => 
 shipments.sort((a,b) => b.id - a.id)
 .map(shipment => (
@@ -10,7 +9,9 @@ shipments.sort((a,b) => b.id - a.id)
         <td className="shipType">{shipment.product}</td>
         <td className="shipType">{shipment.process}</td>
         <td className="address"> <IoLocationSharp
-        /> {getPlace(shipment.latitude, shipment.longitude)}{place}</td>
+        /> 
+        {/* {getPlace(shipment.latitude, shipment.longitude)}{place} */}
+        </td>
         <td className="map">
         <iframe 
           style={{width: "120px", height: "100px", cursor: "pointer"}}
@@ -27,11 +28,9 @@ shipments.sort((a,b) => b.id - a.id)
     </tr>
 ))
 
-
 const Shipment = ({shipments}) => {
 
   const [place, setPlace] = useState("")
-
 
   const getPlace = (lat, long) => {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyA1NTVyRpS9yu9w8Otq1K3r-SwMJMvrhNY`;

@@ -12,7 +12,6 @@ products.sort((a,b) => b.id - a.id)
       <td className="p-comp">{(product.process).replace(/^\[(.+)\]$/,'$1').replace(/"/g, ' ')}</td>
       <td className="p-comp">{product.date}</td>
   </tr>
-
 ))
 
 const Product = ({ products, onView }) => {

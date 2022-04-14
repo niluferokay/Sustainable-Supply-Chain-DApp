@@ -1,61 +1,9 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from "./FormButton"
 import { useNavigate } from 'react-router-dom'
 import {Pie} from "react-chartjs-2"
-import {
-  Chart,
-  ArcElement,
-  LineElement,
-  BarElement,
-  PointElement,
-  BarController,
-  BubbleController,
-  DoughnutController,
-  LineController,
-  PieController,
-  PolarAreaController,
-  RadarController,
-  ScatterController,
-  CategoryScale,
-  LinearScale,
-  LogarithmicScale,
-  RadialLinearScale,
-  TimeScale,
-  TimeSeriesScale,
-  Decimation,
-  Filler,
-  Legend,
-  Title,
-  Tooltip,
-  SubTitle
-} from 'chart.js';
-
-Chart.register(
-  ArcElement,
-  LineElement,
-  BarElement,
-  PointElement,
-  BarController,
-  BubbleController,
-  DoughnutController,
-  LineController,
-  PieController,
-  PolarAreaController,
-  RadarController,
-  ScatterController,
-  CategoryScale,
-  LinearScale,
-  LogarithmicScale,
-  RadialLinearScale,
-  TimeScale,
-  TimeSeriesScale,
-  Decimation,
-  Filler,
-  Legend,
-  Title,
-  Tooltip,
-  SubTitle
-)
+import {Chart, PieController} from 'chart.js'
+Chart.register(PieController)
 
 const Report = ({enviroCount, socialCount, LCACount}) => {
 
@@ -65,7 +13,7 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
     
     useEffect(() => { 
         setAssessChartData({
-            labels: ["Environmental", "Social", "LCA"],
+            labels: ["Environmental", "Social", "LCI"],
             datasets: [
               {
                 label: "Assessments",
@@ -83,7 +31,7 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
         
     let navigate = useNavigate(); 
     const routeLCA = () =>{ 
-        let path = `lca`; 
+        let path = `lci`; 
         navigate(path);}
     const routeS = () =>{ 
         let path = `social`; 
