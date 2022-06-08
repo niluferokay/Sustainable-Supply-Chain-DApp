@@ -15,14 +15,15 @@ import { useLocation } from 'react-router-dom';
 const SocialList = ({assessments}) =>
 assessments.map(a => (
     <tr key={a.id}>
-        <table className='lca-table'>
-      <caption>Social Indicators for 
+        <table className='LCI-table'>
+      <caption>Social Sustainability Assessment for 
       {a.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
         a.account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
         a.account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
         a.account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
         a.account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": a.account}
       </caption>
+      <caption className='captwo'>{"For period " + a.month + " " + a.year}</caption>
       <thead>
           <th>Categories</th>
           <th>Indicators</th>
@@ -32,11 +33,11 @@ assessments.map(a => (
       </thead>
       <tbody>
     <tr>
-    <th rowspan='17'>Labor Practices</th>
+    <th rowspan='17' className='category'>Labor Practices</th>
     <th rowspan='2'>Employee training and development <MdIcons.MdOutlineSchool/></th>
       <th>Average training hours per employee per year</th>
       <td>{(a.trainh/a.trainemp) % 1 !== 0 ? (a.trainh/a.trainemp).toFixed(1): (a.trainh/a.trainemp)}</td>
-      <td></td>
+      <td>hours/ year</td>
     </tr>
     <tr>
       <th>Percentage of employees trained per year</th>
@@ -47,7 +48,7 @@ assessments.map(a => (
     <th rowspan='1'>Employee turnover<GrIcons.GrPowerCycle/></th>
       <th>Employee turnover per year</th>
       <td>{(a.resemp/a.hiredemp) % 1 !== 0 ? (a.resemp/a.hiredemp).toFixed(1): (a.resemp/a.hiredemp)}</td>
-      <td></td>
+      <td>turnover/ year</td>
     </tr>
     <tr>
     <th rowspan='2'>Full and part-time employees<GrIcons.GrUserWorker/></th>
@@ -57,19 +58,19 @@ assessments.map(a => (
     </tr>
     <tr>
       <th>Percentage part-time employees</th>
-      <td>{((a.emp-a.fullemp)*100) % 1 !== 0 ? ((a.emp-a.fullemp)*100).toFixed(1): ((a.emp-a.fullemp)*100)}</td>
+      <td>{((a.emp-a.fullemp)*100/a.emp) % 1 !== 0 ? ((a.emp-a.fullemp)*100/a.emp).toFixed(1): ((a.emp-a.fullemp)*100/a.emp)}</td>
       <td>%</td>
     </tr>
     <tr>
     <th rowspan='2'>Hours of work<AiIcons.AiOutlineClockCircle/></th>
-      <th>Contractual working hours per employee per week</th>
-      <td>{(a.workh/45) % 1 !== 0 ? (a.workh/45).toFixed(1): (a.workh/45)}</td>
-      <td></td>
+      <th>Average weekly contractual working hours per employee per month</th>
+      <td>{a.workh}</td>
+      <td>hours/ month</td>
     </tr>
     <tr>
-      <th>Overtime hours per employee per week</th>
+      <th>Average weekly overtime hours per employee per month</th>
       <td>{a.overtimeh}</td>
-      <td></td>
+      <td>hours/ month</td>
     </tr>
     <tr>
     <th rowspan='2'>Fair wage<MdIcons.MdAttachMoney/></th>
@@ -92,12 +93,12 @@ assessments.map(a => (
     <th rowspan='3'>Gender diversity<BsIcons.BsGenderAmbiguous/></th>
       <th>Wage diversity of genders</th>
       <td>{(a.femwage/a.malwage) % 1 !== 0 ? (a.femwage/a.malwage).toFixed(1): (a.femwage/a.malwage)}</td>
-      <td></td>
+      <td>female wage/ male wage</td>
     </tr>
     <tr>
       <th>Employee gender diversity</th>
       <td>{(a.fem/a.male) % 1 !== 0 ? (a.fem/a.male).toFixed(1): (a.fem/a.male)}</td>
-      <td></td>
+      <td>female employees/ male employees</td>
     </tr>
     <tr>
       <th>Percentage of female employees in board of directors and management positions</th>
@@ -123,11 +124,11 @@ assessments.map(a => (
     <tr>
     <th rowspan='1'>Social standards <GrIcons.GrCertificate/></th>
       <th>Existence of external certifications regarding social standards</th>
-      <td>{a.socialstand}</td>
+      <td>{(a.socialstand + " ").replace(/,/g, ', ')}</td>
       <td></td>
     </tr>
     <tr>
-    <th rowspan='6'>Work Health and Safety</th>
+    <th rowspan='6' className='category'>Work Health and Safety</th>
     <th rowspan='5'>Occupational health and safety<GiIcons.GiHealthNormal/></th>
       <th>Occupational health and safety compliance</th>
       <td>{a.ilo}</td>
@@ -157,10 +158,10 @@ assessments.map(a => (
     <th rowspan='1'>Accidents<MdIcons.MdOutlinePersonalInjury/></th>
       <th>Work accidents per year</th>
       <td>{a.workacc}</td>
-      <td></td>
+      <td>accidents/ year</td>
     </tr>
     <tr>
-    <th rowspan='7'>Human Rights</th>
+    <th rowspan='7' className='category'>Human Rights</th>
     <th rowspan='2'>Freedom of association<GiIcons.GiThreeFriends/></th>
       <th>Presence of unions within the organization</th>
       <td>{a.union}</td>
@@ -179,29 +180,29 @@ assessments.map(a => (
     </tr>
     <tr>
     <th rowspan='1'>Discrimination<GiIcons.GiInjustice/></th>
-      <th>Discrimination incidents</th>
+      <th>Discrimination incidents per year</th>
       <td>{a.discri}</td>
-      <td></td>
+      <td>incidents</td>
     </tr>
     <tr>
     <th rowspan='2'>Child and forced labor<GiIcons.GiCrossedChains/></th>
       <th>Child labor </th>
       <td>{a.child}</td>
-      <td></td>
+      <td>employees</td>
     </tr>
     <tr>
       <th>Forced labor</th>
       <td>{a.forced}</td>
-      <td></td>
+      <td>employees</td>
     </tr>
     <tr>
     <th rowspan='1'>Rights of indigenous people<FaIcons.FaFeatherAlt/></th>
-      <th>Violation of the rights of indigenous people</th>
+      <th>Violation of the rights of indigenous people per year</th>
       <td>{a.indig}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
-    <th rowspan='6'>Society</th>
+    <th rowspan='6' className='category'>Society</th>
     <th rowspan='1'>Job localization<AiIcons.AiOutlineHome/><GrIcons.GrUserWorker/></th>
       <th>Percentage of local employees</th>
       <td>{(a.localemp*100/a.emp) % 1 !== 0 ? (a.localemp*100/a.emp).toFixed(1): (a.localemp*100/a.emp)}</td>
@@ -221,50 +222,50 @@ assessments.map(a => (
     </tr>
     <tr>
     <th rowspan='1'>Anti-corruption<GiIcons.GiPrisoner/></th>
-      <th>Corruption incidents</th>
+      <th>Corruption incidents per year</th>
       <td>{a.corrup}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
     <th rowspan='1'>Anti-competitive behavior<GiIcons.GiPodiumWinner/></th>
-      <th>Legal actions pending or completed regarding anti-competitive behavior</th>
+      <th>Legal actions pending or completed regarding anti-competitive behavior per year</th>
       <td>{a.anticomp}</td>
-      <td></td>
+      <td>legal actions/ year</td> 
     </tr>
     <tr>
     <th rowspan='1'>Supplier sustainability assessment<MdIcons.MdOutlineAssessment/></th>
-      <th>Percentage of suppliers monitored on social sustainability</th>
+      <th>Percentage of suppliers monitored on social sustainability per year</th>
       <td>{(a.socialsus*100/a.suppliers) % 1 !== 0 ? (a.socialsus*100/a.suppliers).toFixed(1): (a.socialsus*100/a.suppliers)}</td>
       <td>%</td>
     </tr>
     <tr>
-    <th rowspan='5'>Customer Responsibility</th>
+    <th rowspan='5' className='category'>Customer Responsibility</th>
     <th rowspan='2'>Customer health and safety<MdIcons.MdHealthAndSafety/></th>
       <th>Percentage of products and services for which health and safety impacts are assessed</th>
       <td>{(a.productassess*100/a.product) % 1 !== 0 ? (a.productassess*100/a.product).toFixed(1): (a.productassess*100/a.product)}</td>
       <td>%</td>
     </tr>
     <tr>
-      <th>Health and safety incidents concerning products and services</th>
+      <th>Health and safety incidents concerning products and services per year</th>
       <td>{a.productincident}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
     <th rowspan='2'>Respect for privacy<MdIcons.MdOutlinePrivacyTip/></th>
-      <th>Customer privacy complaints</th>
+      <th>Customer privacy complaints per year</th>
       <td>{a.privacy}</td>
-      <td></td>
+      <td>complaints/ year</td>
     </tr>
     <tr>
-      <th>Leaks, thefts, or losses of customer data</th>
+      <th>Leaks, thefts, or losses of customer data per year</th>
       <td>{a.leaks}</td>
-      <td></td>
+      <td>leaks, thefts, or losses/ year</td>
     </tr>
     <tr>
     <th rowspan='1'>Customer satisfaction<AiIcons.AiOutlineLike/></th>
-      <th>Customer complaints</th>
+      <th>Customer complaints per month</th>
       <td>{a.cuscomp}</td>
-      <td></td>
+      <td>complaints/ month</td>
     </tr>
       </tbody>
         </table>
@@ -341,10 +342,10 @@ const SocialAssess = () => {
 export default SocialAssess
 
 {/* {showForm[a.id] ? 
-    <div className='lca-indicators'>
-        <AiIcons.AiOutlineClose className='lca-x'
+    <div className='LCI-indicators'>
+        <AiIcons.AiOutlineClose className='LCI-x'
         onClick={() => handleClick(a.id)}/>
-        <table className='lca-table'>
+        <table className='LCI-table'>
         <caption>Social Assessment of {a.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? "Supplier#1":
         a.account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? "Supplier#2":
         a.account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? "Supplier#3":

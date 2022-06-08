@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Button from "./FormButton"
 import { useNavigate } from 'react-router-dom'
 import {Pie} from "react-chartjs-2"
-import {Chart, PieController} from 'chart.js'
-Chart.register(PieController)
+import {Chart, PieController, ArcElement, Tooltip, Legend} from 'chart.js'
+Chart.register(PieController, ArcElement, Tooltip, Legend)
 
-const Report = ({enviroCount, socialCount, LCACount}) => {
+const Report = ({enviroCount, socialCount, LCICount}) => {
 
     const [assessChartData, setAssessChartData] = useState({
         datasets: [],
@@ -17,7 +17,7 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
             datasets: [
               {
                 label: "Assessments",
-                data: [enviroCount, socialCount, LCACount],
+                data: [enviroCount, socialCount, LCICount],
                 backgroundColor: ["#279b48", "orange", "#03a0dd"]
               },
             ],
@@ -27,10 +27,10 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
             }
           });
     
-        }, [enviroCount, socialCount, LCACount]);
+        }, [enviroCount, socialCount, LCICount]);
         
     let navigate = useNavigate(); 
-    const routeLCA = () =>{ 
+    const routeLCI = () =>{ 
         let path = `lci`; 
         navigate(path);}
     const routeS = () =>{ 
@@ -53,7 +53,7 @@ const Report = ({enviroCount, socialCount, LCACount}) => {
                 text="Social Assessment Report"
                 />
                 <Button className="btn" 
-                onClick={routeLCA}
+                onClick={routeLCI}
                 text="Life Cycle Inventory Report"
                 />
             </div>    

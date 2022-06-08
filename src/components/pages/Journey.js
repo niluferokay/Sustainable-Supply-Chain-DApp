@@ -1,7 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import Web3 from "web3"
 import Origin from "../../abis/Origin.json"
-import Assessment from "../../abis/Assessments.json"
 import Sidebar from '../Sidebar'
 import {
   GoogleMap,
@@ -30,28 +29,24 @@ useEffect(() => {
         const loadBlockchainData = async () => {
             const web3 = window.web3
             //Load account
-            const accounts = await web3.eth.getAccounts()
-            // console.log(accounts)
-            setAccount(accounts[0])
-            // console.log(account)
-            // console.log(Origin.abi)
             const networkId = await web3.eth.net.getId()
-            // console.log(networkId)
             const networkData = Origin.networks[networkId]
-            // console.log(networkData)
             if (networkData) {
                 //Fetch contract
                 const contract = new web3.eth.Contract(Origin.abi, networkData.address)
-                setContract(contract)
-                // console.log(contract)
+                const orderCount = await contract.methods.orderCount().call()
+                //Load orders
+                for (var i = 1; i <= orderCount; i++) {
+                    const newOrder = await contract.methods.orders(i).call()
+                    setOrders(orders =>([...orders, newOrder]))
+                }
                 const shipmentCount = await contract.methods.shipmentCount().call()
-                setShipmentCount(shipmentCount)
-                // console.log(sentShipCount)
                 //Load shipments
                 for (var i = 1; i <= shipmentCount; i++) {
                     const newShipment = await contract.methods.shipments(i).call()
                     setShipment(shipments =>([...shipments, newShipment]))
-                    setProduct(shipments =>([...shipments, newShipment.product]))
+                    setOrderID(shipments =>([...shipments, newShipment.product]))
+                    setLatlong(shipments =>([...shipments, JSON.parse(newShipment.latlong)]))
                 }
                 }
             else { 
@@ -60,15 +55,15 @@ useEffect(() => {
         }
     loadBlockchainData()}, [])
   
-  const [contract, setContract] = useState([])
-  const [account, setAccount] = useState([])        
-  const [shipmentCount, setShipmentCount] = useState()        
   const [shipments, setShipment] = useState([])
-  const [product, setProduct] = useState([])
+  const [orderID, setOrderID] = useState([])
+  const [orders, setOrders] = useState([])
   const [formProduct, setFormProduct] = useState("")
+  const [latlong, setLatlong] = useState([])
+    
+  const newShipment = (shipments.map(t1 => ({...t1, ...latlong.find(t2 => t2.id === t1.id)})))
 
-  const unique = [...new Set(product.map(item => item))]
-
+  const unique = [...new Set(orderID.map(item => item))]
 
   const { isLoaded} = useLoadScript({
     googleMapsApiKey: "AIzaSyAAtD8arMVlDgNnv9xQQHKhI6OaVgl7rkk"
@@ -76,7 +71,6 @@ useEffect(() => {
 
   const mapContainerStyle = {
     width: "600px", height: "300px",   borderRadius: "20px"
-
   };
   
   const options = {
@@ -92,7 +86,6 @@ useEffect(() => {
     mapRef.current = map;
   }, []);
 
-
   if (!isLoaded) return null;
 
   return (
@@ -100,33 +93,36 @@ useEffect(() => {
         <Sidebar/>
         <div className="journey-map">
         <div className='timeline-header'>
-                <label>Select Product</label>
+                <label>Select a Product to View the Journey</label>
+                <div></div>
                   <select 
-                      value = {formProduct} onChange={(e) => setFormProduct(e.target.value)}
+                    value ={formProduct} onChange={(e) => setFormProduct(e.target.value)}
                   >
                   <option value=""disabled selected hidden></option>
                   {unique.map(a => {  
-                  return <option value={a}>{a} </option>
+                  return <option value={a}>
+                    ORDER # {a}: {orders.filter(obj=> obj.id.includes(a)).map(o=> o.name)}  </option>
                   })}
                   </select>
         </div>
-            <GoogleMap
+        {formProduct !== "" ? 
+        <GoogleMap
               id="map"
               mapContainerStyle={mapContainerStyle}
               zoom={11}
               center={center}
               options={options}
               onLoad={onMapLoad}
-            >
-            {shipments.map((a) => (
+            >      
+            {newShipment.filter(obj => obj.product.includes(formProduct)).map((a) => (
               <Marker 
               key={a.id}
               position={{lat: Number(a.latitude), lng: Number(a.longitude)}} />
 
             ))}
-            </GoogleMap>
+            </GoogleMap> : null}
         </div>
-        <Timeline shipments={shipments} product= {formProduct}/>
+        <Timeline shipments={shipments} product={formProduct}/>
     </div>
   )
 }

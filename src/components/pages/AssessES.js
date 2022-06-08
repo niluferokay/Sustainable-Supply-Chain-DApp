@@ -15,19 +15,20 @@ import * as IoIcons from 'react-icons/io';
 import Sidebar from '../Sidebar';
 import { useLocation } from 'react-router-dom';
 
-const AssessList = ({assessments, energy, material, account}) =>
+const AssessList = ({assessments, energy, material}) =>
 assessments.map(a => (
     <tr key={a.id}>
-        <table className='lca-table'>
-        <caption>Enviromental Indicators for 
-        {account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
-        account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
-        account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
-        account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
-        account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": account}
+        <table className='LCI-table'>
+        <caption>Enviromental Sustainability Assessment for 
+        {a.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
+        a.account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
+        a.account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
+        a.account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
+        a.account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": a.account}
         </caption>
+        <caption className='captwo'>{"For period " + a.month + " " + a.year}</caption>
         <thead>
-            {/* <th>Categories</th> */}
+            <th>Categories</th>
             <th>Indicators</th>
             <th>Measurements</th>
             <th>Values</th>
@@ -35,72 +36,67 @@ assessments.map(a => (
         </thead>
         <tbody>
                 <tr>
-                    {/* <th rowspan='17' className='category'>Natural Resources</th> */}
+                    <th rowspan='16' className='category'>Natural Resources</th>
                     <th rowspan='1'>Energy consumption <GiIcons.GiElectric/></th>
-                    <th>Amount of energy consumption </th>
+                    <th>Amount of energy used per month</th>
                     <td>{a.energy}</td>
-                    <td>kWh</td>
+                    <td>kWh/ month</td>
                 </tr>
                 <tr>
                     <th rowspan="2">Energy efficiency <MdIcons.MdPowerOff/></th>
-                    <th>Amount of reduced energy </th>
+                    <th>Amount of energy reduced per month</th>
                     <td>{a.id > 1 && energy[a.id-2] > 0 && energy[a.id-1] > 0 ? (energy[a.id-2] - energy[a.id-1]) : null}</td>
-                    <td>kWh</td>
+                    <td>kWh/ month</td>
                 </tr>
                 <tr>
-                    <th>Percentage of energy reduced </th>
+                    <th>Percentage of energy reduced per month</th>
                     <td>{(a.id > 1 && energy[a.id-2] > 0 && energy[a.id-1] > 0 ? ((energy[a.id-2] - energy[a.id-1])*100/energy[a.id-2]) : null) % 1 !== 0 ? 
                     (a.id > 1 && energy[a.id-2] > 0 && energy[a.id-1] > 0 ? ((energy[a.id-2] - energy[a.id-1])*100/energy[a.id-2]) : null).toFixed(1): 
                     (a.id > 1 && energy[a.id-2] > 0 && energy[a.id-1] > 0 ? ((energy[a.id-2] - energy[a.id-1])*100/energy[a.id-2]) : null)}</td>
                     <td>%</td>
                 </tr> 
                 <tr>
-                    <th rowspan='3'>Renewable energy <GiIcons.GiWindTurbine/></th>
-                    <th>Type of renewable energy used</th>
-                    <td>{a.renewenergytype + " "}</td>            
-                    <td></td>
-                </tr>  
-                <tr>
-                    <th>Amount of renewable energy used </th>
+                    <th rowspan='2'>Renewable energy <GiIcons.GiWindTurbine/></th>
+                    <th>Amount of renewable energy used per month</th>
                     <td>{a.renewenergy}</td>
-                    <td>kWh</td>
+                    <td>kWh/ month</td>
                 </tr> 
                 <tr>
-                    <th>Percentage of renewable energy used </th>
+                    <th>Percentage of renewable energy used per month</th>
                     <td>{(a.renewenergy*100/a.energy) % 1 !== 0 ? (a.renewenergy*100/a.energy).toFixed(1): (a.renewenergy*100/a.energy)}</td>
                     <td>%</td>
                 </tr>
                 <tr>
                     <th rowspan='1'>Water consumption <GiIcons.GiWaterDrop/></th>
-                    <th>Amount of water consumption </th>
+                    <th>Amount of water used per month</th>
                     <td>{a.water}</td>
-                    <td>m3</td>
+                    <td>m3/ month</td>
                 </tr>
                 <tr>
                     <th rowspan='2'>Recycled or reused water <GiIcons.GiWaterRecycling/></th>
-                    <th>Amount of recycled or reused water </th>
+                    <th>Amount of recycled or reused water used per month</th>
                     <td>{a.waterrec}</td>
-                    <td>m3</td>
+                    <td>m3/ month</td>
                 </tr>
                 <tr>
-                    <th>Percentage of recycled or reused water </th>
+                    <th>Percentage of recycled or reused water per month</th>
                     <td>{(a.waterrec*100/a.water) % 1 !== 0 ? (a.waterrec*100/a.water).toFixed(1): (a.waterrec*100/a.water)}</td>
                     <td>%</td>
                 </tr>
                 <tr>
                     <th rowspan='1'>Material consumption <AiIcons.AiFillGold/><AiIcons.AiFillGold/></th>
-                    <th>Amount of materials other than water used </th>
+                    <th>Amount of materials other than water used per month</th>
                     <td>{a.material}</td>
-                    <td>kg or t</td>
+                    <td>kg/ month</td>
                 </tr>
                 <tr>
                     <th rowspan='2'>Material efficiency <AiIcons.AiFillGold/></th>
-                    <th>Amount of reduced materials </th>
+                    <th>Amount of materials reduced per month</th>
                     <td>{a.id > 1 && material[a.id-2] > 0 && material[a.id-1] > 0 ? (material[a.id-2] - material[a.id-1]) : null}</td>
-                    <td>kg or t</td>
+                    <td>kg/ month</td>
                 </tr>
                 <tr>
-                    <th>Percentage of reduced materials </th>
+                    <th>Percentage of materials reduced per month </th>
                     <td>{(a.id > 1 && material[a.id-2] > 0 && material[a.id-1] > 0 ? ((material[a.id-2] - material[a.id-1])*100/material[a.id-2]) : null) % 1 !== 0 ? 
                     (a.id > 1 && material[a.id-2] > 0 && material[a.id-1] > 0 ? ((material[a.id-2] - material[a.id-1])*100/material[a.id-2]) : null).toFixed(1): 
                     (a.id > 1 && material[a.id-2] > 0 && material[a.id-1] > 0 ? ((material[a.id-2] - material[a.id-1])*100/material[a.id-2]) : null)}</td>
@@ -108,105 +104,154 @@ assessments.map(a => (
                 </tr>
                 <tr>
                     <th rowspan='2'>Recycled or reused materials <BiIcons.BiRecycle/></th>
-                    <th>Amount of recycled or reused materials </th>
+                    <th>Amount of recycled or reused materials per month </th>
                     <td>{a.materialrec}</td>
-                    <td>kg or t</td>
+                    <td>kg/ month</td>
                 </tr>
                 <tr>
-                    <th>Percentage of recycled or reused materials </th>
-                    <td>{(a.materialrec*100/a.material) % 1 !== 0 ? (a.materialrec*100/a.material).toFixed(1): (a.materialrec*100/a.material)}</td>
+                    <th>Percentage of recycled or reused materials per month </th>
+                    <td>{(a.materialrec*100/a.material) % 1 !== 0 ? 
+                    (a.materialrec*100/a.material).toFixed(1): (a.materialrec*100/a.material)}</td>
                     <td>%</td>
                 </tr>
                 <tr>
                     <th rowspan='1'>Land use<GiIcons.GiFactory/></th>
                     <th>Amount of land owned, leased, or managed for production activities or extractive use</th>
                     <td>{a.land}</td>
-                    <td>kg or t</td>
+                    <td>m2</td>
                 </tr>
                 <tr>
                     <th rowspan='2'>Biodiversity<GiIcons.GiCircleForest/></th>
-                    <th>Is there a biodiversity policy per facility?</th>
+                    <th>Existence of biodiversity policy</th>
                     <td>{a.bio}</td>
-                    <td>kg or t</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <th>Are there activities and operations on protected and sensitive areas per facility? (e.g., IUCN protected area categories 1–4, world heritage sites, and biosphere reserves)</th>
+                    <th>Existence of activities and operations on protected and sensitive areas (e.g., IUCN protected area categories 1–4, world heritage sites, and biosphere reserves)</th>
                     <td>{a.sensitive}</td>
-                    <td>%</td>
+                    <td></td>
                 </tr>
                 <tr>
-                    {/* <th rowspan='8' className='category'>Pollution and Waste Management</th> */}
+                    <th rowspan='16' className='category'>Pollution and Waste Management</th>
                     <th rowspan='1'>Greenhouse gas emission <GiIcons.GiGreenhouse/></th>
-                    <th>Amount of greenhouse gas emission </th>
+                    <th>Amount of greenhouse gas emission generated per month</th>
                     <td>{a.ghg}</td>
                     <td>tonnes of CO2e</td>
                 </tr>
                 <tr>
-                    <th rowspan='3'>Pollution management <GiIcons.GiChemicalDrop/></th>
-                    <th>Amount of water pollution </th>
-                    <td>{a.waterpol}</td>
-                    <td>m3</td>
-                </tr>
-                <tr>
-                    <th>Amount of soil pollution </th>
-                    <td>{a.soilpol}</td>
-                    <td>kg or t</td>
-                </tr>
-                <tr>
-                    <th>Amount of air emission (NOx, SOx) </th>
+                    <th rowspan='1'>Air Pollution<GiIcons.GiChemicalDrop/></th>
+                    <th>Amount of air emission generated per month</th>
                     <td>{a.air}</td>
-                    <td>t</td>
+                    <td>tonnes</td>
                 </tr>
                 <tr>
-                    <th rowspan='1'>Use and release of hazardous materials<GiIcons.GiNuclearWaste/></th>
-                    <th>Amount of hazardous materials used </th>
-                    <td>{a.hazmat}</td>
-                    <td>kg or t</td>
+                    <th rowspan='2'>Water Pollution<GiIcons.GiChemicalDrop/></th>
+                    <th>Amount of water pollution generated per month</th>
+                    <td>{a.waterpol}</td>
+                    <td>m3/ month</td>
                 </tr>
                 <tr>
-                    <th rowspan='2'>Waste management<GiIcons.GiTrashCan/></th>
-                    <th>Amount of solid waste generated </th>
-                    <td>{a.soilwaste}</td>
-                    <td>kg or t</td>
-                </tr>
-                <tr>
-                    <th>Amount of waste water generated </th>
-                    <td>{a.waterwaste}</td>
-                    <td>m3</td>
-                </tr>
-                <tr>
-                    <th rowspan='1'>Product recyclability<RiIcons.RiRecycleFill/></th>
-                    <th>Is the product produced recyclable/reusable?</th>
-                    <td>{a.productrec}</td>
+                    <th>Type of water pollution </th>
+                    <td>{(a.waterpoltype + " ").replace(/,/g, ', ')}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    {/* <th rowspan='5' className='category'>Operations Management and Performance Measurement</th> */}
+                    <th rowspan='2'>Land Pollution<GiIcons.GiChemicalDrop/></th>
+                    <th>Amount of land pollution generated per month</th>
+                    <td>{a.landpol}</td>
+                    <td>m2</td>
+                </tr>
+                <tr>
+                    <th>Type of land pollution </th>
+                    <td>{(a.landpoltype + " ").replace(/,/g, ', ')}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th rowspan='1'>Use and release of hazardous materials<GiIcons.GiNuclearWaste/></th>
+                    <th>Amount of hazardous materials used per month </th>
+                    <td>{a.hazmat}</td>
+                    <td>kg/ month</td>
+                </tr>
+                <tr>
+                    <th rowspan='1'>Hazardous waste<GiIcons.GiNuclearWaste/></th>
+                    <th>Amount of hazardous waste generated per month </th>
+                    <td>{a.hazwaste}</td>
+                    <td>kg/ month</td>
+                </tr>
+                <tr>
+                    <th rowspan='4'>Solid waste<GiIcons.GiTrashCan/></th>
+                    <th>Amount of solid waste generated per month </th>
+                    <td>{a.solidwaste}</td>
+                    <td>kg/ month</td>
+                </tr>
+                <tr>
+                    <th>Amount of solid waste recycled or reused per month </th>
+                    <td>{a.solidwasterec}</td>
+                    <td>kg/ month</td>
+                </tr>
+                <tr>
+                    <th>Percentage of solid waste recycled or reused per month </th>
+                    <td>{(a.solidwasterec*100/a.solidwaste) % 1 !== 0 ? 
+                    (a.solidwasterec*100/a.solidwaste).toFixed(1): (a.solidwasterec*100/a.solidwaste)}</td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <th>Type of solid waste destination </th>
+                    <td>{(a.solidwastedes + " ").replace(/,/g, ', ')}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th rowspan='4'>Waste water<GiIcons.GiTrashCan/></th>
+                    <th>Amount of waste water generated per month </th>
+                    <td>{a.waterwaste}</td>
+                    <td>m3/ month</td>
+                </tr>
+                <tr>
+                    <th>Amount of waste water recycled or reused per month </th>
+                    <td>{a.waterwasterec}</td>
+                    <td>m3/ month</td>
+                </tr>
+                <tr>
+                    <th>Percentage of waste water recycled or reused per month </th>
+                    <td>{(a.waterwasterec*100/a.waterwaste) % 1 !== 0 ? 
+                    (a.waterwasterec*100/a.waterwaste).toFixed(1): (a.waterwasterec*100/a.waterwaste)}</td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <th>Type of waste water destination </th>
+                    <td>{(a.waterwastedes + " ").replace(/,/g, ', ')}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th rowspan='5' className='category'>Operations Management and Performance Measurement</th>
                     <th rowspan='1'>Environmental management system<GrIcons.GrCertificate/></th>
                     <th>Existence of external certifications regarding environmental standards</th>
                     <td>{a.envirostand}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <th rowspan='2'>Reverse logistics systems<AiIcons.AiOutlineArrowLeft/><FaIcons.FaTruckMoving/></th>
-                    <th>Is there reverse logistics system?</th>
-                    <td>{a.reverse}</td>
-                    <td></td>
+                    <th rowspan='1'>Product recyclability<RiIcons.RiRecycleFill/></th>
+                    <th>Percentage of recyclable or reusable products produced per month</th>
+                    <td>{(a.productrec*100/a.products) % 1 !== 0 ? 
+                    (a.productrec*100/a.products).toFixed(1): (a.productrec*100/a.products)}</td>
+                    <td>%</td>
                 </tr>
                 <tr>
-                    <th>Type of reverse logistics </th>
-                    <td>{a.reversetype + " "}</td>
-                    <td></td>
+                    <th rowspan='1'>Green packaging and labeling<BiIcons.BiPackage/></th>
+                    <th>Percentage of eco-friendly packaged and labeled products per month</th>
+                    <td>{(a.ecolabel*100/a.products) % 1 !== 0 ? 
+                    (a.ecolabel*100/a.products).toFixed(1): (a.ecolabel*100/a.products)}</td>
+                    <td>%</td>
                 </tr>
                 <tr>
                     <th rowspan='1'>Cleaner technology<FaIcons.FaSeedling/></th>
                     <th>Type of clean technology used</th>
-                    <td>{a.clean + " "}</td>
+                    <td>{(a.clean + " ").replace(/,/g, ', ')}</td>
                     <td></td>
                 </tr>
                 <tr>
                     <th rowspan='1'>Supplier sustainability assessment<MdIcons.MdOutlineAssessment/></th>
-                    <th>Percentage of suppliers monitored on environmental sustainability</th>
+                    <th>Percentage of suppliers monitored on environmental sustainability per year</th>
                     <td>{(a.envirosus*100/a.suppliers) % 1 !== 0 ? (a.envirosus*100/a.suppliers).toFixed(1): (a.envirosus*100/a.suppliers)}</td>
                     <td>%</td>
                 </tr>
@@ -215,17 +260,18 @@ assessments.map(a => (
 </tr>
 ))
 
-const SocialList = ({assessments, account}) =>
+const SocialList = ({assessments}) =>
 assessments.map(a => (
     <tr key={a.id}>
-        <table className='lca-table'>
-      <caption>Social Indicators for 
-      {account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
-        account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
-        account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
-        account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
-        account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": account}
+        <table className='LCI-table'>
+      <caption>Social Sustainability Assessment for 
+      {a.account === "0xf00EbF44706A84d73698D51390a6801215fF338c" ? " Supplier#1":
+        a.account === "0x2074b4e9bE42c7724C936c16795C42c04e83d7ae" ? " Supplier#2":
+        a.account === "0xa686525B5A5c9353c649b9Ef7f387a9B92085619" ? " Supplier#3":
+        a.account === "0x5e66410a4C6443d035E05162C9bb59708cB0596F" ? " Supplier#4":
+        a.account === "0x3421668462324bFB48EA07D0B12243091CD09759" ? " Company": a.account}
       </caption>
+      <caption className='captwo'>{"For period " + a.month + " " + a.year}</caption>
       <thead>
           <th>Categories</th>
           <th>Indicators</th>
@@ -235,11 +281,11 @@ assessments.map(a => (
       </thead>
       <tbody>
     <tr>
-    <th rowspan='17'>Labor Practices</th>
+    <th rowspan='17' className='category'>Labor Practices</th>
     <th rowspan='2'>Employee training and development <MdIcons.MdOutlineSchool/></th>
       <th>Average training hours per employee per year</th>
       <td>{(a.trainh/a.trainemp) % 1 !== 0 ? (a.trainh/a.trainemp).toFixed(1): (a.trainh/a.trainemp)}</td>
-      <td></td>
+      <td>hours/ year</td>
     </tr>
     <tr>
       <th>Percentage of employees trained per year</th>
@@ -250,7 +296,7 @@ assessments.map(a => (
     <th rowspan='1'>Employee turnover<GrIcons.GrPowerCycle/></th>
       <th>Employee turnover per year</th>
       <td>{(a.resemp/a.hiredemp) % 1 !== 0 ? (a.resemp/a.hiredemp).toFixed(1): (a.resemp/a.hiredemp)}</td>
-      <td></td>
+      <td>turnover/ year</td>
     </tr>
     <tr>
     <th rowspan='2'>Full and part-time employees<GrIcons.GrUserWorker/></th>
@@ -260,19 +306,19 @@ assessments.map(a => (
     </tr>
     <tr>
       <th>Percentage part-time employees</th>
-      <td>{((a.emp-a.fullemp)*100) % 1 !== 0 ? ((a.emp-a.fullemp)*100).toFixed(1): ((a.emp-a.fullemp)*100)}</td>
+      <td>{((a.emp-a.fullemp)*100/a.emp) % 1 !== 0 ? ((a.emp-a.fullemp)*100/a.emp).toFixed(1): ((a.emp-a.fullemp)*100/a.emp)}</td>
       <td>%</td>
     </tr>
     <tr>
     <th rowspan='2'>Hours of work<AiIcons.AiOutlineClockCircle/></th>
-      <th>Contractual working hours per employee per week</th>
-      <td>{(a.workh/45) % 1 !== 0 ? (a.workh/45).toFixed(1): (a.workh/45)}</td>
-      <td></td>
+      <th>Average weekly contractual working hours per employee per month</th>
+      <td>{a.workh}</td>
+      <td>hours/ month</td>
     </tr>
     <tr>
-      <th>Overtime hours per employee per week</th>
+      <th>Average weekly overtime hours per employee per month</th>
       <td>{a.overtimeh}</td>
-      <td></td>
+      <td>hours/ month</td>
     </tr>
     <tr>
     <th rowspan='2'>Fair wage<MdIcons.MdAttachMoney/></th>
@@ -295,12 +341,12 @@ assessments.map(a => (
     <th rowspan='3'>Gender diversity<BsIcons.BsGenderAmbiguous/></th>
       <th>Wage diversity of genders</th>
       <td>{(a.femwage/a.malwage) % 1 !== 0 ? (a.femwage/a.malwage).toFixed(1): (a.femwage/a.malwage)}</td>
-      <td></td>
+      <td>female wage/ male wage</td>
     </tr>
     <tr>
       <th>Employee gender diversity</th>
       <td>{(a.fem/a.male) % 1 !== 0 ? (a.fem/a.male).toFixed(1): (a.fem/a.male)}</td>
-      <td></td>
+      <td>female employees/ male employees</td>
     </tr>
     <tr>
       <th>Percentage of female employees in board of directors and management positions</th>
@@ -326,11 +372,11 @@ assessments.map(a => (
     <tr>
     <th rowspan='1'>Social standards <GrIcons.GrCertificate/></th>
       <th>Existence of external certifications regarding social standards</th>
-      <td>{a.socialstand}</td>
+      <td>{(a.socialstand + " ").replace(/,/g, ', ')}</td>
       <td></td>
     </tr>
     <tr>
-    <th rowspan='6'>Work Health and Safety</th>
+    <th rowspan='6' className='category'>Work Health and Safety</th>
     <th rowspan='5'>Occupational health and safety<GiIcons.GiHealthNormal/></th>
       <th>Occupational health and safety compliance</th>
       <td>{a.ilo}</td>
@@ -360,10 +406,10 @@ assessments.map(a => (
     <th rowspan='1'>Accidents<MdIcons.MdOutlinePersonalInjury/></th>
       <th>Work accidents per year</th>
       <td>{a.workacc}</td>
-      <td></td>
+      <td>accidents/ year</td>
     </tr>
     <tr>
-    <th rowspan='7'>Human Rights</th>
+    <th rowspan='7' className='category'>Human Rights</th>
     <th rowspan='2'>Freedom of association<GiIcons.GiThreeFriends/></th>
       <th>Presence of unions within the organization</th>
       <td>{a.union}</td>
@@ -382,29 +428,29 @@ assessments.map(a => (
     </tr>
     <tr>
     <th rowspan='1'>Discrimination<GiIcons.GiInjustice/></th>
-      <th>Discrimination incidents</th>
+      <th>Discrimination incidents per year</th>
       <td>{a.discri}</td>
-      <td></td>
+      <td>incidents</td>
     </tr>
     <tr>
     <th rowspan='2'>Child and forced labor<GiIcons.GiCrossedChains/></th>
       <th>Child labor </th>
       <td>{a.child}</td>
-      <td></td>
+      <td>employees</td>
     </tr>
     <tr>
       <th>Forced labor</th>
       <td>{a.forced}</td>
-      <td></td>
+      <td>employees</td>
     </tr>
     <tr>
     <th rowspan='1'>Rights of indigenous people<FaIcons.FaFeatherAlt/></th>
-      <th>Violation of the rights of indigenous people</th>
+      <th>Violation of the rights of indigenous people per year</th>
       <td>{a.indig}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
-    <th rowspan='6'>Society</th>
+    <th rowspan='6' className='category'>Society</th>
     <th rowspan='1'>Job localization<AiIcons.AiOutlineHome/><GrIcons.GrUserWorker/></th>
       <th>Percentage of local employees</th>
       <td>{(a.localemp*100/a.emp) % 1 !== 0 ? (a.localemp*100/a.emp).toFixed(1): (a.localemp*100/a.emp)}</td>
@@ -424,50 +470,50 @@ assessments.map(a => (
     </tr>
     <tr>
     <th rowspan='1'>Anti-corruption<GiIcons.GiPrisoner/></th>
-      <th>Corruption incidents</th>
+      <th>Corruption incidents per year</th>
       <td>{a.corrup}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
     <th rowspan='1'>Anti-competitive behavior<GiIcons.GiPodiumWinner/></th>
-      <th>Legal actions pending or completed regarding anti-competitive behavior</th>
+      <th>Legal actions pending or completed regarding anti-competitive behavior per year</th>
       <td>{a.anticomp}</td>
-      <td></td>
+      <td>legal actions/ year</td> 
     </tr>
     <tr>
     <th rowspan='1'>Supplier sustainability assessment<MdIcons.MdOutlineAssessment/></th>
-      <th>Percentage of suppliers monitored on social sustainability</th>
+      <th>Percentage of suppliers monitored on social sustainability per year</th>
       <td>{(a.socialsus*100/a.suppliers) % 1 !== 0 ? (a.socialsus*100/a.suppliers).toFixed(1): (a.socialsus*100/a.suppliers)}</td>
       <td>%</td>
     </tr>
     <tr>
-    <th rowspan='5'>Customer Responsibility</th>
+    <th rowspan='5' className='category'>Customer Responsibility</th>
     <th rowspan='2'>Customer health and safety<MdIcons.MdHealthAndSafety/></th>
       <th>Percentage of products and services for which health and safety impacts are assessed</th>
       <td>{(a.productassess*100/a.product) % 1 !== 0 ? (a.productassess*100/a.product).toFixed(1): (a.productassess*100/a.product)}</td>
       <td>%</td>
     </tr>
     <tr>
-      <th>Health and safety incidents concerning products and services</th>
+      <th>Health and safety incidents concerning products and services per year</th>
       <td>{a.productincident}</td>
-      <td></td>
+      <td>incidents/ year</td>
     </tr>
     <tr>
     <th rowspan='2'>Respect for privacy<MdIcons.MdOutlinePrivacyTip/></th>
-      <th>Customer privacy complaints</th>
+      <th>Customer privacy complaints per year</th>
       <td>{a.privacy}</td>
-      <td></td>
+      <td>complaints/ year</td>
     </tr>
     <tr>
-      <th>Leaks, thefts, or losses of customer data</th>
+      <th>Leaks, thefts, or losses of customer data per year</th>
       <td>{a.leaks}</td>
-      <td></td>
+      <td>leaks, thefts, or losses/ year</td>
     </tr>
     <tr>
     <th rowspan='1'>Customer satisfaction<AiIcons.AiOutlineLike/></th>
-      <th>Customer complaints</th>
+      <th>Customer complaints per month</th>
       <td>{a.cuscomp}</td>
-      <td></td>
+      <td>complaints/ month</td>
     </tr>
       </tbody>
         </table>
@@ -491,40 +537,26 @@ const AssessES = () => {
     useEffect(() => { 
       const loadBlockchainData = async () => {
           const web3 = window.web3
-          const accounts = await web3.eth.getAccounts()
-          setAccount(accounts[0])
           const networkId = await web3.eth.net.getId()
           const networkData = Assessment.networks[networkId]
           if (networkData) {
               //Fetch contract
               const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
-              setContract(contract)
               const enviroCount = await contract.methods.enviroCount().call()
-              setEnviroCount(enviroCount)
               const socialCount = await contract.methods.socialCount().call()
-              setSocialCount(socialCount)
               //Load Enviros
               for (var i = 1; i <= enviroCount; i++) {
                   const newEnviro = await contract.methods.enviros(i).call()
                   setEnviros(enviros =>([...enviros, newEnviro]))
+                  const parse = JSON.parse(newEnviro.document)
+                  setEnergy(enviros =>([...enviros, (parse.energy)]))
+                  setMaterial(enviros =>([...enviros, (parse.material)]))
+                  setEnviroForm(enviros =>([...enviros, parse]))
               }
-              for (var i = 1; i <= enviroCount; i++) {
-                  const newEnviro = await contract.methods.enviros(i).call()
-                  setEnviroForm(enviros =>([...enviros, JSON.parse(newEnviro.document)]))
-              }
-              for (var i = 1; i <= enviroCount; i++) {
-                const newenviro = await contract.methods.enviros(i).call()
-                const parse = JSON.parse(newenviro.document)
-                setEnergy(enviros =>([...enviros, (parse.energy)]))
-                setMaterial(enviros =>([...enviros, (parse.material)]))
-            }
               //Load Socials
               for (var i = 1; i <= socialCount; i++) {
                   const newSocial = await contract.methods.socials(i).call()
                   setSocials(socials =>([...socials, newSocial]))
-              }
-              for (var i = 1; i <= socialCount; i++) {
-                  const newSocial = await contract.methods.socials(i).call()
                   setSocialForm(socials =>([...socials, JSON.parse(newSocial.document)]))
               }
               }
@@ -534,13 +566,9 @@ const AssessES = () => {
       }
       loadBlockchainData()}, [])
 
-    const [contract, setContract] = useState([])
-    const [account, setAccount] = useState([])        
     const [accountData, setAccountData] = useState()        
-    const [enviroCount, setEnviroCount] = useState()
     const [enviros, setEnviros] = useState([])
     const [enviroform, setEnviroForm] = useState([])
-    const [socialCount, setSocialCount] = useState()
     const [socials, setSocials] = useState([])  
     const [energy, setEnergy] = useState([])
     const [material, setMaterial] = useState([])
@@ -562,7 +590,7 @@ const AssessES = () => {
     const lastSupp = supp.slice(-1)
     const lastSuppS = suppS.slice(-1)
 
-
+    console.log(lastSuppS)
     
   return (
     <>
@@ -571,7 +599,8 @@ const AssessES = () => {
     <table className="assess-table">
          <AssessList assessments={lastSupp} energy={energy} material={material} account={accountData} />
          <SocialList assessments={lastSuppS} Data={accountData} />
-         {lastSupp === "" && lastSuppS === "" ? <h2> No Assessment Found</h2> : null}
+         {lastSuppS.length === 0 ? <h3 style={{marginTop: "30px"}}> No Social Assessment Found</h3> : null}
+         {lastSupp.length === 0 ? <h3> No Environmental Assessment Found</h3> : null}
     </table>
     </div>
     </>

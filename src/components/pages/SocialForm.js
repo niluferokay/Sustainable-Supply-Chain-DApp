@@ -201,8 +201,8 @@ const Social = () => {
     return (
       <div>
         <Sidebar/>
-            <div className="lca-container">
-            <form className="lca-form" onSubmit={onSubmit}>
+            <div className="LCI-container">
+            <form className="LCI-form" onSubmit={onSubmit}>
                 <div>
                 <h3>Social Sustainability Assessment</h3>
                         <div className="center">
@@ -220,52 +220,16 @@ const Social = () => {
                     <div className='center-form-input' >
                     <label 
                     className="form-label">
-                    1- Total number of training hours provided to employees per year   
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
-                        value = {trainh} onChange={(e) => setTrainh(e.target.value)}
-                    /> 
-                <div></div>
-                    <label 
-                    className="form-label">
-                    2- Total number of trained employees per year
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {trainemp} onChange={(e) => setTrainemp(e.target.value)}
-                    /> 
-                <div></div>
-                    <label 
-                    className="form-label">
-                    3- Total number of employees
+                    1 - Total number of employees
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
                         value = {emp} onChange={(e) => setEmp(e.target.value)}
                     /> 
                 <div></div> 
-                    <label 
-                    className="form-label">
-                    4- Total number of employees who resigned or have been made redundant per year
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()}
-                        value = {resemp} onChange={(e) => setResemp(e.target.value)}
-                    /> 
-                <div></div> 
                 <label 
                     className="form-label">
-                    5- Total number of hired employees per year 
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()}  
-                        value = {hiredemp} onChange={(e) => setHiredemp(e.target.value)}
-                    /> 
-                <div></div> 
-                <label 
-                    className="form-label">
-                    6- Total number of full-time employees 
+                    2 - Total number of full-time employees 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -274,7 +238,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    7- Average contractual working hours per full-time employee per week
+                    3 - Average weekly contractual working hours per full-time employee per month
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -283,7 +247,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    8- Average overtime hours per employee per week
+                    4 - Average weekly overtime hours per employee per month
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -292,7 +256,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    9- Average employee wage 
+                    5 - Average employee wage 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -301,7 +265,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    10- Total number of full-time employees earning below minimum wage
+                    6 - Total number of full-time employees earning below minimum wage
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -309,7 +273,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    11- Total number of employees entitled for health insurance, parental leave, unemployment, disability and invalidity coverage, retirement provision 
+                    7 - Total number of employees entitled for health insurance, parental leave, unemployment, disability and invalidity coverage, retirement provision 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -317,7 +281,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    12- Average female employee wage
+                    8 - Average female employee wage
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -326,7 +290,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    13- Average male employee wage
+                    9 - Average male employee wage
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -335,7 +299,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    14- Total number of female employees
+                    10 - Total number of female employees
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -344,7 +308,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    15- Total number of male employees 
+                    11 - Total number of male employees 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -352,27 +316,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    16- Total number of female employees in board of director and management positions
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {femboard} onChange={(e) => setFemboard(e.target.value)}/>
-                <div></div> 
-                <label 
-                    className="form-label">
-                    17- Total number of employees in board of director and management positions
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {empboard} onChange={(e) => setEmpboard(e.target.value)}/> 
-                <div></div>
-                </div>
-                </fieldset>
-                <fieldset className='annual-kpi'><legend>Annual KPI Update</legend> 
-                    <div className='center-form-input' >
-                    <label 
-                    className="form-label">
-                    18- Total number of disabled employees 
+                    12 - Total number of disabled employees 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -380,7 +324,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    19- Total number of minority employees 
+                    13 - Total number of minority employees 
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -388,15 +332,111 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    20- Total number of older employees
+                    14 - Total number of older employees
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
                         value = {older} onChange={(e) => setOlder(e.target.value)}/> 
+                <div></div>
+                <label 
+                    className="form-label">
+                    15- Total number of local employees
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {localemp} onChange={(e) => setLocalemp(e.target.value)}/> 
                 <div></div> 
                 <label 
                     className="form-label">
-                    21- Choose the external certification(s) regarding social standards and supplier's code of conduct 
+                    16 - Total number of local suppliers
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {localsup} onChange={(e) => setLocalsup(e.target.value)}/> 
+                <div></div>
+                <label 
+                    className="form-label">
+                    17 - Total number of suppliers
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {suppliers} onChange={(e) => setSuppliers(e.target.value)}/> 
+                <div></div>  
+                <label 
+                    className="form-label">
+                    18 - Total number of products and services 
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {product} onChange={(e) => setProduct(e.target.value)}/> 
+                <div></div>
+                <label 
+                    className="form-label">
+                    19 - Total number of customer complaints per month
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {cuscomp} onChange={(e) => setCuscomp(e.target.value)}/> 
+                <div></div>   
+                </div>
+                </fieldset>
+                <fieldset className='annual-kpi'><legend>Annual KPI Update</legend> 
+                    <div className='center-form-input' >
+                    <label 
+                    className="form-label">
+                    1 - Total number of training hours provided to employees per year   
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
+                        value = {trainh} onChange={(e) => setTrainh(e.target.value)}
+                    /> 
+                <div></div>
+                    <label 
+                    className="form-label">
+                    2 - Total number of trained employees per year
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {trainemp} onChange={(e) => setTrainemp(e.target.value)}
+                    /> 
+                <div></div>
+                <label 
+                    className="form-label">
+                    3 - Total number of employees who resigned or have been made redundant per year
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()}
+                        value = {resemp} onChange={(e) => setResemp(e.target.value)}
+                    /> 
+                <div></div> 
+                <label 
+                    className="form-label">
+                    4 - Total number of hired employees per year 
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()}  
+                        value = {hiredemp} onChange={(e) => setHiredemp(e.target.value)}
+                    /> 
+                <div></div>
+                <label 
+                    className="form-label">
+                    5 - Total number of female employees in board of director and management positions
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {femboard} onChange={(e) => setFemboard(e.target.value)}/>
+                <div></div> 
+                <label 
+                    className="form-label">
+                    6 - Total number of employees in board of director and management positions
+                    </label>
+                    <input 
+                        type='number' min='0' onWheel={(e) => e.target.blur()} 
+                        value = {empboard} onChange={(e) => setEmpboard(e.target.value)}/> 
+                <div></div> 
+                <label 
+                    className="form-label">
+                    7 - Choose the external certification(s) regarding social standards and supplier's code of conduct 
                     </label>
                     <div></div>  
                     <input 
@@ -408,7 +448,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    22- Is there compliance with ILO Guidelines for Occupational Health Management Systems? 
+                    8 - Is there compliance with ILO Guidelines for Occupational Health Management Systems? 
                     </label>
                     <div></div> 
                     <input
@@ -422,7 +462,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    23- Is there fire-fighting equipment and emergency exits?
+                    9 - Is there fire-fighting equipment and emergency exits?
                     </label>
                     <div></div> 
                     <input 
@@ -436,7 +476,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    24- Is there provision of medical assistance and first aid?
+                    10 - Is there provision of medical assistance and first aid?
                     </label>
                     <div></div> 
                     <input 
@@ -450,7 +490,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    25- Is there access to water and sanitation?
+                    11 - Is there access to water and sanitation?
                     </label>
                     <div></div> 
                     <input 
@@ -464,7 +504,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    26- Is there provision of protective gear? 
+                    12 - Is there provision of protective gear? 
                     </label>
                     <div></div> 
                     <input 
@@ -478,7 +518,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    27- Total number of work accidents per year
+                    13 - Total number of work accidents per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -486,7 +526,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    28- Are there union(s) within the organization?
+                    14 - Are there union(s) within the organization?
                     </label>
                     <div></div> 
                     <input 
@@ -500,7 +540,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    29- Total number of employees joined to labor unions
+                    15 - Total number of employees joined to labor unions
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -508,7 +548,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    30- Total number of employees covered by collective bargaining agreements
+                    16 - Total number of employees covered by collective bargaining agreements
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -516,7 +556,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    31- Total number of discrimination incidents in terms of race, gender, sexual orientation, religion, disability, and age
+                    17 - Total number of discrimination incidents in terms of race, gender, sexual orientation, religion, disability, and age per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -524,7 +564,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    32- Total number of child labor
+                    18 - Total number of child labor
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -532,7 +572,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    33- Total number of forced labor
+                    19 - Total number of forced labor
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -540,7 +580,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    34- Total number of incidents of violating the rights of indigenous people 
+                    20 - Total number of incidents of violating the rights of indigenous people per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -548,23 +588,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    35- Total number of local employees
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {localemp} onChange={(e) => setLocalemp(e.target.value)}/> 
-                <div></div> 
-                <label 
-                    className="form-label">
-                    36- Total number of local suppliers
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {localsup} onChange={(e) => setLocalsup(e.target.value)}/> 
-                <div></div> 
-                <label 
-                    className="form-label">
-                    37- Total amount of money donated
+                    21 - Total amount of money donated to charity per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -573,7 +597,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    38- Total amount of pre-tax earnings 
+                    22 - Total amount of pre-tax earnings per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} step=".001" 
@@ -582,7 +606,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    39- Total number of incidents of corruption 
+                    23 - Total number of incidents of corruption per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -590,7 +614,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    40- Total number of legal actions pending or completed regarding anti-competitive behavior 
+                    24 - Total number of legal actions pending or completed regarding anti-competitive behavior per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -598,7 +622,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    41- Total number of suppliers monitored on labor practices, health and safety, human rights, society and product responsibility issues
+                    25 - Total number of suppliers monitored on social sustainability per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -606,31 +630,15 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    42- Total number of suppliers
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {suppliers} onChange={(e) => setSuppliers(e.target.value)}/> 
-                <div></div> 
-                <label 
-                    className="form-label">
-                    43- Total number of products and services for which health and safety impacts are assessed
+                    26 - Total number of products and services for which health and safety impacts are assessed
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
                         value = {productassess} onChange={(e) => setProductassess(e.target.value)}/> 
-                <div></div> 
+                <div></div>
                 <label 
                     className="form-label">
-                    44- Total number of products and services 
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {product} onChange={(e) => setProduct(e.target.value)}/> 
-                <div></div> 
-                <label 
-                    className="form-label">
-                    45- Total number of health and safety incidents concerning products and services
+                    27 - Total number of health and safety incidents concerning products and services per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -638,7 +646,7 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    46- Total number of customer privacy complaints
+                    28 - Total number of customer privacy complaints per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
@@ -646,24 +654,16 @@ const Social = () => {
                 <div></div> 
                 <label 
                     className="form-label">
-                    47- Total number of leaks, thefts, or losses of customer data
+                    29 - Total number of leaks, thefts, or losses of customer data per year
                     </label>
                     <input 
                         type='number' min='0' onWheel={(e) => e.target.blur()} 
                         value = {leaks} onChange={(e) => setLeaks(e.target.value)}/> 
                 <div></div> 
-                <label 
-                    className="form-label">
-                    48- Total number of customer complaints
-                    </label>
-                    <input 
-                        type='number' min='0' onWheel={(e) => e.target.blur()} 
-                        value = {cuscomp} onChange={(e) => setCuscomp(e.target.value)}/> 
-                <div></div>
                 </div>
                 </fieldset> 
                 <div className='center-btn'>
-                        <button className="btn form-input-lca" type="submit">
+                        <button className="btn form-input-LCI" type="submit">
                         Calculate Assessment
                         </button>
                 </div>                 

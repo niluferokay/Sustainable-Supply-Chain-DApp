@@ -7,7 +7,7 @@ assessments.sort((a,b) => b.id - a.id)
 .map(a => (
     <tr key={a.id}>
     <td className="p-name">
-      <Link to="enviro" state={a.date} style={{ textDecoration: 'none', color: "black"}}>
+      <Link to="enviro" state={{date: a.date, account: a.account}} style={{ textDecoration: 'none', color: "black"}}>
       <FcDocument style={{ fontSize: "30px", cursor: "pointer" }}/> 
       </Link>
     </td>

@@ -6,7 +6,7 @@ import Assessment from "../../abis/Assessments.json"
 import Button from "../FormButton"
 import Enviro from '../EnviroIndicators'
 import Social from '../SocialIndicators'
-import LCA from '../LCAIndicators'
+import LCI from '../LCIIndicators'
 
 const Assessments = () => {
 
@@ -31,17 +31,17 @@ const Assessments = () => {
           if (networkData) {
               //Fetch contract
               const contract = new web3.eth.Contract(Assessment.abi, networkData.address)
-              const LCACount = await contract.methods.LCACount().call()
+              const LCICount = await contract.methods.LCICount().call()
               const enviroCount = await contract.methods.enviroCount().call()
               const socialCount = await contract.methods.socialCount().call()
-              //Load LCAs
-              for (var i = 1; i <= LCACount; i++) {
-                  const newLCA = await contract.methods.LCAs(i).call()
-                  setLCAs(LCAs =>([...LCAs, newLCA]))
+              //Load LCIs
+              for (var i = 1; i <= LCICount; i++) {
+                  const newLCI = await contract.methods.LCIs(i).call()
+                  setLCIs(LCIs =>([...LCIs, newLCI]))
               }
-              for (var i = 1; i <= LCACount; i++) {
-                  const newLCA = await contract.methods.LCAs(i).call()
-                  setLCAForm(LCAs =>([...LCAs, JSON.parse(newLCA.document)]))
+              for (var i = 1; i <= LCICount; i++) {
+                  const newLCI = await contract.methods.LCIs(i).call()
+                  setLCIForm(LCIs =>([...LCIs, JSON.parse(newLCI.document)]))
               }
               //Load Enviros
               for (var i = 1; i <= enviroCount; i++) {
@@ -68,19 +68,19 @@ const Assessments = () => {
       }
       loadBlockchainData()}, [])
 
-    const [LCAs, setLCAs] = useState([]) 
-    const [LCAform, setLCAForm] = useState([])       
+    const [LCIs, setLCIs] = useState([]) 
+    const [LCIform, setLCIForm] = useState([])       
     const [enviros, setEnviros] = useState([])
     const [enviroform, setEnviroForm] = useState([])
     const [socials, setSocials] = useState([])  
     const [socialform, setSocialForm] = useState([])
 
-    const merge = (LCAs.map(t1 => ({...t1, ...LCAform.find(t2 => t2.id === t1.id)})))
+    const merge = (LCIs.map(t1 => ({...t1, ...LCIform.find(t2 => t2.id === t1.id)})))
     const Emerge = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
     const Smerge = (socials.map(t1 => ({...t1, ...socialform.find(t2 => t2.id === t1.id)})))
     
     let navigate = useNavigate(); 
-    const routeLCA = () =>{ 
+    const routeLCI = () =>{ 
       let path = `/forms/lci`; 
       navigate(path);}
     const routeS = () =>{ 
@@ -104,14 +104,14 @@ const Assessments = () => {
                   text="Social Assessment"
                   />
                   <Button className="btn" 
-                  onClick={routeLCA}
+                  onClick={routeLCI}
                   color="#03a0dd"
                   text="Life Cycle Inventory"
                   />
       </header>
       <Enviro Emerge={Emerge}/>
       <Social Smerge={Smerge}/>
-      <LCA assessments={merge}/>
+      <LCI assessments={merge}/>
       <Sidebar/>
       </div>
     )

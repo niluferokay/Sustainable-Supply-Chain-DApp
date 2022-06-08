@@ -25,17 +25,24 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
             setAccount(accounts[0])
             console.log(Origin.abi)
             const networkId = await web3.eth.net.getId()
-            console.log(networkId)
+            // console.log(networkId)
             const networkData = Origin.networks[networkId]
-            console.log(networkData)
+            // console.log(networkData)
             if (networkData) {
                 //Fetch contract
                 const contract = new web3.eth.Contract(Origin.abi, networkData.address)
                 const productCount = await contract.methods.productCount().call()
+                const shipmentCount = await contract.methods.shipmentCount().call()
+                const orderCount = await contract.methods.orderCount().call()
+                setShipmentCount(shipmentCount)
                 //Load products
                 for (var i = 1; i <= productCount; i++) {
                     const newProduct = await contract.methods.products(i).call()
                     setProducts(products =>([...products, newProduct]))
+                }
+                for (var i = 1; i <= orderCount; i++) {
+                    const neworder = await contract.methods.orders(i).call()
+                    setOrders(orders =>([...orders, neworder]))
                 }
                 }
             else { 
@@ -45,15 +52,19 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
         loadBlockchainData()}, [])
 
     const [products, setProducts] = useState([])
+    const [orders, setOrders] = useState([])
     const [account, setAccount] = useState([])        
         
     const [date, setDate] = useState("")
-    const [d, setD] = useState("")   
+    const [d, setD] = useState(true)   
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
-    const [place, setAddress] = useState("")
+    const [place, setPlace] = useState()
     const [product, setProduct] = useState("")
     const [process, setProcess] = useState("")
+    const [shipmentCount, setShipmentCount] = useState([])
+    
+    const orderName = orders.filter(obj=> obj.id.includes(product)).map(order => order.name)
 
     useEffect(() => { 
         getDate()
@@ -72,20 +83,18 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
   
     const getCoordinates = async(position) => {
         const accuracy = await position.coords.accuracy
-        console.log(accuracy)
+        console.log("accuracy: ", accuracy)
         const lat  = await position.coords.latitude.toString()
-        console.log("lat", lat)
         const long = await position.coords.longitude.toString()
-        console.log("long", long)
         setLatitude(lat)
         setLongitude(long)
         const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyA1NTVyRpS9yu9w8Otq1K3r-SwMJMvrhNY`;
         fetch(url)
         .then(response => response.json())
         .then(data => {
-            const place = data.results[0].formatted_address
-        setAddress(place)
-        console.log(place)})        
+            const address = data.results[0].formatted_address
+            setPlace(address)
+        })        
     }
 
     const getDate = async () => {
@@ -95,31 +104,37 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
         const date = await d + " " + t
         setDate(date)
     }
+
   
     const onSubmit = async(e) => {
         e.preventDefault()
-        setD("now")
-        await addShipment({shipType, latitude, longitude, date, account, product, process})
+        setD(!d)
+        const setLatlong={
+            id: (parseInt(shipmentCount)+1).toString(),
+            latitude: latitude,
+            longitude: longitude
+        }
+        const latlong = await JSON.stringify(setLatlong)
+        await addShipment({shipType, place, latlong, date, account, product, process})
     }
-    console.log(place)
     
     return (
         <div className='center'>
             <form className="ship-form" onSubmit={onSubmit}>
             <div className="form-header">
-                <h2>{shipType==="Shipment Sent" ? "Sent Shipment" : "Receive Shipment"}</h2>
+                <h2>{shipType==="Shipment Sent" ? "Send Shipment" : "Receive Shipment"}</h2>
                 <button className="btn form-close" style= {{background:"red", fontSize:"14px"}} onClick={onShipAdd}>X</button>
             </div>
             <div className="product-center-form">                
                 <div className="form-inputs">
-                    <label className='order-label'>Select Product</label>
+                    <label className='order-label'>Select Order</label>
                     <select 
                         className="order-product" required
                         value = {product} onChange={(e) => setProduct(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>
-                        {products.map(product => { 
-                        return <option value={product.name}>{product.name} </option>
+                        {orders.map(order => { 
+                        return <option value={order.id}>ORDER # {order.id}: {order.name} </option>
                         })}
                     </select>
                 </div>
@@ -130,13 +145,13 @@ const AddShipment = ({addShipment, shipType, onShipAdd}) => {
                         value = {process} onChange={(e) => setProcess(e.target.value)}
                     >
                         <option value=""disabled selected hidden></option>
-                        {product !== "" ? products.filter(obj => obj.name.includes(product)).map(product => product.process).map(a => JSON.parse(a).map(process=> 
+                        {product !== "" ? products.filter(obj => obj.name.includes(orderName)).map(product => product.process).map(a => JSON.parse(a).map(process=> 
                         <option value={process}>{process} </option>
                         )) : null}
                     </select>
                 </div>            
                 <button className="btn order-input-btn" type="submit">
-                    Sent
+                {shipType==="Shipment Sent" ? "Send" : "Receive"}
                 </button>
             </div>
             </form>

@@ -2,16 +2,16 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Assessments {
     
-    uint public LCACount = 0; 
+    uint public LCICount = 0; 
     uint public enviroCount = 0; 
     uint public socialCount = 0; 
     uint public assessmentCount = 0; 
 
-    mapping (uint => LCA) public LCAs;
+    mapping (uint => LCI) public LCIs;
     mapping (uint => Enviro) public enviros;
     mapping (uint => Social) public socials;
 
-    struct LCA {
+    struct LCI {
         uint id;
         string assessType;
         string date;
@@ -22,7 +22,7 @@ contract Assessments {
         string process;
     }
 
-    event LCAAdded(
+    event LCIAdded(
         uint id,
         string assessType,
         string date,
@@ -73,7 +73,7 @@ contract Assessments {
         string year
     );
 
-    function addLCA(
+    function addLCI(
         string memory _date, 
         string memory _document,
         string memory _month,
@@ -83,20 +83,20 @@ contract Assessments {
         require(bytes(_date).length != 0);
         require(bytes(_document).length != 0);
         require(bytes(_process).length != 0);
-        LCACount++;
+        LCICount++;
         assessmentCount++;
-        LCAs[LCACount] = LCA(
-            LCACount,
-            "Life Cycle Assessment",
+        LCIs[LCICount] = LCI(
+            LCICount,
+            "Life Cycle Inventory",
             _date,
             msg.sender,
             _document,
             _month,
             _year,
             _process);
-        emit LCAAdded(
-            LCACount,
-            "Life Cycle Assessment",
+        emit LCIAdded(
+            LCICount,
+            "Life Cycle Inventory",
             _date,
             msg.sender,
             _document,

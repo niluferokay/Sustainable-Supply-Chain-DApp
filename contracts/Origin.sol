@@ -10,7 +10,6 @@ contract Origin {
     mapping (uint => Product) public products; 
     mapping (uint => Order) public orders; 
     mapping (uint => Shipment) public shipments; 
-    //put on the blockchain when inserted into the mapping
 
     constructor() public {
     }
@@ -39,17 +38,12 @@ contract Origin {
     );
    
     function addProduct(string memory _name, string memory _image, string memory _process, string memory _date) public onlyOwner {
-        //Require name and process
         require(bytes(_name).length != 0);
         require(bytes(_image).length != 0);
         require(bytes(_process).length != 0);
         require(bytes(_date).length != 0);
-        //Make sure parameters are correct
-        //Increment product count
         productCount++;
-        // Add the product
         products[productCount] = Product(productCount, _name,_image, _process, _date, msg.sender);
-        //Trigger an event
         emit ProductAdded(productCount, _name, _image, _process, _date, msg.sender);
     }
 
@@ -84,8 +78,8 @@ contract Origin {
     struct Shipment {
         uint id;
         string shipType;
-        string latitude;
-        string longitude;
+        string place;
+        string latlong;
         string date;
         address account;
         string product;
@@ -95,25 +89,24 @@ contract Origin {
     event ShipmentAdded(
         uint id,
         string shipType,
-        string latitude,
-        string longitude,
+        string place,
+        string latlong,
         string date,
         address account,
         string product,
         string process
     );
    
-    function addShipment(string memory _shipType,  string memory _latitude, string memory _longitude, 
+    function addShipment(string memory _shipType, string memory _place,  string memory _latlong, 
     string memory _date, string memory _product, string memory _process) public {
         require(bytes(_shipType).length != 0);
-        require(bytes(_latitude).length != 0);
-        require(bytes(_longitude).length != 0);
+        require(bytes(_latlong).length != 0);
         require(bytes(_date).length != 0);
         require(bytes(_product).length != 0);
         require(bytes(_process).length != 0);
         shipmentCount++;
-        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _latitude, _longitude, _date, msg.sender, _product, _process);
-        emit ShipmentAdded(shipmentCount, _shipType, _latitude, _longitude, _date, msg.sender, _product, _process);
-    }   
+        shipments[shipmentCount] = Shipment(shipmentCount, _shipType, _place, _latlong, _date, msg.sender, _product, _process);
+        emit ShipmentAdded(shipmentCount, _shipType, _place, _latlong, _date, msg.sender, _product, _process);
+    } 
     
 }

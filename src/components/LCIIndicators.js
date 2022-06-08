@@ -24,17 +24,17 @@ assessments.sort((a,b) => b.id - a.id)
     </tr>
 ))
 
-const LCAIndicators = ({assessments}) => {
+const LCIIndicators = ({assessments}) => {
 
   return (
     <>
     <h3 className="table-title">Life Cycle Inventories</h3>
         <table className="assess-table">
           <tr>
-            <th  className='lca-assess'>Assessment</th>
-            <th className='lca-product'>Product</th>
+            <th  className='LCI-assess'>Assessment</th>
+            <th className='LCI-product'>Product</th>
             <th>Process</th>
-            <th className='lca-period'>Period (Month  Year)</th>
+            <th className='LCI-period'>Period (Month  Year)</th>
             <th>User</th>
             <th>Date  Time Added</th>
           </tr>
@@ -44,4 +44,4 @@ const LCAIndicators = ({assessments}) => {
   )
 }
 
-export default LCAIndicators
+export default LCIIndicators

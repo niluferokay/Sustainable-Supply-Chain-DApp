@@ -4,57 +4,21 @@ import Assessment from "../../abis/Assessments.json"
 import {Line} from "react-chartjs-2"
 import {
   Chart,
-  ArcElement,
   LineElement,
   BarElement,
-  PointElement,
   BarController,
-  BubbleController,
-  DoughnutController,
   LineController,
-  PieController,
-  PolarAreaController,
-  RadarController,
-  ScatterController,
   CategoryScale,
   LinearScale,
-  LogarithmicScale,
-  RadialLinearScale,
-  TimeScale,
-  TimeSeriesScale,
-  Decimation,
-  Filler,
-  Legend,
-  Title,
-  Tooltip,
-  SubTitle
 } from 'chart.js';
 import Sidebar from '../Sidebar';
 Chart.register(
-  ArcElement,
   LineElement,
   BarElement,
-  PointElement,
   BarController,
-  BubbleController,
-  DoughnutController,
   LineController,
-  PieController,
-  PolarAreaController,
-  RadarController,
-  ScatterController,
   CategoryScale,
   LinearScale,
-  LogarithmicScale,
-  RadialLinearScale,
-  TimeScale,
-  TimeSeriesScale,
-  Decimation,
-  Filler,
-  Legend,
-  Title,
-  Tooltip,
-  SubTitle
 )
 
 const EnviroReport = () => {
@@ -111,10 +75,6 @@ const EnviroReport = () => {
   const [company, setCompany] = useState("")
   const [data, setData] = useState([])
 
-  const dataE = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
-
-  const unique = [...new Set(formAccount.map(item => item))]
-
   const [energyChartData, setEnergyChartData] = useState({
     datasets: [],
   });
@@ -122,6 +82,7 @@ const EnviroReport = () => {
   const [waterChartData, setWaterChartData] = useState({
     datasets: [],  
   });
+
   const [materialChartData, setMaterialChartData] = useState({
     datasets: [],
   });
@@ -133,16 +94,33 @@ const EnviroReport = () => {
   const [pollutionChartData, setPollutionChartData] = useState({
     datasets: [],
   });
+
   const [wasteChartData, setWasteChartData] = useState({
+    datasets: [],
+  });
+
+  const [landChartData, setLandChartData] = useState({
+    datasets: [],
+  });
+
+  const [productChartData, setProductChartData] = useState({
+    datasets: [],
+  });
+
+  const [supplierChartData, setSupplierChartData] = useState({
     datasets: [],
   });
 
   const [optionsE, setOptionsE] = useState({})
   const [optionsW, setOptionsW] = useState({})
+  const [optionsWa, setOptionsWa] = useState({})
   const [optionsG, setOptionsG] = useState({})
   const [optionsM, setOptionsM] = useState({})
-  const [optionsP, setOptionsP] = useState({})
+  const [optionsL, setOptionsL] = useState({})
 
+  const dataE = (enviros.map(t1 => ({...t1, ...enviroform.find(t2 => t2.id === t1.id)})))
+
+  const unique = [...new Set(formAccount.map(item => item))]
   const uniqueMonth = [...new Set(month.map(item => item))]
   const uniqueYear = [...new Set(year.map(item => item))]
 
@@ -163,7 +141,7 @@ const EnviroReport = () => {
       .filter(obj => obj.year.includes(formYear)).map(p => (p))
       setData(data)
     }
-    else {
+    if (formMonth === "All" && formYear === "All")  {
       const data = (dataE.filter(obj => obj.account.includes(company)))
       .map(p => (p))
       setData(data)  
@@ -178,13 +156,21 @@ const EnviroReport = () => {
     const waterrec = data.map(a => parseInt(a.waterrec))
     const material = data.map(a => parseInt(a.material))
     const materialrec = data.map(a => parseInt(a.materialrec))
-    const ghg = data.map(a => parseInt(a.ghg))
+    const ghg = data.map(a => parseFloat(a.ghg))
     const waterpol = data.map(a => parseInt(a.waterpol))
-    const soilpol = data.map(a => parseInt(a.soilpol))
-    const air = data.map(a => parseInt(a.air))
+    const landpol = data.map(a => parseInt(a.landpol))
+    const air = data.map(a => parseFloat(a.air))
     const hazmat = data.map(a => parseInt(a.hazmat))
     const solidwaste = data.map(a => parseInt(a.solidwaste))
+    const solidwasterec = data.map(a => parseInt(a.solidwasterec))
     const waterwaste = data.map(a => parseInt(a.waterwaste))
+    const waterwasterec = data.map(a => parseInt(a.waterwasterec))
+    const hazwaste = data.map(a => parseInt(a.hazwaste))
+    const productrec = data.map(a => parseInt(a.productrec))
+    const products = data.map(a => parseInt(a.products))
+    const ecolabel = data.map(a => parseInt(a.ecolabel))
+    const envirosus = data.map(a => parseInt(a.envirosus))
+    const suppliers = data.map(a => parseInt(a.suppliers))
 
     setEnergyChartData({
       labels: id,
@@ -192,15 +178,22 @@ const EnviroReport = () => {
         {
           label: "Energy Consumption",
           data: energy,
-          borderColor: "rgb(253,224,138)",
-          backgroundColor: "rgba(253,224,138, 0.4)",
+          borderColor: "rgb(252, 217, 0)",
+          backgroundColor: "rgba(252, 217, 0)",
         },
         {
           label: "Renewable energy Consumption",
           data: renewenergy,
           borderColor: "rgb(184,225,133)",
-          backgroundColor: "rgba(184,225,133, 0.4)",
+          backgroundColor: "rgba(184,225,133)",
         },
+        // {
+        //   label: "Product Produced",
+        //   data: products,
+        //   yAxisID: 'A',
+        //   borderColor: "purple",
+        //   backgroundColor: "purple",
+        // },
       ]
     },
     setOptionsE({
@@ -223,13 +216,13 @@ const EnviroReport = () => {
           label: "Water Consumption",
           data: water,
           borderColor: "rgb(171,217,233)",
-          backgroundColor: "rgba(171,217,233, 0.4)",
+          backgroundColor: "rgba(171,217,233)",
         },
         {
           label: "Recycled or Reused Water Consumption",
           data: waterrec,
           borderColor: "rgb(98,195,165)",
-          backgroundColor: "rgba(98,195,165, 0.4)",
+          backgroundColor: "rgba(98,195,165)",
         },
       ],
     },
@@ -252,19 +245,19 @@ const EnviroReport = () => {
           label: "Material Consumption",
           data: material,
           borderColor: "rgb(253,174,97)",
-          backgroundColor: "rgba(253,174,97, 0.4)",
+          backgroundColor: "rgba(253,174,97)",
         },
         {
           label: "Recycled or Reused Material Consumption",
           data: materialrec,
           borderColor: "rgb(226,117,174)",
-          backgroundColor: "rgba(226,117,174, 0.4)",
+          backgroundColor: "rgba(226,117,174)",
         },
         {
           label: "Hazardous Material Consumption",
           data: hazmat,
           borderColor: "rgb(118,111,178)",
-          backgroundColor: "rgba(118,111,178, 0.4)",
+          backgroundColor: "rgba(118,111,178)",
         },
       ],
     },
@@ -287,13 +280,13 @@ const EnviroReport = () => {
           label: "Greenhouse Gas Emission",
           data: ghg,
           borderColor: "rgb(213,49,36)",
-          backgroundColor: "rgba(213,49,36, 0.4)",
+          backgroundColor: "rgba(213,49,36)",
         },
         {
           label: "Air Pollution",
           data: air,
-          borderColor: "rgb(204,204,204)",
-          backgroundColor: "rgba(204,204,204, 0.4)",
+          borderColor: "rgb(108, 117, 125)",
+          backgroundColor: "rgba(108, 117, 125)",
         },
       ],
       options: {
@@ -307,7 +300,30 @@ const EnviroReport = () => {
         y: {
         title: {
             display: true,
-            text: 'Water (m3)',
+            text: 'Emmision (tonnes)',
+            }
+        }
+    },
+    }));
+
+    setLandChartData({
+      labels: id,
+      datasets: [
+        {
+          label: "Land Pollution",
+          data: landpol,
+          borderColor: "rgb(236,113,20)",
+          backgroundColor: "rgba(236,113,20)",
+        },
+      ],
+    },
+    setOptionsL({
+      responsive: true,
+      scales: {
+        y: {
+        title: {
+            display: true,
+            text: 'Land area (m2)',
             }
         }
     },
@@ -317,30 +333,36 @@ const EnviroReport = () => {
       labels: id,
       datasets: [
         {
-          label: "Soil Pollution",
-          data: soilpol,
-          borderColor: "rgb(236,113,20)",
-          backgroundColor: "rgba(236,113,20, 0.4)",
-        },
-        {
           label: "Solid Waste",
           data: solidwaste,
-          borderColor: "rgb(167,86,40)",
-          backgroundColor: "rgba(167,86,40, 0.4)",
+          borderColor: "rgb(88, 49, 1)",
+          backgroundColor: "rgba(88, 49, 1)",
+        },
+        {
+          label: "Recycled or Reused Solid Waste",
+          data: solidwasterec,
+          borderColor: "rgb(190, 140, 99)",
+          backgroundColor: "rgba(190, 140, 99)",
+        },
+        {
+          label: "Hazardous Waste",
+          data: hazwaste,
+          borderColor: "rgb(201, 24, 74)",
+          backgroundColor:"rgba(201, 24, 74)",
         },
       ],
     },
-    setOptionsP({
-      responsive: true,
-      scales: {
-        y: {
-        title: {
-            display: true,
-            text: 'Water (m3)',
-            }
-        }
-    },
-    }));
+      setOptionsWa({
+        responsive: true,
+        scales: {
+          y: {
+          title: {
+              display: true,
+              text: 'Waste (kg)',
+              }
+          }
+      },
+      }));
 
     setWasteChartData({
       labels: id,
@@ -348,20 +370,63 @@ const EnviroReport = () => {
         {
           label: "Water Pollution",
           data: waterpol,
-          borderColor: "rgb(98,190,145)",
-          backgroundColor: "rgba(98,190,145, 0.4)",
+          borderColor: "rgb(217, 237, 146)",
+          backgroundColor: "rgba(217, 237, 146)",
         },
         {
           label: "Water Waste",
           data: waterwaste,
+          borderColor: "rgb(120, 147, 138)",
+          backgroundColor: "rgba(120, 147, 138)",
+        },
+        {
+          label: "Recycled or Reused Water Waste",
+          data: waterwasterec,
           borderColor: "rgb(49,135,189)",
-          backgroundColor: "rgba(49,135,189, 0.4)",
+          backgroundColor: "rgba(49,135,189)",
+        },
+      ]});
+
+    setProductChartData({
+      labels: id,
+      datasets: [
+        {
+          label: "Products",
+          data: products,
+          borderColor: "rgb(142, 202, 230)",
+          backgroundColor: "rgba(142, 202, 230)",
+        },
+        {
+          label: "Recyclable or Reusable Products",
+          data: productrec,
+          borderColor: "rgb(144, 190, 109)",
+          backgroundColor: "rgba(144, 190, 109)",
+        },
+        {
+          label: "Eco-friendly Packaged and Labeled Products",
+          data: ecolabel,
+          borderColor: "rgb(45, 106, 79)",
+          backgroundColor: "rgba(45, 106, 79)",
         },
       ],
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+    });
+
+    setSupplierChartData({
+      labels: id,
+      datasets: [
+        {
+          label: "Suppliers Monitored on Environmental Sustainability",
+          data: envirosus,
+          borderColor: "rgb(249, 132, 74)",
+          backgroundColor: "rgba(249, 132, 74)",
+        },
+        {
+          label: "Suppliers",
+          data: suppliers,
+          borderColor: "rgb(249, 199, 79)",
+          backgroundColor: "rgba(249, 199, 79)",
+        },
+      ],
     });
   }
   
@@ -433,11 +498,20 @@ const EnviroReport = () => {
         <Line className='line' data={ghgChartData} options={optionsG}/>
         </div>
         <div>
-        <Line className='line' data={pollutionChartData} options={optionsP}/>
+        <Line className='line' data={pollutionChartData} options={optionsWa}/>
+        </div>
+        <div>
+        <Line className='line' data={landChartData} options={optionsL}/>
         </div>
         <div>
         <Line className='line' data={wasteChartData} options={optionsW}/>
         </div>
+        <div>
+        <Line className='line' data={productChartData}/>
+        </div>
+        <div>
+        <Line className='line' data={supplierChartData}/>
+      </div>
       </div>
     </>
   )

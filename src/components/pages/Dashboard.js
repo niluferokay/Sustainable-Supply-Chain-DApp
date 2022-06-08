@@ -53,6 +53,7 @@ const Dashboard = () => {
                     for (var i = 1; i <= shipmentCount; i++) {
                         const newShipment = await contract.methods.shipments(i).call()
                         setShipment(shipments =>([...shipments, newShipment]))
+                        setLatlong(shipments =>([...shipments, JSON.parse(newShipment.latlong)]))
                     }
                     }
                 else { 
@@ -68,7 +69,10 @@ const Dashboard = () => {
     const [orders, setOrder] = useState([])
     const [shipments, setShipment] = useState([])
     const [shipType, setShipType] = useState("")
+    const [latlong, setLatlong] = useState([])
     
+    const newShipment = (shipments.map(t1 => ({...t1, ...latlong.find(t2 => t2.id === t1.id)})))
+
     //Add Order
     const addOrder = ({name, quantity, unit, date}) => {
         contract.methods.addOrder(name, quantity, unit, date).send( {from: account} )
@@ -78,8 +82,8 @@ const Dashboard = () => {
     }
 
     //Add Shipment
-    const addShipment = ({shipType, latitude, longitude, date, product, process}) => {
-        contract.methods.addShipment(shipType, latitude, longitude, date, product, process).send( {from: account} )
+    const addShipment = ({shipType, place, latlong, date, product, process}) => {
+        contract.methods.addShipment(shipType, place, latlong, date, product, process).send( {from: account} )
         .once('receipt', (receipt) => {
             window.location.reload()
           })
@@ -113,7 +117,7 @@ const Dashboard = () => {
             {showCreateShip && <AddShipment addShipment={addShipment}
             shipType={shipType} onShipAdd= {() => {setShowCreateShip(!showCreateShip)}} />}
         <Order orders={orders} />
-        <Shipment shipments = {shipments} />
+        <Shipment shipments = {newShipment} orders={orders} />
         </div>
         </>
     )
