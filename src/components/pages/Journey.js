@@ -66,7 +66,7 @@ useEffect(() => {
   const unique = [...new Set(orderID.map(item => item))]
 
   const { isLoaded} = useLoadScript({
-    googleMapsApiKey: "AIzaSyAAtD8arMVlDgNnv9xQQHKhI6OaVgl7rkk"
+    googleMapsApiKey: "YOUR-API-KEY-HERE"
   });
 
   const mapContainerStyle = {
