@@ -10,7 +10,7 @@ React | 18.2.0 | User interface
 
 ## System Workflow
 This diagram shows the different actors and their interactions with the system.
-<img src="https://your-image-url.type](https://user-images.githubusercontent.com/44509698/227777313-f9f15f52-ff50-4f7e-b249-36787affe8a8.png)" width="100">
+<img src="https://user-images.githubusercontent.com/44509698/227777313-f9f15f52-ff50-4f7e-b249-36787affe8a8.png" width="100">
 
 ![image](https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png)
 ![image](https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png)
