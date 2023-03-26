@@ -8,7 +8,9 @@ Node | 16.17.0 | Build React UI
 Web3 | 1.3.5 | Connect UI to EVM
 React | 18.2.0 | User interface
 
-![image](https://user-images.githubusercontent.com/44509698/227777313-f9f15f52-ff50-4f7e-b249-36787affe8a8.png)
+## System Workflow
+This diagram shows the different actors and their interactions with the system.
+![image](https://user-images.githubusercontent.com/44509698/227777313-f9f15f52-ff50-4f7e-b249-36787affe8a8.png | width=100)
 
 ![image](https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png)
 ![image](https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png)
