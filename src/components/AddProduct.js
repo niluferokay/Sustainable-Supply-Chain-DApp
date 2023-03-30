@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import * as AiIcons from 'react-icons/ai';
-const { create } = require("ipfs-http-client")
-const ipfs = create({host:"ipfs.infura.io", port:"5001", protocol: "https"})
+const ipfsClient = require("ipfs-http-client")
+const projectId = '<API_KEY>';
+const projectSecret = '<API_KEY_SECRET>';
+const auth ='Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+const client = ipfsClient.create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+});
 
 const AddProduct = ({ addProduct, onAdd}) => {
     
