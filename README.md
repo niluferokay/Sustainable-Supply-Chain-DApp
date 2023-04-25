@@ -3,7 +3,7 @@ The Sustainable Supply Chain DApp is developed to measure the environmental and 
 
 A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. 
 
-<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="400">
+<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="500">
 
 The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
 
@@ -21,7 +21,7 @@ React | 18.2.0 | User interface
 ## System Workflow
 This diagram shows the different actors and their interactions with the system.
 
-<img src="https://user-images.githubusercontent.com/44509698/234396591-c255ccd6-9d00-439b-bed3-ed1970f3aabf.jpg" width="1000">
+<img src="https://user-images.githubusercontent.com/44509698/234407614-6d68b711-a044-4140-a40f-97bdb38d82ab.jpg" width="900">
 
 In the assessments page, the focal company and its suppliers do the environmental, social assessments to measure their monthly or annual sustainability performance. 
 
@@ -29,7 +29,7 @@ In the assessments page, the focal company and its suppliers do the environmenta
 
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators.
 
-<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="300"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="300"> 
+<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="400"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="400"> 
 
 The focal company or suppliers can display the environmental and social sustainability indicators with charts. In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
 
@@ -40,6 +40,7 @@ When the focal company and all of its suppliers have completed their environment
 <img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="800">
 
 After registering the product, the focal company creates an order. In this scenario, production of 1000 t-shirts are ordered. The permission to add products and orders is only given to the focal company.
+
 <img src="https://user-images.githubusercontent.com/44509698/234399310-7c2d04db-2888-4572-903e-574b23d5b6eb.png" width="800">
 
 Later, the suppliers’ send or receive the shipments of the order. When sending or receiving the shipments, each supplier selects the order and their production stage. As shipment is sent or received the real-time location (latitude and longitude), descriptive name of the location and the time information is obtained and displayed via Google API.
