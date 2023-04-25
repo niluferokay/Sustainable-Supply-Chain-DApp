@@ -29,8 +29,7 @@ In the assessments page, the focal company and its suppliers do the environmenta
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators. 
                                                                                                                            
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
-<img src="https://user-images.githubusercontent.com/44509698/234383134-9c08ba6c-e81e-4b12-bf6c-cf0bd3ae10cd.png">
-![hey](https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg)
+<img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
 
 The focal company or suppliers can display the environmental and social sustainability indicators with charts (Figure 18 and 19). In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
 
