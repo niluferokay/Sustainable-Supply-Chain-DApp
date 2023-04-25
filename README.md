@@ -36,10 +36,10 @@ The focal company or suppliers can display the environmental and social sustaina
 
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
 <img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
-<img src="https://user-images.githubusercontent.com/44509698/234409672-5692d813-8c30-4379-98ca-f55a404e2533.jpg" width="700">
 
 When the focal company and all of its suppliers have completed their environmental and social assessments, the company creates orders. To create an order, the focal company first must create a digital record of the product. The image of the product is uploaded to IPFS.
 <img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="700">
+<img src="https://user-images.githubusercontent.com/44509698/234409672-5692d813-8c30-4379-98ca-f55a404e2533.jpg" width="700">
 
 After registering the product, the focal company creates an order. In this scenario, production of 1000 t-shirts are ordered. The permission to add products and orders is only given to the focal company.
 
