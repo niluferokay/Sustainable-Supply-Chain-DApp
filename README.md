@@ -1,9 +1,11 @@
 ## About
 The Sustainable Supply Chain DApp is developed to measure the environmental and social performance of the supply chain. The information system is designed to collect data from supply chain actors, assess their environmental and social sustainability and transfer them to the relevant stakeholders for decision-making processes. At the same time, the blockchain system can be used to prove the origin of the products, track and trace the product journey throughout the supply chain and measure the product lifecycle inventory.
 
-<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="600">
+A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. 
 
-A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
+<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="400">
+
+The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
 
 ## System Architecture
 <img src="https://user-images.githubusercontent.com/44509698/234395807-fe548331-02ab-4644-8938-9fe63077f22a.png" width="600">
@@ -18,16 +20,19 @@ React | 18.2.0 | User interface
 
 ## System Workflow
 This diagram shows the different actors and their interactions with the system.
+
 <img src="https://user-images.githubusercontent.com/44509698/234396591-c255ccd6-9d00-439b-bed3-ed1970f3aabf.jpg" width="1000">
 
 In the assessments page, the focal company and its suppliers do the environmental, social assessments to measure their monthly or annual sustainability performance. 
+
 <img src="https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png" width="800">
 
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators.
-<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="800"> 
-<img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="800"> 
+
+<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="300"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="300"> 
 
 The focal company or suppliers can display the environmental and social sustainability indicators with charts. In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
+
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
 <img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
 
