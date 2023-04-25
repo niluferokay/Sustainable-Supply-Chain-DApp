@@ -3,7 +3,7 @@ The Sustainable Supply Chain DApp is developed to measure the environmental and 
 
 A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. 
 
-<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="500">
+<img src="https://user-images.githubusercontent.com/44509698/234410122-899bdfe8-495d-40ae-8493-0b33bd5db430.jpg" width="500">
 
 The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
 
@@ -36,6 +36,7 @@ The focal company or suppliers can display the environmental and social sustaina
 
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
 <img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
+<img src="https://user-images.githubusercontent.com/44509698/234409672-5692d813-8c30-4379-98ca-f55a404e2533.jpg" width="700">
 
 When the focal company and all of its suppliers have completed their environmental and social assessments, the company creates orders. To create an order, the focal company first must create a digital record of the product. The image of the product is uploaded to IPFS.
 <img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="700">
@@ -48,7 +49,6 @@ Later, the suppliers’ send or receive the shipments of the order. When sending
 
 <img src="https://user-images.githubusercontent.com/44509698/234400211-8e04e1fa-30e3-44f8-b22f-8f4d800be65d.png" width="700">
 <img src="https://user-images.githubusercontent.com/44509698/234400083-c3f05b9c-1e0b-4990-8232-9ca491e942e9.png" width="700">
-<img src="https://user-images.githubusercontent.com/44509698/234409672-5692d813-8c30-4379-98ca-f55a404e2533.jpg" width="700">
 
 The life cycle inventory for each product can be done after relevant production stages are completed. The company or the suppliers enter information to LCI form of the material flow for their production stage (Figure 27). After submitting the form, the system automatically calculates LCI indicators.
 
