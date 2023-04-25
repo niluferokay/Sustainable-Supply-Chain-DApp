@@ -1,6 +1,8 @@
 ## About
 The Sustainable Supply Chain DApp is developed to measure the environmental and social performance of the supply chain. The information system is designed to collect data from supply chain actors, assess their environmental and social sustainability and transfer them to the relevant stakeholders for decision-making processes. At the same time, the blockchain system can be used to prove the origin of the products, track and trace the product journey throughout the supply chain and measure the product lifecycle inventory.
 
+<img src="https://user-images.githubusercontent.com/44509698/234406469-ba4405a4-3873-4748-bc7d-2cde76321bd0.jpg" width="600">
+
 A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
 
 ## System Architecture
