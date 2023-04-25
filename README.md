@@ -24,14 +24,25 @@ This diagram shows the different actors and their interactions with the system.
 <img src="https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png" width="800">
 In the assessments page, the focal company and its suppliers do the environmental, social assessments to measure their monthly or annual sustainability performance. 
 
-<img src="https://user-images.githubusercontent.com/44509698/234396767-7431c5c5-1686-4d2c-8a66-b0e6393ff00b.png" width="800"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="800"> 
-The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators. 
-                                                                                                                           
+<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="800"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="800"> 
+The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators.
+
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
 <img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
 
 The focal company or suppliers can display the environmental and social sustainability indicators with charts (Figure 18 and 19). In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
 
-<img src="https://user-images.githubusercontent.com/44509698/227777379-5d3bcce2-d824-4133-955d-120c4c1a4a71.png" width="800">
 <img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="800">
+When the focal company and all of its suppliers have completed their environmental and social assessments, the company creates orders. To create an order, the focal company first must create a digital record of the product. 
+
+<img src="https://user-images.githubusercontent.com/44509698/234399310-7c2d04db-2888-4572-903e-574b23d5b6eb.png" width="800">
+After registering the product, the focal company creates an order. In this scenario, production of 1000 t-shirts are ordered (Figure 23 and 24). The permission to add products and orders is only given to the focal company.
+
+<img src="https://user-images.githubusercontent.com/44509698/234400211-8e04e1fa-30e3-44f8-b22f-8f4d800be65d.png" width="800">
+<img src="https://user-images.githubusercontent.com/44509698/234400083-c3f05b9c-1e0b-4990-8232-9ca491e942e9.png" width="800">
+Later, the suppliers’ send or receive the shipments of the order. When sending or receiving the shipments, each supplier selects the order and their production stage (Figure 25 and 26). As shipment is sent or received the real-time location (latitude and longitude), descriptive name of the location and the time information is obtained.
+
+<img src="https://user-images.githubusercontent.com/44509698/227777379-5d3bcce2-d824-4133-955d-120c4c1a4a71.png" width="800">
+Finally, when the order is completed, customers can see the entire product journey; the shipment locations and time, production stages and the suppliers (Figure 30). They can also display the environmental footprint of each production process and the environmental and social sustainability assessment of suppliers and the focal company. 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
