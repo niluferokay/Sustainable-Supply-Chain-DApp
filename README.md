@@ -1,7 +1,9 @@
 ## About
 The Supply Chain DApp is developed to measure the environmental and social performance of the supply chain. The information system is designed to collect data from supply chain actors, assess their environmental and social sustainability and transfer them to the relevant stakeholders. At the same time, the blockchain system can be used to prove the origin of the products, track and trace the product journey throughout the supply chain and measure the product lifecycle inventory.
 
-## Libraries
+## System Architecture
+<img src="https://user-images.githubusercontent.com/44509698/234380014-4a1c274c-407c-48d0-b769-af8dd31de1a8.png" width="900">
+
 Library | Version | Use
 ------------ | ------------- | -------------
 Truffle | 5.3.5 | Compile/deploy/test contracts, Ganache for running local test node
