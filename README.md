@@ -29,7 +29,7 @@ In the assessments page, the focal company and its suppliers do the environmenta
 
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators.
 
-<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="450"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="450"> 
+<img src="https://user-images.githubusercontent.com/44509698/234398157-beb5eb14-d91e-4019-84af-854716af99c4.png" width="550"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="550"> 
 
 The focal company or suppliers can display the environmental and social sustainability indicators with charts. In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
 
@@ -37,16 +37,16 @@ The focal company or suppliers can display the environmental and social sustaina
 <img src="https://user-images.githubusercontent.com/44509698/234384044-3862be5b-68d0-476d-8623-953d8cc00e86.jpg" width="800">
 
 When the focal company and all of its suppliers have completed their environmental and social assessments, the company creates orders. To create an order, the focal company first must create a digital record of the product. The image of the product is uploaded to IPFS.
-<img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="800">
+<img src="https://user-images.githubusercontent.com/44509698/227777549-61a27643-3880-420b-8485-c350b5b89ad3.png" width="600">
 
 After registering the product, the focal company creates an order. In this scenario, production of 1000 t-shirts are ordered. The permission to add products and orders is only given to the focal company.
 
-<img src="https://user-images.githubusercontent.com/44509698/234399310-7c2d04db-2888-4572-903e-574b23d5b6eb.png" width="800">
+<img src="https://user-images.githubusercontent.com/44509698/234399310-7c2d04db-2888-4572-903e-574b23d5b6eb.png" width="600">
 
 Later, the suppliers’ send or receive the shipments of the order. When sending or receiving the shipments, each supplier selects the order and their production stage. As shipment is sent or received the real-time location (latitude and longitude), descriptive name of the location and the time information is obtained and displayed via Google API.
 
-<img src="https://user-images.githubusercontent.com/44509698/234400211-8e04e1fa-30e3-44f8-b22f-8f4d800be65d.png" width="600">
-<img src="https://user-images.githubusercontent.com/44509698/234400083-c3f05b9c-1e0b-4990-8232-9ca491e942e9.png" width="600">
+<img src="https://user-images.githubusercontent.com/44509698/234400211-8e04e1fa-30e3-44f8-b22f-8f4d800be65d.png" width="500">
+<img src="https://user-images.githubusercontent.com/44509698/234400083-c3f05b9c-1e0b-4990-8232-9ca491e942e9.png" width="500">
 
 The life cycle inventory for each product can be done after relevant production stages are completed. The company or the suppliers enter information to LCI form of the material flow for their production stage (Figure 27). After submitting the form, the system automatically calculates LCI indicators.
 
