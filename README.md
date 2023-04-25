@@ -23,8 +23,11 @@ This diagram shows the different actors and their interactions with the system.
 ## Screenshots
 <img src="https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png" width="800">
 In the assessments page, the focal company and its suppliers do the environmental, social assessments to measure their monthly or annual sustainability performance. 
+
 <img src="https://user-images.githubusercontent.com/44509698/234381767-28073845-aa42-4b85-921b-50d876494e8d.png" width="500"> 
+<img src="https://user-images.githubusercontent.com/44509698/234382683-3e2b7e07-ca64-4277-8422-a16926866698.png width="500"> 
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators. 
+                                                                                                                           
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
 The focal company or suppliers can display the environmental and social sustainability indicators with charts (Figure 18 and 19). In the charts, indicators are grouped according to similarities of their measurement units or their contexts. Also, in the chart section various sustainability assessments can be viewed at the same time or can be filtered by month or year. Thus, stakeholders can analyze and compare their past performances and evaluate their sustainability progress. 
 <img src="https://user-images.githubusercontent.com/44509698/227777379-5d3bcce2-d824-4133-955d-120c4c1a4a71.png" width="800">
