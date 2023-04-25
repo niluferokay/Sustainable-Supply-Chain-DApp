@@ -6,7 +6,7 @@ A blockchain-based quantitative sustainability measurement model is created for 
 A DSS is composed of three components; a model base, a database, and a user interface. The model base component is a sustainability assessment model that calculates the environmental and social sustainability performance of the supply chain. It also does the life cycle inventory analysis of the product produced. The database is a blockchain database that stores the system inputs. The model runs on the user interface (UI) built on the React framework using JavaScript language. The UI allows users to run the sustainability model and presents the results in tables and charts. The user enters input data into the system. These can be the data for environmental and social sustainability, or life cycle inventory. The environmental and social dimensions are taken into account as they are less considered compared to the economic dimension when measuring organizational sustainability. When the data is entered, the user runs the sustainability model. Once the model is run, the data entered is uploaded to the blockchain database. The sustainability model retrieves the data from the blockchain database to calculate sustainability assessments and reports. After this step, the user can view the sustainability assessments in tables and charts. 
 
 ## System Architecture
-<img src="https://user-images.githubusercontent.com/44509698/234380014-4a1c274c-407c-48d0-b769-af8dd31de1a8.png" width="600">
+<img src="https://user-images.githubusercontent.com/44509698/234395807-fe548331-02ab-4644-8938-9fe63077f22a.png" width="800">
 
 Library | Version | Use
 ------------ | ------------- | -------------
@@ -18,14 +18,13 @@ React | 18.2.0 | User interface
 
 ## System Workflow
 This diagram shows the different actors and their interactions with the system.
-<img src="https://user-images.githubusercontent.com/44509698/234395807-fe548331-02ab-4644-8938-9fe63077f22a.png" width="800">
+<img src="https://user-images.githubusercontent.com/44509698/234396591-c255ccd6-9d00-439b-bed3-ed1970f3aabf.jpg" width="800">
 
 ## Screenshots
 <img src="https://user-images.githubusercontent.com/44509698/227777345-93a637b8-710e-470a-abdc-26c63749abf8.png" width="800">
 In the assessments page, the focal company and its suppliers do the environmental, social assessments to measure their monthly or annual sustainability performance. 
 
-<img src="https://user-images.githubusercontent.com/44509698/234381767-28073845-aa42-4b85-921b-50d876494e8d.png" width="500"> 
-<img src="https://user-images.githubusercontent.com/44509698/234382683-3e2b7e07-ca64-4277-8422-a16926866698.png" width="500"> 
+<img src="https://user-images.githubusercontent.com/44509698/234396767-7431c5c5-1686-4d2c-8a66-b0e6393ff00b.png" width="500"> | <img src="https://user-images.githubusercontent.com/44509698/234396794-0e21629f-9204-43cc-837e-33f23017deb0.png" width="500"> 
 The focal company enters information into the environmental assessment form. After submitting the assessment form, the system automatically calculates sustainability indicators. 
                                                                                                                            
 <img src="https://user-images.githubusercontent.com/44509698/227777426-274c8fca-a181-453a-99c5-6e401831cfdc.png" width="800">
